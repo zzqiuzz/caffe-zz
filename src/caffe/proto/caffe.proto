@@ -420,8 +420,12 @@ message LayerParameter {
   optional ThresholdParameter threshold_param = 128;
   optional TileParameter tile_param = 138;
   optional WindowDataParameter window_data_param = 129;
+  optional AllPassParameter all_pass_param = 148;
 }
 
+message AllPassParameter{
+  optional float key = 1 [default = 0];
+}
 // Message that stores parameters used to apply transformation
 // to the data layer's data
 message TransformationParameter {
