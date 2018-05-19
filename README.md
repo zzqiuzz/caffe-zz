@@ -1,3 +1,9 @@
+Though maybe hard,still go on.
+To implement BNN in caffe.
+Hope in the future.
+
+
+
 # Caffe
 
 [![Build Status](https://travis-ci.org/BVLC/caffe.svg?branch=master)](https://travis-ci.org/BVLC/caffe)
