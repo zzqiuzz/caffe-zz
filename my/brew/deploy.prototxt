@@ -1,0 +1,17 @@
+name: "AllPassTest"
+layer{
+  name:"data"
+  type:"Input"
+  top:"data"
+  input_param{shape: {dim:10 dim:3 dim:227 dim:227}}
+
+}
+layer{
+  name: "ap"
+  type: "AllPass"
+  bottom:"data"
+  top: "conv1"
+  all_pass_param{
+    key:99.99
+  }
+}
