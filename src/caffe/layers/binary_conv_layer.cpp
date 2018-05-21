@@ -3,6 +3,7 @@
 
 namespace caffe{
 
+#define sign(x) ((x)>=0?1:-1)
 template <typename Dtype>
 void BinaryConvolutionLayer<Dtype>::compute_output_shape() {
   const int* kernel_shape_data = this->kernel_shape_.cpu_data();
@@ -21,28 +22,53 @@ void BinaryConvolutionLayer<Dtype>::compute_output_shape() {
 }
 
 //Initialize binaried weights
-template BinaryConvolutionLayer<Dtype>::binaryConvInit(){
+template <typename Dtype>
+void BinaryConvolutionLayer<Dtype>::binaryConvInit(){
+	int num = this->blobs_[0]->num();
+	filterMean.push_back(num);
+	Alpha.push_back(num);
 	W_b = shared_ptr<Blob<Dtype> >(new Blob<Dtype>());
 	W_buffer = shared_ptr<Blob<Dtype> >(new Blob<Dtype>());
-	W_b->ReshapeLike(this->blob_[0]);
-	W_buffer->ReshapeLike(this->blob_[0]);
+	W_b->ReshapeLike(*(this->blobs_[0]));
+	W_buffer->ReshapeLike(*(this->blobs_[0]));
 }
-//blob[0]-->W_b
-template BinaryConvolutionLayer<Dtype>::binarizeFloatWeights(const shared_ptr<Blob<Dtype> > weights,
-			const shared_ptr<Blob<Dtype> > wb){
-	
-	
-}
+template <typename Dtype> 
+void BinaryConvolutionLayer<Dtype>::meanClampBinarizeConvParam(const shared_ptr<Blob<Dtype> > weights,
+		const shared_ptr<Blob<Dtype> > wb){
+	int weightsNum = weights->count();  
+	int num = weights->num();
+	int channel = weights->channels();
+	int height = weights->height();
+	int width = weights->width(); 
+	const int div = weightsNum / num;
+	for (int n = 0;n < num; num++){
+		for(int c = 0;c < channel;c++){
+			for(int h = 0;h < height;h++){
+				for(int w = 0;w < width;w++){
+					filterMean[n]+=weights->data_at(n,c,h,w);
+					Alpha[n]+=std::abs(weights->data_at(n,c,h,w))/Dtype(div);
+				}
+			}
+		}
+	}
+	for(int id = 0;id < weightsNum;id++){
+		const int num = id / div;//for each filter in the layer.
+		wb->mutable_cpu_data()[id] = Alpha[num] * sign(clampWeights(weights->cpu_data()[id] - filterMean[num]));
+	}
 
-template BinaryConvolutionLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+}
+ 
+ 
+template <typename Dtype>
+void BinaryConvolutionLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
 const vector<Blob<Dtype>*>& top){
 	//TODO:
 	//convert float weights to bianry 
-	binarizeFloatWeights(this->blob_[0],W_b);
+	meanClampBinarizeConvParam(this->blobs_[0],W_b);
 	//store float weights to W_buffer
-	copyFromTo(this->blob_[0],W_buffer);
+	copyFromTo(this->blobs_[0],W_buffer);
 	//reinitialize blob_ with binarized weights W_b.
-	copyFromTo(W_b,this->blob_[0]); 
+	copyFromTo(W_b,this->blobs_[0]); 
 	//normal conv operations,directly copied from conv_layer.cpp
 	const Dtype* weight = this->blobs_[0]->cpu_data();
   for (int i = 0; i < bottom.size(); ++i) {
@@ -59,16 +85,17 @@ const vector<Blob<Dtype>*>& top){
   }
 }
 
-template BinaryConvolutionLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& bottom,
+template <typename Dtype>
+void BinaryConvolutionLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& bottom,const vector<bool>& propagate_down,
 const vector<Blob<Dtype>*>& top){
 
 
 }
 
-#ifdef CPU_ONLY
-STUP_GPU(BinaryConvolutionLayer);
-#endif
+/*#ifdef CPU_ONLY
+STUB_GPU(BinaryConvolutionLayer);
+#endif*/
 
-INSTANTIATE_CLASS(BinaryConvolution);
-
+INSTANTIATE_CLASS(BinaryConvolutionLayer); 
+REGISTER_LAYER_CLASS(BinaryConvolution);
 }
