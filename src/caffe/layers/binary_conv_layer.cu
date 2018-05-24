@@ -4,15 +4,18 @@
 
 namespace caffe {
 #define sign(x) ((x)>=0?1:-1)
+#define clamp(x) ((x) < -1 ? -1 : (x) >1 ? 1 : (x))
 template <typename Dtype>
 __global__ void BinaryGpu_binarize(const int n, const int num, const Dtype* in, Dtype* out){
-	CUDA_KERNEL_LOOP(index, n){
-		Dtype sum = 0;
+	CUDA_KERNEL_LOOP(index, n){//n:numbers of filters. 
+		Dtype sum = 0;         //num: numbers of filters' elements.
+		Dtype mean = 0;
 		for (int coor = 0; coor < num; coor++){
 			sum += std::abs(in[index*num + coor]) / Dtype(num);
+			mean += in[index*num + coor];
 		}
 		for (int coor = 0; coor < num; coor++){
-			out[index*num + coor] = sign(in[index*num + coor])*sum;
+			out[index*num + coor] = sign(clamp(in[index*num + coor]))*sum;
 		}
 	}
 }
