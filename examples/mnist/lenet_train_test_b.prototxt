@@ -1,5 +1,3 @@
-#float version gets accuracy of 99.31%
-
 name: "LeNet"
 layer {
   name: "mnist"
@@ -37,7 +35,7 @@ layer {
 }
 layer {
   name: "conv1"
-  type: "BinaryConvolution"
+  type: "Convolution"
   bottom: "data"
   top: "conv1"
   param {
@@ -90,7 +88,7 @@ layer{
 }
 layer {
   name: "conv2"
-  type: "BinaryConvolution"
+  type: "Convolution"
   bottom: "norm2"
   top: "conv2"
   param {
