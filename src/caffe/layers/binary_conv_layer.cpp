@@ -39,7 +39,7 @@ void BinaryConvolutionLayer<Dtype>::customConvInit(){
 	W_buffer->ReshapeLike(*(this->blobs_[0]));
 }
 template <typename Dtype>
-void BinaryConvolutionLayer<Dtype>::meanClampBinarizeConvParam(const shared_ptr<Blob<Dtype> > weights,
+void BinaryConvolutionLayer<Dtype>::cpuMeanClampBinarizeConvParam(const shared_ptr<Blob<Dtype> > weights,
 	const shared_ptr<Blob<Dtype> > wb){
 	int weightsNum = weights->count();
 	int num = weights->num();
@@ -59,7 +59,8 @@ void BinaryConvolutionLayer<Dtype>::meanClampBinarizeConvParam(const shared_ptr<
 	}
 	for (int id = 0; id < weightsNum; id++){
 		const int num = id / div;//for each filter in the layer. 
-		wb->mutable_cpu_data()[id] = Alpha[num] * signWeights(clampWeights(weights->cpu_data()[id] - filterMean[num]));
+		//wb->mutable_cpu_data()[id] = Alpha[num] * signWeights(clampWeights(weights->cpu_data()[id] - filterMean[num]));
+		wb->mutable_cpu_data()[id] = Alpha[num] * signWeights(weights->cpu_data()[id]);
 	}
 
 }
@@ -70,11 +71,11 @@ void BinaryConvolutionLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bott
 	const vector<Blob<Dtype>*>& top){
 	//TODO:
 	//convert float weights to bianry 
-	meanClampBinarizeConvParam(this->blobs_[0], W_b);
+	cpuMeanClampBinarizeConvParam(this->blobs_[0], W_b);
 	//store float weights to W_buffer
-	copyFromTo(this->blobs_[0], W_buffer);
+	copyCpuFromTo(this->blobs_[0], W_buffer);
 	//reinitialize blob_ with binarized weights W_b.
-	copyFromTo(W_b, this->blobs_[0]);
+	copyCpuFromTo(W_b, this->blobs_[0]);
 	//normal conv operations,directly copied from conv_layer.cpp
 	const Dtype* weight = this->blobs_[0]->cpu_data();
 	for (int i = 0; i < bottom.size(); ++i) {
@@ -122,7 +123,7 @@ void BinaryConvolutionLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& bot
 			}
 		}
 	}
-	copyFromTo(W_buffer, this->blobs_[0]);
+	copyCpuFromTo(W_buffer, this->blobs_[0]);
 
 }
 

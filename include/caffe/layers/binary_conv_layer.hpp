@@ -35,21 +35,20 @@ protected:
 	virtual inline bool reverse_dimensions() { return false; }
 	/*user' function e.g binary/hardsigmoid*/
 	void customConvInit();
-	virtual void meanClampBinarizeConvParam(const shared_ptr<Blob<Dtype> > weights, const shared_ptr<Blob<Dtype> > wb);
-	virtual inline void copyFromTo(const shared_ptr<Blob<Dtype> > orig, const shared_ptr<Blob<Dtype> > buf){
+	void cpuMeanClampBinarizeConvParam(const shared_ptr<Blob<Dtype> > weights, const shared_ptr<Blob<Dtype> > wb);
+	void gpuMeanClampBinarizeConvParam(const shared_ptr<Blob<Dtype> > weights, const shared_ptr<Blob<Dtype> > wb);
+	inline void copyCpuFromTo(const shared_ptr<Blob<Dtype> > orig, const shared_ptr<Blob<Dtype> > buf){
 		CHECK_EQ(orig->count(), buf->count());
-		
-#ifndef CPU_ONLY
-		caffe_copy(orig->count(), orig->gpu_data(), buf->mutable_gpu_data());
-#else
 		caffe_copy(orig->count(), orig->cpu_data(), buf->mutable_cpu_data());
-#endif
-
 	}
-	virtual inline Dtype clampWeights(Dtype w){
+	inline void copyGpuFromTo(const shared_ptr<Blob<Dtype> > orig, const shared_ptr<Blob<Dtype> > buf){
+		CHECK_EQ(orig->count(), buf->count());
+		caffe_copy(orig->count(), orig->gpu_data(), buf->mutable_gpu_data());
+	}
+	inline Dtype clampWeights(Dtype w){
 		return w = w < -1 ? -1 : w >1 ? 1 : w;
 	}
-	virtual inline Dtype signWeights(Dtype w){
+	inline Dtype signWeights(Dtype w){
 		return w = w >= 0 ? 1 : -1;
 	}
 
