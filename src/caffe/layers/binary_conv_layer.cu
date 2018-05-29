@@ -3,8 +3,8 @@
 #include "caffe/layers/binary_conv_layer.hpp"
 
 namespace caffe {
-//#define sign(x) ((x)>=0?1:-1)
-//#define clamp(x) ((x) < -1 ? -1 : (x) >1 ? 1 : (x))
+#define sign(x) ((x)>=0?1:-1)
+#define clamp(x) ((x) < -1 ? -1 : (x) >1 ? 1 : (x))
 template <typename Dtype>
 __global__ void BinaryGpu_binarize(const int n, const int num, const Dtype* in, Dtype* out){
 	CUDA_KERNEL_LOOP(index, n){//n:numbers of filters. 
@@ -15,14 +15,14 @@ __global__ void BinaryGpu_binarize(const int n, const int num, const Dtype* in, 
 			mean += in[index*num + coor] / Dtype(num);
 		}
 		//Dtype c = 0;
-		Dtype s = 0;
+		//Dtype s = 0;
 		for (int coor = 0; coor < num; coor++){
 			/*c = in[index*num + coor] - mean;
 			c = c < -1 ? -1 : c >1 ? 1 : c*/
-			s = in[index*num + coor] - mean;
-			s = s >= 0 ? 1 : -1;
-			//out[index*num + coor] = sign(clamp(in[index*num + coor]-mean))*sum;
-			out[index*num + coor] = s;
+			//s = in[index*num + coor] - mean;
+			//s = s >= 0 ? 1 : -1;
+			out[index*num + coor] = sign(clamp(in[index*num + coor]-mean))*sum;
+			//out[index*num + coor] = s;
 		}
 		 
 	}
