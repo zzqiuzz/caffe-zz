@@ -3,8 +3,8 @@
 #include "caffe/layers/binary_conv_layer.hpp"
 
 namespace caffe {
-#define sign(x) ((x)>=0?1:-1)
-#define clamp(x) ((x) < -1 ? -1 : (x) >1 ? 1 : (x))
+//#define sign(x) ((x)>=0?1:-1)
+//#define clamp(x) ((x) < -1 ? -1 : (x) >1 ? 1 : (x))
 template <typename Dtype>
 __global__ void BinaryGpu_binarize(const int n, const int num, const Dtype* in, Dtype* out){
 	CUDA_KERNEL_LOOP(index, n){//n:numbers of filters. 
@@ -12,19 +12,26 @@ __global__ void BinaryGpu_binarize(const int n, const int num, const Dtype* in, 
 		Dtype mean = 0;
 		for (int coor = 0; coor < num; coor++){
 			sum += std::abs(in[index*num + coor]) / Dtype(num);
-			mean += in[index*num + coor]/Dtype(num);
+			mean += in[index*num + coor] / Dtype(num);
 		}
+		//Dtype c = 0;
+		Dtype s = 0;
 		for (int coor = 0; coor < num; coor++){
-			//out[index*num + coor] = sign(clamp(in[index*num + coor]))*sum;
-			out[index*num+coor]=sign(in[index*num+coor])*sum;
+			/*c = in[index*num + coor] - mean;
+			c = c < -1 ? -1 : c >1 ? 1 : c*/
+			s = in[index*num + coor] - mean;
+			s = s >= 0 ? 1 : -1;
+			//out[index*num + coor] = sign(clamp(in[index*num + coor]-mean))*sum;
+			out[index*num + coor] = s;
 		}
+		 
 	}
 }
 template <typename Dtype>
 void BinaryConvolutionLayer<Dtype>::gpuMeanClampBinarizeConvParam(const shared_ptr<Blob<Dtype> > weights,
 	const shared_ptr<Blob<Dtype> > wb){
 	const int num = weights->num();
-	const int div = weights->count() / num;
+	const int div = weights->count() / num; 
 	BinaryGpu_binarize<Dtype> << <CAFFE_GET_BLOCKS(num), CAFFE_CUDA_NUM_THREADS >> >(
 		num, div, weights->gpu_data(), wb->mutable_gpu_data());
 }

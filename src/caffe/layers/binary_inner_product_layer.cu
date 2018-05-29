@@ -5,21 +5,27 @@
 #include "caffe/util/math_functions.hpp"
 
 namespace caffe {
-#define sign(x) ((x)>=0?1:-1)
-#define clamp(x) ((x) < -1 ? -1 : (x) >1 ? 1 : (x))
+//#define sign(x) ((x)>=0?1:-1)
+//#define clamp(x) ((x) < -1 ? -1 : (x) >1 ? 1 : (x))
 
 template <typename Dtype>
 __global__ void binarize_kernel(const Dtype* in, Dtype* out, const int num, const int kel){
-	CUDA_KERNEL_LOOP(index, num){ 
-		Dtype sum = 0;         
+	CUDA_KERNEL_LOOP(index, num){ //num:numbers of filters
+		Dtype sum = 0;            //kel:numbers of elements of filters
 		Dtype mean = 0;
 		for (int coor = 0; coor < kel; coor++){
 			sum += std::abs(in[index*kel + coor]) / Dtype(kel);
 			mean += in[index*kel + coor] / Dtype(kel);
 		}
+		//Dtype c = 0;
+		Dtype s = 0;
 		for (int coor = 0; coor < kel; coor++){
-		//	out[index*kel + coor] = sign(clamp(in[index*kel + coor] - mean))*sum;
-			out[index*kel + coor] = sign(in[index*kel+coor])*sum;
+			/*c = in[index*num + coor] - mean;
+			c = c < -1 ? -1 : c >1 ? 1 : c*/
+			s = in[index*num + coor] - mean;
+			s = s >= 0 ? 1 : -1;
+			//out[index*kel + coor] = sign(clamp(in[index*kel + coor] - mean))*sum;
+			out[index*kel + coor] = s;
 		}
 	}
 }
@@ -41,12 +47,6 @@ void BinaryInnerProductLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bot
   //TODO:
   //convert float weights to binary 
   gpuMeanClampBinarizeParam(this->blobs_[0], W_b);
-  /*const Dtype* cpu_d = this->blobs_[0]->cpu_data();
-  const Dtype* gpu_d = this->blobs_[0]->gpu_data();
-  for (int i = 0; i < 5; i++){
-  std::cout << "cpu data: " << cpu_d[i];
-  std::cout << " gpu data:" << gpu_d[i] << std::endl;
-  }*/
   //store float weights to W_buffer
   copyGpuFromTo(this->blobs_[0], W_buffer);
   //reinitialize blob_ with binarized weights W_b.
