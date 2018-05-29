@@ -112,6 +112,7 @@ void BinaryInnerProductLayer<Dtype>::Backward_gpu(const vector<Blob<Dtype>*>& to
          (Dtype)0., bottom[0]->mutable_gpu_diff());
     }
   }
+  copyGpuFromTo(W_buffer, this->blobs_[0]);
 }
 
 INSTANTIATE_LAYER_GPU_FUNCS(BinaryInnerProductLayer);
