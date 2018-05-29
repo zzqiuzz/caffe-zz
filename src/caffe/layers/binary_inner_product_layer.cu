@@ -18,7 +18,8 @@ __global__ void binarize_kernel(const Dtype* in, Dtype* out, const int num, cons
 			mean += in[index*kel + coor] / Dtype(kel);
 		}
 		for (int coor = 0; coor < kel; coor++){
-			out[index*kel + coor] = sign(clamp(in[index*kel + coor] - mean))*sum;
+		//	out[index*kel + coor] = sign(clamp(in[index*kel + coor] - mean))*sum;
+			out[index*kel + coor] = sign(in[index*kel+coor])*sum;
 		}
 	}
 }
@@ -27,8 +28,8 @@ void BinaryInnerProductLayer<Dtype>::gpuMeanClampBinarizeParam(const shared_ptr<
 	const shared_ptr<Blob<Dtype> > wb){
 	const int num = this->N_;//numbers of output
 	const int kel = this->K_;
-	int N = num*kel;
-	binarize_kernel<Dtype> << <CAFFE_GET_BLOCKS(N), CAFFE_CUDA_NUM_THREADS >> >(weights->gpu_data(), wb->mutable_gpu_data(),num, kel); 
+	//int N = num*kel;
+	binarize_kernel<Dtype> << <CAFFE_GET_BLOCKS(num), CAFFE_CUDA_NUM_THREADS >> >(weights->gpu_data(), wb->mutable_gpu_data(),num, kel); 
 }
 template <typename Dtype>
 void BinaryInnerProductLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,

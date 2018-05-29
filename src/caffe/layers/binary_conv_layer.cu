@@ -12,10 +12,11 @@ __global__ void BinaryGpu_binarize(const int n, const int num, const Dtype* in, 
 		Dtype mean = 0;
 		for (int coor = 0; coor < num; coor++){
 			sum += std::abs(in[index*num + coor]) / Dtype(num);
-			mean += in[index*num + coor];
+			mean += in[index*num + coor]/Dtype(num);
 		}
 		for (int coor = 0; coor < num; coor++){
-			out[index*num + coor] = sign(clamp(in[index*num + coor]))*sum;
+			//out[index*num + coor] = sign(clamp(in[index*num + coor]))*sum;
+			out[index*num+coor]=sign(in[index*num+coor])*sum;
 		}
 	}
 }
