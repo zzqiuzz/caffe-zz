@@ -56,14 +56,15 @@ void BinaryInnerProductLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bott
   /*variable init*/
   vector<int> weight_shape(1, N_);
   //vector<int> sumHelper_shape(1, K_);
-  //this->sumHelper.Reshape(sumHelper_shape);
+  const int weight_dim = this->blobs_[0]->count() / this->blobs_[0]->num();
+  this->sum_multiplier_.Reshape(weight_dim,1,1,1);//must be reshaped as 4 dim. no know reasons yet.
   this->Alpha.Reshape(weight_shape);
   this->filterMean.Reshape(weight_shape);
   this->W_b = shared_ptr<Blob<Dtype> >(new Blob<Dtype>());
   this->W_buffer = shared_ptr<Blob<Dtype> >(new Blob<Dtype>());
   this->W_b->ReshapeLike(*(this->blobs_[0]));
   this->W_buffer->ReshapeLike(*(this->blobs_[0]));
-  //caffe_set<Dtype>(K_,Dtype(1),sumHelper.mutable_cpu_data());
+  caffe_set<Dtype>(sum_multiplier_.count(), Dtype(1), sum_multiplier_.mutable_cpu_data());
 
 }
 
@@ -102,16 +103,16 @@ void BinaryInnerProductLayer<Dtype>::cpuMeanClampBinarizeParam(const shared_ptr<
 	  
 	for (int n = 0; n < num; n++)
 		Alpha.mutable_cpu_data()[n] = caffe_cpu_asum<Dtype>(kel, weightdata + n*kel) / kel;
-	std::cout << Alpha.cpu_data()[0] << " " << std::endl;
-	for (int id = 0; id < N; id++){
+	//std::cout << Alpha.cpu_data()[0] << " " << std::endl;
+	/*for (int id = 0; id < N; id++){
 		const int n = id / kel;
 		filterMean.mutable_cpu_data()[n] += weightdata[id] / Dtype(kel);
 	}
-	std::cout << filterMean.cpu_data()[0] << " " << std::endl;
- 	/*caffe_cpu_gemv<Dtype>(CblasTrans, num, kel, Dtype(1.0/kel), weightdata,
-		sumHelper.cpu_data(), 0,
+	std::cout << filterMean.cpu_data()[0] << " " << std::endl;*/
+ 	caffe_cpu_gemv<Dtype>(CblasNoTrans, num, kel, Dtype(1.0/kel), weightdata,
+		sum_multiplier_.cpu_data(), 0,
 		filterMean.mutable_cpu_data());//why failed to run?
-*/
+	//std::cout << filterMean.cpu_data()[0] << " " << std::endl;
 	 
 	for (int id = 0; id < N; id++){
 		const int num = id / kel;//for each filter in the layer.  

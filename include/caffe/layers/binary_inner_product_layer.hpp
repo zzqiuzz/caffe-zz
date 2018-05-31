@@ -66,7 +66,7 @@ class BinaryInnerProductLayer : public Layer<Dtype> {
   shared_ptr<Blob<Dtype> > W_buffer;
   Blob<Dtype> filterMean;
   Blob<Dtype> Alpha;
-  //Blob<Dtype> sumHelper;//used for vector sum
+  Blob<Dtype> sum_multiplier_;//used for vector sum
 };
 
 }  // namespace caffe

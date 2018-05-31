@@ -15,12 +15,14 @@ public:
 		: BaseConvolutionLayer<Dtype>(param){}
 
 	virtual inline const char* type() const { return "BinaryConvolution"; }
-
+	virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+		const vector<Blob<Dtype>*>& top);
 protected:
 	//W_b store binarized weights
 	//W_buffer store original weights.
 	shared_ptr<Blob<Dtype> > W_b;
 	shared_ptr<Blob<Dtype> > W_buffer;
+	Blob<Dtype> alphas_; 
 	vector<Dtype> filterMean;
 	vector<Dtype> Alpha;
 	virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
@@ -34,7 +36,7 @@ protected:
 	virtual void compute_output_shape();
 	virtual inline bool reverse_dimensions() { return false; }
 	/*user' function e.g binary/hardsigmoid*/
-	void customConvInit();
+	
 	void cpuMeanClampBinarizeConvParam(const shared_ptr<Blob<Dtype> > weights, const shared_ptr<Blob<Dtype> > wb);
 	void gpuMeanClampBinarizeConvParam(const shared_ptr<Blob<Dtype> > weights, const shared_ptr<Blob<Dtype> > wb);
 	inline void copyCpuFromTo(const shared_ptr<Blob<Dtype> > orig, const shared_ptr<Blob<Dtype> > buf){
@@ -46,10 +48,10 @@ protected:
 		caffe_copy(orig->count(), orig->gpu_data(), buf->mutable_gpu_data());
 	}
 	inline Dtype clampWeights(Dtype w){
-		return w = w < -1 ? -1 : w >1 ? 1 : w;
+		return w = (w) < -1 ? -1 : (w) >1 ? 1 : (w);
 	}
 	inline Dtype signWeights(Dtype w){
-		return w = w >= 0 ? 1 : -1;
+		return w = (w) >= 0 ? 1 : -1;
 	}
 
 
