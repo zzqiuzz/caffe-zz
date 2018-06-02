@@ -6,32 +6,40 @@ namespace caffe {
 #define sign(x) ((x)>=0?1:-1)
 #define clamp(x) ((x) < -1 ? -1 : (x) >1 ? 1 : (x))
 template <typename Dtype>
-__global__ void BinaryGpu_binarize(const int num, const int kel, const Dtype* alpha,const Dtype* in, Dtype* out){
-	CUDA_KERNEL_LOOP(index, num){//n:numbers of filters. 
-		int n = index / num;
-		out[index] = alpha[n] * sign(in[index]); 
+__global__ void BinaryGpu_binarize(const int n, const int num, const Dtype* in, Dtype* out){
+	CUDA_KERNEL_LOOP(index, n){//n:numbers of filters. 
+		Dtype sum = 0;         //num: numbers of filters' elements.
+		Dtype mean = 0;
+		for (int coor = 0; coor < num; coor++){
+			sum += std::abs(in[index*num + coor]) / Dtype(num);
+			mean += in[index*num + coor] / Dtype(num);
+		}
+		 for (int coor = 0; coor < num; coor++){
+			 out[index*num + coor] = sign(clamp(in[index*num + coor]-mean))*sum; 
+		}
+		 
 	}
 }
 template <typename Dtype>
 void BinaryConvolutionLayer<Dtype>::gpuMeanClampBinarizeConvParam(const shared_ptr<Blob<Dtype> > weights,
-	const shared_ptr<Blob<Dtype> > wb){ 
+	const shared_ptr<Blob<Dtype> > wb){
 	const int num = weights->num();
 	const int div = weights->count() / num; 
-	const int N = num*div;
-	for (int n = 0; n < num; n++){
-		caffe_gpu_asum(div, weights->gpu_data() + n*div, alphas_.mutable_cpu_data());
-		alphas_.mutable_cpu_data()[n] /= div;
-	}
-	
-	BinaryGpu_binarize<Dtype> << <CAFFE_GET_BLOCKS(N), CAFFE_CUDA_NUM_THREADS >> >(
-		N, div, alphas_.gpu_data(),weights->gpu_data(), wb->mutable_gpu_data());
+	BinaryGpu_binarize<Dtype> << <CAFFE_GET_BLOCKS(num), CAFFE_CUDA_NUM_THREADS >> >(
+		num, div, weights->gpu_data(), wb->mutable_gpu_data());
 }
 template <typename Dtype>
 void BinaryConvolutionLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
 	const vector<Blob<Dtype>*>& top) {
 	//TODO:
 	//convert float weights to binary 
-	gpuMeanClampBinarizeConvParam(this->blobs_[0], W_b); 
+	gpuMeanClampBinarizeConvParam(this->blobs_[0], W_b);
+	/*const Dtype* cpu_d = this->blobs_[0]->cpu_data();
+	const Dtype* gpu_d = this->blobs_[0]->gpu_data();
+	for (int i = 0; i < 5; i++){
+		std::cout << "cpu data: " << cpu_d[i];
+		std::cout << " gpu data:" << gpu_d[i] << std::endl;
+	}*/
 	//store float weights to W_buffer
 	copyGpuFromTo(this->blobs_[0], W_buffer);
 	//reinitialize blob_ with binarized weights W_b.

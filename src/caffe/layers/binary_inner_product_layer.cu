@@ -9,23 +9,26 @@ namespace caffe {
 #define clamp(x) ((x) < -1 ? -1 : (x) >1 ? 1 : (x))
 
 template <typename Dtype>
-__global__ void binarize_kernel(const Dtype* alpha,const Dtype* in, Dtype* out, const int num, const int kel){
+__global__ void binarize_kernel(const Dtype* in, Dtype* out, const int num, const int kel){
 	CUDA_KERNEL_LOOP(index, num){ //num:numbers of filters
-		int n = index / num;
-		out[index] = alpha[n] * sign(in[index]);
+		Dtype sum = 0;            //kel:numbers of elements of filters
+		Dtype mean = 0;
+		for (int coor = 0; coor < kel; coor++){
+			sum += std::abs(in[index*kel + coor]) / Dtype(kel);
+			mean += in[index*kel + coor] / Dtype(kel);
+		} 
+		for (int coor = 0; coor < kel; coor++){ 
+			out[index*kel + coor] = sign(clamp(in[index*kel + coor] - mean))*sum; 
+		}
 	}
 }
 template <typename Dtype>
 void BinaryInnerProductLayer<Dtype>::gpuMeanClampBinarizeParam(const shared_ptr<Blob<Dtype> > weights,
 	const shared_ptr<Blob<Dtype> > wb){
 	const int num = this->N_;//numbers of output
-	const int kel = this->K_; 
-	int N = num*kel;
-	for (int n = 0; n < num; n++){
-		caffe_gpu_asum(kel, weights->gpu_data() + n*kel, Alpha.mutable_cpu_data());
-		Alpha.mutable_cpu_data()[n] /= kel;
-	}
-	binarize_kernel<Dtype> << <CAFFE_GET_BLOCKS(N), CAFFE_CUDA_NUM_THREADS >> >(this->Alpha.gpu_data(), weights->gpu_data(), wb->mutable_gpu_data(), N, kel);
+	const int kel = this->K_;
+	//int N = num*kel;
+	binarize_kernel<Dtype> << <CAFFE_GET_BLOCKS(num), CAFFE_CUDA_NUM_THREADS >> >(weights->gpu_data(), wb->mutable_gpu_data(),num, kel); 
 }
 template <typename Dtype>
 void BinaryInnerProductLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,

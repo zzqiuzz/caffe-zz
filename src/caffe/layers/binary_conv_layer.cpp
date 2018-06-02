@@ -7,8 +7,6 @@ void BinaryConvolutionLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& botto
 	const vector<Blob<Dtype>*>& top){
 	BaseConvolutionLayer<Dtype>::LayerSetUp(bottom, top);
 	const int num = this->blobs_[0]->num(); 
-	vector<int> output_channels(1, this->num_output_);
-	this->alphas_.Reshape(output_channels);
 	filterMean.clear();
 	Alpha.clear();
 	for (int i = 0; i < num; i++)

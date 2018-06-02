@@ -22,7 +22,6 @@ protected:
 	//W_buffer store original weights.
 	shared_ptr<Blob<Dtype> > W_b;
 	shared_ptr<Blob<Dtype> > W_buffer;
-	Blob<Dtype> alphas_; 
 	vector<Dtype> filterMean;
 	vector<Dtype> Alpha;
 	virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
