@@ -22,14 +22,7 @@ __global__ void binarize_kernel(const Dtype* in, Dtype* out, const int num, cons
 		}
 	}
 }
-template <typename Dtype>
-void BinaryInnerProductLayer<Dtype>::gpuMeanClampBinarizeParam(const shared_ptr<Blob<Dtype> > weights,
-	const shared_ptr<Blob<Dtype> > wb){
-	const int num = this->N_;//numbers of output
-	const int kel = this->K_;
-	//int N = num*kel;
-	binarize_kernel<Dtype> << <CAFFE_GET_BLOCKS(num), CAFFE_CUDA_NUM_THREADS >> >(weights->gpu_data(), wb->mutable_gpu_data(),num, kel); 
-}
+ 
 template <typename Dtype>
 void BinaryInnerProductLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
     const vector<Blob<Dtype>*>& top) {
@@ -39,11 +32,14 @@ void BinaryInnerProductLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bot
 
   //TODO:
   //convert float weights to binary 
-  gpuMeanClampBinarizeParam(this->blobs_[0], W_b);
-  //store float weights to W_buffer
-  copyGpuFromTo(this->blobs_[0], W_buffer);
-  //reinitialize blob_ with binarized weights W_b.
-  copyGpuFromTo(W_b, this->blobs_[0]);
+  const int num = this->N_;//numbers of output
+  const int kel = this->K_;
+  //int N = num*kel;
+  binarize_kernel<Dtype> << <CAFFE_GET_BLOCKS(num), CAFFE_CUDA_NUM_THREADS >> >(this->blobs_[0]->gpu_data(), this->W_b->mutable_gpu_data(), num, kel);
+ 
+  caffe_copy(this->blobs_[0]->count(), this->blobs_[0]->gpu_data(), W_buffer->mutable_gpu_data());
+
+  caffe_copy(this->blobs_[0]->count(), W_b->gpu_data(), this->blobs_[0]->mutable_gpu_data());
 
   const Dtype* weight = this->blobs_[0]->gpu_data();
   if (M_ == 1) {
@@ -106,7 +102,7 @@ void BinaryInnerProductLayer<Dtype>::Backward_gpu(const vector<Blob<Dtype>*>& to
          (Dtype)0., bottom[0]->mutable_gpu_diff());
     }
   }
-  copyGpuFromTo(W_buffer, this->blobs_[0]);
+  caffe_copy(this->blobs_[0]->count(), W_buffer->gpu_data(), this->blobs_[0]->mutable_gpu_data());
 }
 
 INSTANTIATE_LAYER_GPU_FUNCS(BinaryInnerProductLayer);
