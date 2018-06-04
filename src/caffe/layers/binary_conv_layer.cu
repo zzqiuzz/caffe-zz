@@ -12,37 +12,34 @@ __global__ void BinaryGpu_binarize(const int n, const int num, const Dtype* in, 
 		Dtype mean = 0;
 		for (int coor = 0; coor < num; coor++){
 			sum += std::abs(in[index*num + coor]) / Dtype(num);
+<<<<<<< HEAD
 			mean += in[index*num + coor];
 		}
 		for (int coor = 0; coor < num; coor++){
 			out[index*num + coor] = sign(clamp(in[index*num + coor]))*sum;
+=======
+			mean += in[index*num + coor] / Dtype(num);
 		}
+		 for (int coor = 0; coor < num; coor++){
+			 out[index*num + coor] = sign(clamp(in[index*num + coor]-mean))*sum; 
+>>>>>>> dev
+		}
+		 
 	}
-}
-template <typename Dtype>
-void BinaryConvolutionLayer<Dtype>::gpuMeanClampBinarizeConvParam(const shared_ptr<Blob<Dtype> > weights,
-	const shared_ptr<Blob<Dtype> > wb){
-	const int num = weights->num();
-	const int div = weights->count() / num;
-	BinaryGpu_binarize<Dtype> << <CAFFE_GET_BLOCKS(num), CAFFE_CUDA_NUM_THREADS >> >(
-		num, div, weights->gpu_data(), wb->mutable_gpu_data());
 }
 template <typename Dtype>
 void BinaryConvolutionLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
 	const vector<Blob<Dtype>*>& top) {
-	//TODO:
-	//convert float weights to binary 
-	gpuMeanClampBinarizeConvParam(this->blobs_[0], W_b);
-	/*const Dtype* cpu_d = this->blobs_[0]->cpu_data();
-	const Dtype* gpu_d = this->blobs_[0]->gpu_data();
-	for (int i = 0; i < 5; i++){
-		std::cout << "cpu data: " << cpu_d[i];
-		std::cout << " gpu data:" << gpu_d[i] << std::endl;
-	}*/
-	//store float weights to W_buffer
-	copyGpuFromTo(this->blobs_[0], W_buffer);
-	//reinitialize blob_ with binarized weights W_b.
-	copyGpuFromTo(W_b, this->blobs_[0]);
+	 
+	const int num = this->blobs_[0]->num();
+	const int div = this->blobs_[0]->count() / num;
+	BinaryGpu_binarize<Dtype> << <CAFFE_GET_BLOCKS(num), CAFFE_CUDA_NUM_THREADS >> >(
+		num, div, this->blobs_[0]->gpu_data(), this->W_b->mutable_gpu_data());
+	
+	caffe_copy(this->blobs_[0]->count(), this->blobs_[0]->gpu_data(), W_buffer->mutable_gpu_data());
+	
+	caffe_copy(this->blobs_[0]->count(), W_b->gpu_data(), this->blobs_[0]->mutable_gpu_data());
+
 	//normal conv operations,directly copied from conv_layer.cpp
 	const Dtype* weight = this->blobs_[0]->gpu_data();
 	for (int i = 0; i < bottom.size(); ++i) {
@@ -90,7 +87,7 @@ void BinaryConvolutionLayer<Dtype>::Backward_gpu(const vector<Blob<Dtype>*>& top
 			}
 		}
 	}
-	copyGpuFromTo(W_buffer, this->blobs_[0]);
+	caffe_copy(this->blobs_[0]->count(), W_buffer->gpu_data(), this->blobs_[0]->mutable_gpu_data());
 }
 
 INSTANTIATE_LAYER_GPU_FUNCS(BinaryConvolutionLayer);
