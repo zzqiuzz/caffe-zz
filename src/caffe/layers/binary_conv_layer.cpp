@@ -6,19 +6,17 @@ template <typename Dtype>
 void BinaryConvolutionLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
 	const vector<Blob<Dtype>*>& top){
 	BaseConvolutionLayer<Dtype>::LayerSetUp(bottom, top);
-	const int num = this->blobs_[0]->num(); 
-	filterMean.clear();
-	Alpha.clear();
-	for (int i = 0; i < num; i++)
-	{
-		filterMean.push_back(0);
-		Alpha.push_back(0);
-	}
-
-	W_b = shared_ptr<Blob<Dtype> >(new Blob<Dtype>());
-	W_buffer = shared_ptr<Blob<Dtype> >(new Blob<Dtype>());
-	W_b->ReshapeLike(*(this->blobs_[0]));
-	W_buffer->ReshapeLike(*(this->blobs_[0]));
+	const int weight_dim = this->blobs_[0]->count() / this->blobs_[0]->num();
+	
+	alphas_.Reshape(this->num_output_,1,1,1);
+	mean_.Reshape(this->num_output_, 1, 1, 1);
+	W_b.Reshape(this->blobs_[0]->shape());
+	weight_sum_multiplier.Reshape(weight_dim, 1, 1, 1);
+	caffe_set(this->num_output_, Dtype(1), weight_sum_multiplier.mutable_cpu_data());
+	caffe_set(this->num_output_, Dtype(1), alphas_.mutable_cpu_data());
+	caffe_set(this->num_output_, Dtype(1), mean_.mutable_cpu_data());
+	
+	 
 }
 template <typename Dtype>
 void BinaryConvolutionLayer<Dtype>::compute_output_shape() {
@@ -36,52 +34,30 @@ void BinaryConvolutionLayer<Dtype>::compute_output_shape() {
 		this->output_shape_.push_back(output_dim);
 	}
 	 
-} 
-template <typename Dtype>
-void BinaryConvolutionLayer<Dtype>::cpuMeanClampBinarizeConvParam(const shared_ptr<Blob<Dtype> > weights,
-	const shared_ptr<Blob<Dtype> > wb){
-	int weightsNum = weights->count();
-	int num = weights->num();
-	int channel = weights->channels();
-	int height = weights->height();
-	int width = weights->width(); 
-	const int div = weightsNum / num;
-	for (int n = 0; n < num; n++){
-		for (int c = 0; c < channel; c++){
-			for (int h = 0; h < height; h++){
-				for (int w = 0; w < width; w++){
-					filterMean[n] += weights->data_at(n, c, h, w) / div;
-					Alpha[n] += std::abs(weights->data_at(n, c, h, w)) / Dtype(div);
-				}
-			}
-		}
-	}
-	for (int id = 0; id < weightsNum; id++){
-		const int num = id / div;//for each filter in the layer. 
-		wb->mutable_cpu_data()[id] = Alpha[num] * signWeights(clampWeights(weights->cpu_data()[id] - filterMean[num]));
-		//wb->mutable_cpu_data()[id] = Alpha[num] * signWeights(weights->cpu_data()[id]);
-	}
-
-}
-
-
+}  
 template <typename Dtype>
 void BinaryConvolutionLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-	const vector<Blob<Dtype>*>& top){
-	//TODO:
-	//convert float weights to bianry 
-	cpuMeanClampBinarizeConvParam(this->blobs_[0], W_b);
-	//store float weights to W_buffer
-	copyCpuFromTo(this->blobs_[0], W_buffer);
-	//reinitialize blob_ with binarized weights W_b.
-	copyCpuFromTo(W_b, this->blobs_[0]);
-	//normal conv operations,directly copied from conv_layer.cpp
-	const Dtype* weight = this->blobs_[0]->cpu_data();
+	const vector<Blob<Dtype>*>& top){  
+	const Dtype* weight = this->blobs_[0]->cpu_data(); 
+	//caffe_copy(W_b.count(), weight, W_b.mutable_cpu_data());
+	const int num = this->num_output_;
+	const int N = this->blobs_[0]->count();
+	const int weight_dim = N / num;
+	//binarize weights.
+	caffe_abs(N, weight, W_b.mutable_cpu_data());
+	const Dtype* binaryweight = W_b.cpu_data();
+	caffe_cpu_gemv<Dtype>(CblasNoTrans, this->num_output_, weight_dim, 1. / weight_dim, binaryweight, weight_sum_multiplier.cpu_data(), 0.,
+		alphas_.mutable_cpu_data());
+	for (int i = 0; i < N; i++){
+		int n = i / weight_dim;
+		Dtype binary_code = (weight[i] >= 0) ? 1 : -1;
+		W_b.mutable_cpu_data()[i] = binary_code*alphas_.cpu_data()[n];
+	}
 	for (int i = 0; i < bottom.size(); ++i) {
 		const Dtype* bottom_data = bottom[i]->cpu_data();
 		Dtype* top_data = top[i]->mutable_cpu_data();
 		for (int n = 0; n < this->num_; ++n) {
-			this->forward_cpu_gemm(bottom_data + n * this->bottom_dim_, weight,
+			this->forward_cpu_gemm(bottom_data + n * this->bottom_dim_, binaryweight,
 				top_data + n * this->top_dim_);
 			if (this->bias_term_) {
 				const Dtype* bias = this->blobs_[1]->cpu_data();
@@ -94,7 +70,8 @@ void BinaryConvolutionLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bott
 template <typename Dtype>
 void BinaryConvolutionLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& bottom, const vector<bool>& propagate_down,
 	const vector<Blob<Dtype>*>& top){
-	const Dtype* weight = this->blobs_[0]->cpu_data();
+	//const Dtype* weight = this->blobs_[0]->cpu_data();
+	const Dtype* binaryweight = W_b.cpu_data();
 	Dtype* weight_diff = this->blobs_[0]->mutable_cpu_diff();
 	for (int i = 0; i < top.size(); ++i) {
 		const Dtype* top_diff = top[i]->cpu_diff();
@@ -116,15 +93,12 @@ void BinaryConvolutionLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& bot
 				}
 				// gradient w.r.t. bottom data, if necessary.
 				if (propagate_down[i]) {
-					this->backward_cpu_gemm(top_diff + n * this->top_dim_, weight,
+					this->backward_cpu_gemm(top_diff + n * this->top_dim_, binaryweight,
 						bottom_diff + n * this->bottom_dim_);
 				}
 			}
 		}
-	}
-	//need to compute gradients w.r.t sign clamp?
-	copyCpuFromTo(W_buffer, this->blobs_[0]);
-
+	} 
 }
 
 #ifdef CPU_ONLY
