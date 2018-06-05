@@ -8,11 +8,13 @@ namespace caffe {
 template <typename Dtype>
 __global__ void BinaryGpu_binarize(const int num, const int weight_col, const Dtype* alpha,const Dtype* in, Dtype* out){
 	CUDA_KERNEL_LOOP(index, num){
-		//int n = index / weight_col;
-		//out[index] = sign(in[index])*alpha[n]; 
-		for (int coor = 0; coor < weight_col; coor++){
+		int n = index / weight_col;
+		const Dtype binarycode = 0;
+		binarycode = (in[index]) >= 0 ? 1 : -1;
+		out[index] = binarycode*alpha[n];
+		/*for (int coor = 0; coor < weight_col; coor++){
 			out[index*weight_col + coor] = sign(in[index*weight_col + coor]) * alpha[index];
-		}
+		}*/
 	}
 }
 template <typename Dtype>
@@ -30,8 +32,8 @@ void BinaryConvolutionLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bott
 		caffe_gpu_asum<Dtype>(div, weight + n*div, alphas_.mutable_cpu_data() + n);
 		alphas_.mutable_cpu_data()[n] /= div;
 	}
-	BinaryGpu_binarize<Dtype> << <CAFFE_GET_BLOCKS(num), CAFFE_CUDA_NUM_THREADS >> > (
-		num, div, this->alphas_.gpu_data(), weight, binaryweight);
+	BinaryGpu_binarize<Dtype> << <CAFFE_GET_BLOCKS(N), CAFFE_CUDA_NUM_THREADS >> > (
+		N, div, this->alphas_.gpu_data(), weight, binaryweight);
 	
 
 	//normal conv operations,directly copied from conv_layer.cpp
