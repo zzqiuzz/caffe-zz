@@ -29,9 +29,10 @@ void BinaryInnerProductLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bot
   int N = num*div;
   const Dtype* weight = this->blobs_[0]->gpu_data();
   Dtype* binaryweight = W_b.mutable_gpu_data();
+  caffe_copy<Dtype>(N, weight, binaryweight);
   for (int n = 0; n < num; n++){
-	  caffe_gpu_asum(div, weight + n*div, alphas_.mutable_gpu_data() + n);
-	  alphas_.mutable_gpu_data()[n] /= div;
+	  caffe_gpu_asum<Dtype>(div, weight + n*div, alphas_.mutable_cpu_data() + n);
+	  alphas_.mutable_cpu_data()[n] /= div;
   }
   binarize_kernel<Dtype> << <CAFFE_GET_BLOCKS(N), CAFFE_CUDA_NUM_THREADS >> >(alphas_.gpu_data(), weight,
 	  binaryweight, N, div);

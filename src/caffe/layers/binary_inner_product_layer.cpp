@@ -98,7 +98,7 @@ void BinaryInnerProductLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bot
   const int weight_dim = this->blobs_[0]->count() / this->blobs_[0]->num();
   const int N = this->blobs_[0]->count();
   const Dtype* weight = this->blobs_[0]->cpu_data();
-  //caffe_copy(W_b.count(), weight, W_b.mutable_cpu_data());
+  caffe_copy(W_b.count(), weight, W_b.mutable_cpu_data());
   caffe_abs(W_b.count(), weight, W_b.mutable_cpu_data());
   const Dtype* binaryweight = W_b.cpu_data();
   caffe_cpu_gemv<Dtype>(CblasNoTrans, num_output, weight_dim, 1. / weight_dim, binaryweight,

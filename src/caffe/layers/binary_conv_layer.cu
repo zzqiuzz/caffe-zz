@@ -14,7 +14,7 @@ __global__ void BinaryGpu_binarize(const int num, const int weight_col, const Dt
 }
 template <typename Dtype>
 void BinaryConvolutionLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-	const vector<Blob<Dtype>*>& top) {
+	const vector<Blob<Dtype>*>& top){
 	 
 	//const int num = this->blobs_[0]->num();
 	const int num = this->num_output_;
@@ -22,9 +22,10 @@ void BinaryConvolutionLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bott
 	const int N = this->blobs_[0]->count();
 	const Dtype* weight = this->blobs_[0]->gpu_data();
 	Dtype* binaryweight = this->W_b.mutable_gpu_data();
+	caffe_copy<Dtype>(N, weight, binaryweight);
 	for (int n = 0; n < num; n++){
-		caffe_gpu_asum(div, weight + n*div, alphas_.mutable_gpu_data() + n);
-		alphas_.mutable_gpu_data()[n] /= div;
+		caffe_gpu_asum<Dtype>(div, weight + n*div, alphas_.mutable_cpu_data() + n);
+		alphas_.mutable_cpu_data()[n] /= div;
 	}
 	BinaryGpu_binarize<Dtype> << <CAFFE_GET_BLOCKS(N), CAFFE_CUDA_NUM_THREADS >> > (
 		N, div, this->alphas_.gpu_data(), weight, binaryweight);

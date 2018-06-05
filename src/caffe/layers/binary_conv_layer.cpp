@@ -39,7 +39,7 @@ template <typename Dtype>
 void BinaryConvolutionLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
 	const vector<Blob<Dtype>*>& top){  
 	const Dtype* weight = this->blobs_[0]->cpu_data(); 
-	//caffe_copy(W_b.count(), weight, W_b.mutable_cpu_data());
+	caffe_copy(W_b.count(), weight, W_b.mutable_cpu_data());
 	const int num = this->num_output_;
 	const int N = this->blobs_[0]->count();
 	const int weight_dim = N / num;
