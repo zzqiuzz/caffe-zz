@@ -11,8 +11,11 @@ namespace caffe {
 template <typename Dtype>
 __global__ void binarize_kernel(const Dtype* alpha, const Dtype* in, Dtype* out, const int num, const int weight_col){
 	CUDA_KERNEL_LOOP(index, num){
-		int n = index / weight_col;
-		out[index] = sign(in[index])*alpha[n];
+		//int n = index / weight_col;
+		//out[index] = sign(in[index])*alpha[n];
+		for (int coor = 0; coor < weight_col; coor++){
+			out[index*weight_col + coor] = sign(in[index*weight_col + coor]) * alpha[index];
+		}
 	}
 }
 
@@ -34,8 +37,8 @@ void BinaryInnerProductLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bot
 	  caffe_gpu_asum<Dtype>(div, weight + n*div, alphas_.mutable_cpu_data() + n);
 	  alphas_.mutable_cpu_data()[n] /= div;
   }
-  binarize_kernel<Dtype> << <CAFFE_GET_BLOCKS(N), CAFFE_CUDA_NUM_THREADS >> >(alphas_.gpu_data(), weight,
-	  binaryweight, N, div);
+  binarize_kernel<Dtype> << <CAFFE_GET_BLOCKS(num), CAFFE_CUDA_NUM_THREADS >> >(alphas_.gpu_data(), weight,
+	  binaryweight, num, div);
  
  
  
