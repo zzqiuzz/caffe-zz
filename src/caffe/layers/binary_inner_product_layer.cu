@@ -12,8 +12,7 @@ template <typename Dtype>
 __global__ void binarize_kernel(const Dtype* alpha, const Dtype* in, Dtype* out, const int num, const int weight_col){
 	CUDA_KERNEL_LOOP(index, num){
 		int n = index / weight_col;
-		const Dtype binarycode = 0;
-		binarycode = (in[index]) >= 0 ? 1 : -1;
+		const Dtype binarycode = (in[index]) >= 0 ? 1 : -1; 
 		out[index] = binarycode*alpha[n];
 		/*for (int coor = 0; coor < weight_col; coor++){
 			out[index*weight_col + coor] = sign(in[index*weight_col + coor]) * alpha[index];
