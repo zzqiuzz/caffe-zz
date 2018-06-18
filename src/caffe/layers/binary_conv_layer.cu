@@ -90,14 +90,7 @@ void BinaryConvolutionLayer<Dtype>::Backward_gpu(const vector<Blob<Dtype>*>& top
 				if (this->param_propagate_down_[0]) {
 					this->weight_gpu_gemm(bottom_data + n * this->bottom_dim_,
 						top_diff + n * this->top_dim_, weight_diff);
-					//
-					const Dtype* weight = this->blobs_[0]->gpu_data();
-					const int weight_dim = this->blobs_[0]->count() / this->blobs_[0]->num();
-					const int n = this->blobs_[0]->count();
 					
-					Gradient_adder<Dtype> << <CAFFE_GET_BLOCKS(n), CAFFE_CUDA_NUM_THREADS >> > 
-						(n, weight_dim, weight, weight_diff, alphas_.gpu_data());
-					//
 				}
 				// gradient w.r.t. bottom data, if necessary.
 				if (propagate_down[i]) {
@@ -105,6 +98,14 @@ void BinaryConvolutionLayer<Dtype>::Backward_gpu(const vector<Blob<Dtype>*>& top
 						bottom_diff + n * this->bottom_dim_);
 				}
 			}
+			//
+			const Dtype* weight = this->blobs_[0]->gpu_data();
+			const int weight_dim = this->blobs_[0]->count() / this->blobs_[0]->num();
+			const int n = this->blobs_[0]->count();
+
+			Gradient_adder<Dtype> << <CAFFE_GET_BLOCKS(n), CAFFE_CUDA_NUM_THREADS >> >
+				(n, weight_dim, weight, weight_diff, alphas_.gpu_data());
+			//
 		}
 	}
 

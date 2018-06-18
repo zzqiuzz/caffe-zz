@@ -90,28 +90,28 @@ void BinaryConvolutionLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& bot
 				if (this->param_propagate_down_[0]) {
 					this->weight_cpu_gemm(bottom_data + n * this->bottom_dim_,
 						top_diff + n * this->top_dim_, weight_diff);
-				}
-				//
-				const Dtype* weight= this->blobs_[0]->cpu_data();
-				const int weight_dim = this->blobs_[0]->count() / this->blobs_[0]->num();
-				for (int i = 0; i < this->blobs_[0]->count(); i++){
-					const int n = i / weight_dim;
-					Dtype multiplier = 0;
-					if (abs(weight[i]) >= 1)
-						multiplier = 0;
-					else
-					{
-						multiplier = 1;
-						multiplier *= alphas_.cpu_data()[n];
-					} 
-					multiplier += Dtype(1) / this->blobs_[0]->count();
-					weight_diff[i] *= multiplier;
 				} 
 				// gradient w.r.t. bottom data, if necessary.
 				if (propagate_down[i]) {
 					this->backward_cpu_gemm(top_diff + n * this->top_dim_, binaryweight,
 						bottom_diff + n * this->bottom_dim_);
 				}
+			}
+			//
+			const Dtype* weight = this->blobs_[0]->cpu_data();
+			const int weight_dim = this->blobs_[0]->count() / this->blobs_[0]->num();
+			for (int i = 0; i < this->blobs_[0]->count(); i++){
+				const int n = i / weight_dim;
+				Dtype multiplier = 0;
+				if (abs(weight[i]) >= 1)
+					multiplier = 0;
+				else
+				{
+					multiplier = 1;
+					multiplier *= alphas_.cpu_data()[n];
+				}
+				multiplier += Dtype(1) / this->blobs_[0]->count();
+				weight_diff[i] *= multiplier;
 			}
 		}
 	} 
