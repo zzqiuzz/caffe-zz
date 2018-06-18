@@ -11,8 +11,8 @@ void BinaryConvolutionLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& botto
 	alphas_.Reshape(this->num_output_,1,1,1);
 	mean_.Reshape(this->num_output_, 1, 1, 1);
 	W_b.Reshape(this->blobs_[0]->shape());
-	weight_sum_multiplier.Reshape(weight_dim, 1, 1, 1);
-	caffe_set(this->num_output_, Dtype(1), weight_sum_multiplier.mutable_cpu_data());
+	weight_sum_multiplier.Reshape(weight_dim, 1, 1, 1); 
+	caffe_set(this->num_output_, Dtype(1), weight_sum_multiplier.mutable_cpu_data()); 
 	caffe_set(this->num_output_, Dtype(1), alphas_.mutable_cpu_data());
 	caffe_set(this->num_output_, Dtype(1), mean_.mutable_cpu_data());
 	
@@ -91,6 +91,22 @@ void BinaryConvolutionLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& bot
 					this->weight_cpu_gemm(bottom_data + n * this->bottom_dim_,
 						top_diff + n * this->top_dim_, weight_diff);
 				}
+				//
+				const Dtype* weight= this->blobs_[0]->cpu_data();
+				const int weight_dim = this->blobs_[0]->count() / this->blobs_[0]->num();
+				for (int i = 0; i < this->blobs_[0]->count(); i++){
+					const int n = i / weight_dim;
+					Dtype multiplier = 0;
+					if (abs(weight[i]) >= 1)
+						multiplier = 0;
+					else
+					{
+						multiplier = 1;
+						multiplier *= alphas_.cpu_data()[n];
+					} 
+					multiplier += Dtype(1) / this->blobs_[0]->count();
+					weight_diff[i] *= multiplier;
+				} 
 				// gradient w.r.t. bottom data, if necessary.
 				if (propagate_down[i]) {
 					this->backward_cpu_gemm(top_diff + n * this->top_dim_, binaryweight,

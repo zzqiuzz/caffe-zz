@@ -17,6 +17,22 @@ __global__ void BinaryGpu_binarize(const int num, const int weight_col, const Dt
 	}
 }
 template <typename Dtype>
+__global__ void Gradient_adder(const int num,const int weight_dim,const Dtype* weight,Dtype* weight_diff,const Dtype* alpha){
+	CUDA_KERNEL_LOOP(index, num){ 
+		const int n = index / weight_dim;
+		Dtype multiplier = 0;
+		if (abs(weight[index]) >= 1)
+			multiplier = 0;
+		else
+		{
+			multiplier = 1;
+			multiplier *= alpha[n];
+		}
+		multiplier += Dtype(1) / num;
+		weight_diff[index] *= multiplier; 
+	}
+}
+template <typename Dtype>
 void BinaryConvolutionLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
 	const vector<Blob<Dtype>*>& top){
 	 
@@ -74,6 +90,14 @@ void BinaryConvolutionLayer<Dtype>::Backward_gpu(const vector<Blob<Dtype>*>& top
 				if (this->param_propagate_down_[0]) {
 					this->weight_gpu_gemm(bottom_data + n * this->bottom_dim_,
 						top_diff + n * this->top_dim_, weight_diff);
+					//
+					const Dtype* weight = this->blobs_[0]->gpu_data();
+					const int weight_dim = this->blobs_[0]->count() / this->blobs_[0]->num();
+					const int n = this->blobs_[0]->count();
+					
+					Gradient_adder<Dtype> << <CAFFE_GET_BLOCKS(n), CAFFE_CUDA_NUM_THREADS >> > 
+						(n, weight_dim, weight, weight_diff, alphas_.gpu_data());
+					//
 				}
 				// gradient w.r.t. bottom data, if necessary.
 				if (propagate_down[i]) {

@@ -19,7 +19,22 @@ __global__ void binarize_kernel(const Dtype* alpha, const Dtype* in, Dtype* out,
 		}*/
 	}
 }
-
+template <typename Dtype>
+__global__ void Gradient_adder(const int num, const int weight_dim, const Dtype* weight, Dtype* weight_diff, const Dtype* alpha){
+	CUDA_KERNEL_LOOP(index, num){
+		const int n = index / weight_dim;
+		Dtype multiplier = 0;
+		if (abs(weight[index]) >= 1)
+			multiplier = 0;
+		else
+		{
+			multiplier = 1;
+			multiplier *= alpha[n];
+		}
+		multiplier += Dtype(1) / num;
+		weight_diff[index] *= multiplier;
+	}
+}
  
 template <typename Dtype>
 void BinaryInnerProductLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
@@ -81,6 +96,16 @@ void BinaryInnerProductLayer<Dtype>::Backward_gpu(const vector<Blob<Dtype>*>& to
           N_, K_, M_,
           (Dtype)1., top_diff, bottom_data,
           (Dtype)1., this->blobs_[0]->mutable_gpu_diff());
+	  
+	  //
+	  const Dtype* weight = this->blobs_[0]->gpu_data();
+	  const int weight_dim = this->blobs_[0]->count() / this->blobs_[0]->num();
+	  const int n = this->blobs_[0]->count();
+
+	  Gradient_adder<Dtype> << <CAFFE_GET_BLOCKS(n), CAFFE_CUDA_NUM_THREADS >> >
+		  (n, weight_dim, weight, this->blobs_[0]->mutable_gpu_diff(), alphas_.gpu_data());
+	  //
+	  
     }
   }
   if (bias_term_ && this->param_propagate_down_[1]) {

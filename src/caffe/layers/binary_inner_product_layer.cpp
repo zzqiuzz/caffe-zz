@@ -139,6 +139,25 @@ void BinaryInnerProductLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& to
           N_, K_, M_,
           (Dtype)1., top_diff, bottom_data,
           (Dtype)1., this->blobs_[0]->mutable_cpu_diff());
+	  //
+	  //
+	  const Dtype* weight = this->blobs_[0]->cpu_data();
+	  Dtype* weight_diff = this->blobs_[0]->mutable_cpu_diff();
+	  const int weight_dim = this->blobs_[0]->count() / this->blobs_[0]->num();
+	  for (int i = 0; i < this->blobs_[0]->count(); i++){
+		  const int n = i / weight_dim;
+		  Dtype multiplier = 0;
+		  if (abs(weight[i]) >= 1)
+			  multiplier = 0;
+		  else
+		  {
+			  multiplier = 1;
+			  multiplier *= alphas_.cpu_data()[n];
+		  }
+		  multiplier += Dtype(1) / this->blobs_[0]->count();
+		  weight_diff[i] *= multiplier;
+	  }
+	  //
     }
   }
   if (bias_term_ && this->param_propagate_down_[1]) {
