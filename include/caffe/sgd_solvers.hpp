@@ -25,6 +25,7 @@ class SGDSolver : public Solver<Dtype> {
 
  protected:
   void PreSolve();
+  void ClipWeights();
   Dtype GetLearningRate();
   virtual void ApplyUpdate();
   virtual void Normalize(int param_id);

@@ -181,6 +181,8 @@ inline void caffe_gpu_memset(const size_t N, const int alpha, void* X) {
   NO_GPU;
 #endif
 }
+template <typename Dtype>
+void caffe_gpu_clip(const int N, Dtype *X);
 
 template <typename Dtype>
 void caffe_gpu_add_scalar(const int N, const Dtype alpha, Dtype *X);
