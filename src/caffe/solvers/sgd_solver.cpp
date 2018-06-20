@@ -173,7 +173,14 @@ void SGDSolver<Dtype>::Regularize(int param_id) {
             local_decay,
             temp_[param_id]->cpu_data(),
             net_params[param_id]->mutable_cpu_diff());
-      } else {
+      } else if(regularization_type == "Binary"){
+        local_decay *= -1;
+        caffe_axpy(net_params[param_id]->count(),
+            local_decay,
+            net_params[param_id]->cpu_data(),
+            net_params[param_id]->mutable_cpu_diff());
+      }
+       else {
         LOG(FATAL) << "Unknown regularization type: " << regularization_type;
       }
     }

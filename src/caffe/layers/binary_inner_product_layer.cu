@@ -31,7 +31,8 @@ __global__ void Gradient_adder(const int num, const int weight_dim, const Dtype*
 			multiplier = 1;
 			multiplier *= alpha[n];
 		}
-		multiplier += Dtype(1) / num;
+		multiplier += Dtype(1) / weight_dim;
+		multiplier *= weight_dim;
 		weight_diff[index] *= multiplier;
 	}
 }
