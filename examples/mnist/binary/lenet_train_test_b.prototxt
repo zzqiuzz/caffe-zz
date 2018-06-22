@@ -64,10 +64,19 @@ layer{
   bottom: "conv1"
   top: "norm1"
 }
+layer {
+  bottom: "norm1"
+  top: "conv1_2_sc"
+  name: "bn1_2_scal"
+  type: "Scale"
+  scale_param {
+    bias_term: true
+  }
+}
 layer{
   name: "relu1"
   type: "ReLU"
-  bottom: "norm1"
+  bottom: "conv1_2_sc"
   top: "relu1"
 
 } 
@@ -89,9 +98,18 @@ layer{
   top: "norm2"
 }
 layer {
+  bottom: "norm2"
+  top: "conv2_sc"
+  name: "bn2_scal"
+  type: "Scale"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
   name: "conv2"
   type: "BinaryConvolution"
-  bottom: "norm2"
+  bottom: "conv2_sc"
   top: "conv2"
   param {
     lr_mult: 1
@@ -152,7 +170,7 @@ layer {
 }
 layer {
   name: "ip2"
-  type: "InnerProduct"
+  type: "BinaryInnerProduct"
   bottom: "ip1"
   top: "ip2"
   param {
