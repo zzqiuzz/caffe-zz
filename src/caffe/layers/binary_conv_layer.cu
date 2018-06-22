@@ -45,12 +45,13 @@ void BinaryConvolutionLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bott
 	Dtype* binaryweight = this->W_b.mutable_gpu_data();
 	caffe_copy<Dtype>(N, weight, binaryweight);
 	//calculate mean_.
-	caffe_gpu_gemv<Dtype>(CblasNoTrans, num, div, 1. / div, weight, weight_sum_multiplier.cpu_data(), 0.,
-		mean_.mutable_cpu_data()); 
+	caffe_gpu_gemv<Dtype>(CblasNoTrans, num, div, 1. / div, weight, weight_sum_multiplier.gpu_data(), 0.,
+		mean_.mutable_gpu_data()); 
+
 	//extract mean.
 	const Dtype* mean_data=mean_.cpu_data();
 	for(int i=0;i<num;++i){
-		caffe_gpu_add_scalar<Dtype>(div, *(mean_data + i), this->blobs_[0]->mutable_gpu_data() + i*div);
+		caffe_gpu_add_scalar<Dtype>(div, -*(mean_data + i), this->blobs_[0]->mutable_gpu_data() + i*div);
 	}
 	//clamp weights
 	this->blobs_[0]->clip_data();
