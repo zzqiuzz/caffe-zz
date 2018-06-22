@@ -32,6 +32,7 @@ __global__ void Gradient_adder(const int num, const int weight_dim, const Dtype*
 			multiplier *= alpha[n];
 		}
 		multiplier += Dtype(1) / weight_dim;
+    multiplier *= (1 - 1./weight_dim);
 		multiplier *= weight_dim;
 		weight_diff[index] *= multiplier;
 	}
@@ -50,15 +51,24 @@ void BinaryInnerProductLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bot
   const Dtype* weight = this->blobs_[0]->gpu_data();
   Dtype* binaryweight = W_b.mutable_gpu_data();
   caffe_copy<Dtype>(N, weight, binaryweight);
+
+  //calculate mean_.
+  caffe_gpu_gemv<Dtype>(CblasNoTrans, num, div, 1. / div, weight, weight_sum_multiplier.cpu_data(), 0.,
+    mean_.mutable_cpu_data()); 
+  //extract mean.
+  for(int i=0;i<num;++i){
+    caffe_gpu_add_scalar<Dtype>(div, *(mean_.gpu_data() + i), this->blobs_[0]->mutable_gpu_data() + i*div);
+  }
+  //clamp weights
+  this->blobs_[0]->clip_data();
+  //calculate alphas_
   for (int n = 0; n < num; n++){
 	  caffe_gpu_asum<Dtype>(div, weight + n*div, alphas_.mutable_cpu_data() + n);
 	  alphas_.mutable_cpu_data()[n] /= div;
   }
+  //binarize weights.
   binarize_kernel<Dtype> << <CAFFE_GET_BLOCKS(N), CAFFE_CUDA_NUM_THREADS >> >(alphas_.gpu_data(), weight,
-	  binaryweight, N, div);
- 
- 
- 
+	  binaryweight, N, div); 
   if (M_ == 1) {
 	  caffe_gpu_gemv<Dtype>(CblasNoTrans, N_, K_, (Dtype)1.,
 		  binaryweight, bottom_data, (Dtype)0., top_data);

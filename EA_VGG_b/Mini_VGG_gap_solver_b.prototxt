@@ -12,7 +12,7 @@ momentum: 0.9
 weight_decay: 0.0000005
 lr_policy: "multistep"
 gamma:0.1
-regularization_type: "Binary"
+#regularization_type: "Binary"
 #gamma:0.0001
 #power:0.75
 stepvalue:100000

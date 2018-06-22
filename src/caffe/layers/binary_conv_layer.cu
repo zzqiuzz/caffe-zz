@@ -8,9 +8,10 @@ namespace caffe {
 template <typename Dtype>
 __global__ void BinaryGpu_binarize(const int num, const int weight_col, const Dtype* alpha,const Dtype* in, Dtype* out){
 	CUDA_KERNEL_LOOP(index, num){
-		int n = index / weight_col;
+		int n = index / weight_col; 
 		const Dtype binarycode = in[index] >= 0 ? 1 : -1; 
 		out[index] = binarycode*alpha[n];
+
 		/*for (int coor = 0; coor < weight_col; coor++){
 			out[index*weight_col + coor] = sign(in[index*weight_col + coor]) * alpha[index];
 		}*/
@@ -21,14 +22,13 @@ __global__ void Gradient_adder(const int num,const int weight_dim,const Dtype* w
 	CUDA_KERNEL_LOOP(index, num){ 
 		const int n = index / weight_dim;
 		Dtype multiplier = 0;
-		if (abs(weight[index]) >= 1)
-			multiplier = 0;
-		else
+		if (abs(weight[index]) <= 1)
 		{
 			multiplier = 1;
 			multiplier *= alpha[n];
 		}
 		multiplier += Dtype(1) / weight_dim;
+		multiplier *= (1 - 1./weight_dim);
 		multiplier *= weight_dim;
 		weight_diff[index] *= multiplier; 
 	}
@@ -44,10 +44,21 @@ void BinaryConvolutionLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bott
 	const Dtype* weight = this->blobs_[0]->gpu_data();
 	Dtype* binaryweight = this->W_b.mutable_gpu_data();
 	caffe_copy<Dtype>(N, weight, binaryweight);
-	for (int n = 0; n < num; n++){
-		caffe_gpu_asum<Dtype>(div, weight + n*div, alphas_.mutable_cpu_data() + n);
-		alphas_.mutable_cpu_data()[n] /= div;
+	//calculate mean_.
+	caffe_gpu_gemv<Dtype>(CblasNoTrans, num, div, 1. / div, weight, weight_sum_multiplier.cpu_data(), 0.,
+		mean_.mutable_cpu_data()); 
+	//extract mean.
+	for(int i=0;i<num;++i){
+		caffe_gpu_add_scalar<Dtype>(div, *(mean_.gpu_data() + i), this->blobs_[0]->mutable_gpu_data() + i*div);
 	}
+	//clamp weights
+	this->blobs_[0]->clip_data();
+	//calculate alphas_.
+	for (int n = 0; n < num; n++){
+		caffe_gpu_asum<Dtype>(div, weight + n*div, alphas_.mutable_cpu_data() + n); 
+		alphas_.mutable_cpu_data()[n] /= div; 
+	}
+	//binarize weights.
 	BinaryGpu_binarize<Dtype> << <CAFFE_GET_BLOCKS(N), CAFFE_CUDA_NUM_THREADS >> > (
 		N, div, this->alphas_.gpu_data(), weight, binaryweight);
 	

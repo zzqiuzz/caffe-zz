@@ -120,17 +120,30 @@ void SGDSolver<Dtype>::ApplyUpdate() {
     ComputeUpdateValue(param_id, rate);
   }
   this->net_->Update();
-  //clip gradients within [-1,1]
-  ClipWeights();
+  //clip weights within [-1,1]
+ /* if(this->param_.net_type() == "Binary"){
+     for(int param_id = 0;param_id < this->net_->learnable_params().size();++param_id){
+        MeanExtract(param_id);
+        ClipWeights(param_id);
+
+     } 
+    
+  }*/
   
 }
-template <typename Dtype>
-void SGDSolver<Dtype>::ClipWeights(){
-  for(int param_id = 0;param_id < this->net_->learnable_params().size();++param_id){
-    const vector<Blob<Dtype>*>& net_params = this->net_->learnable_params();
-    net_params[param_id]->clip_data();
-  } 
+/*template <typename Dtype>
+void SGDSolver<Dtype>::MeanExtract(int param_id){
+  const vector<Blob<Dtype>*>& net_params = this->net_->learnable_params();
+  //
+  
+  //
 }
+
+template <typename Dtype>
+void SGDSolver<Dtype>::ClipWeights(int param_id){
+  const vector<Blob<Dtype>*>& net_params = this->net_->learnable_params();
+  net_params[param_id]->clip_data();
+}*/
 
 template <typename Dtype>
 void SGDSolver<Dtype>::Normalize(int param_id) {
