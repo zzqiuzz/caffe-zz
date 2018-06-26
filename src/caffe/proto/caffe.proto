@@ -323,7 +323,7 @@ message ParamSpec {
 // NOTE
 // Update the next available ID when you add a new LayerParameter field.
 //
-// LayerParameter next available layer-specific ID: 148 (last added: swish_param)
+// LayerParameter next available layer-specific ID: 150 (last added: debug_param)
 message LayerParameter {
   optional string name = 1; // the layer name
   optional string type = 2; // the layer type
@@ -422,8 +422,11 @@ message LayerParameter {
   optional TileParameter tile_param = 138;
   optional WindowDataParameter window_data_param = 129;
   optional AllPassParameter all_pass_param = 148;
+  optional DebugParameter debug_param = 149;
 }
-
+message DebugParameter{
+  optional bool xnorno_grad  = 1 [default = false];
+}
 message AllPassParameter{
   optional float key = 1 [default = 0];
 }

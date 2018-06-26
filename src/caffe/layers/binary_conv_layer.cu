@@ -44,17 +44,20 @@ void BinaryConvolutionLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bott
 	const Dtype* weight = this->blobs_[0]->gpu_data();
 	Dtype* binaryweight = this->W_b.mutable_gpu_data();
 	caffe_copy<Dtype>(N, weight, binaryweight);
-	//calculate mean_.
-	caffe_gpu_gemv<Dtype>(CblasNoTrans, num, div, 1. / div, weight, weight_sum_multiplier.gpu_data(), 0.,
-		mean_.mutable_gpu_data()); 
+	if(this->layer_param_.debug_param().xnorno_grad()){
+		//calculate mean_.
+		caffe_gpu_gemv<Dtype>(CblasNoTrans, num, div, 1. / div, weight, weight_sum_multiplier.gpu_data(), 0.,
+			mean_.mutable_gpu_data()); 
 
-	//extract mean.
-	const Dtype* mean_data=mean_.cpu_data();
-	for(int i=0;i<num;++i){
-		caffe_gpu_add_scalar<Dtype>(div, -*(mean_data + i), this->blobs_[0]->mutable_gpu_data() + i*div);
+		//extract mean.
+		const Dtype* mean_data=mean_.cpu_data();
+		for(int i=0;i<num;++i){
+			caffe_gpu_add_scalar<Dtype>(div, -*(mean_data + i), this->blobs_[0]->mutable_gpu_data() + i*div);
+		}
+		//clamp weights
+		this->blobs_[0]->clip_data(); 
 	}
-	//clamp weights
-	this->blobs_[0]->clip_data();
+	
 	//calculate alphas_.
 	for (int n = 0; n < num; n++){
 		caffe_gpu_asum<Dtype>(div, weight + n*div, alphas_.mutable_cpu_data() + n); 
@@ -113,12 +116,14 @@ void BinaryConvolutionLayer<Dtype>::Backward_gpu(const vector<Blob<Dtype>*>& top
 				}
 			}
 			//
-			const Dtype* weight = this->blobs_[0]->gpu_data();
-			const int weight_dim = this->blobs_[0]->count() / this->blobs_[0]->num();
-			const int n = this->blobs_[0]->count();
-
-			Gradient_adder<Dtype> << <CAFFE_GET_BLOCKS(n), CAFFE_CUDA_NUM_THREADS >> >
-				(n, weight_dim, weight, weight_diff, alphas_.gpu_data());
+			if(this->layer_param_.debug_param().xnorno_grad()){
+				const Dtype* weight = this->blobs_[0]->gpu_data();
+				const int weight_dim = this->blobs_[0]->count() / this->blobs_[0]->num();
+				const int n = this->blobs_[0]->count(); 
+				Gradient_adder<Dtype> << <CAFFE_GET_BLOCKS(n), CAFFE_CUDA_NUM_THREADS >> >
+					(n, weight_dim, weight, weight_diff, alphas_.gpu_data()); 
+			}
+			
 			//
 		}
 	}
