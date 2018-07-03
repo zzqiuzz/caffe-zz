@@ -12,7 +12,7 @@ void BinaryConvolutionLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& botto
 	mean_.Reshape(this->num_output_, 1, 1, 1);
 	W_b.Reshape(this->blobs_[0]->shape());
 	weight_sum_multiplier.Reshape(weight_dim, 1, 1, 1); 
-	caffe_set(this->num_output_, Dtype(1), weight_sum_multiplier.mutable_cpu_data()); 
+	caffe_set(weight_dim, Dtype(1), weight_sum_multiplier.mutable_cpu_data()); 
 	caffe_set(this->num_output_, Dtype(1), alphas_.mutable_cpu_data());
 	caffe_set(this->num_output_, Dtype(1), mean_.mutable_cpu_data());
 	

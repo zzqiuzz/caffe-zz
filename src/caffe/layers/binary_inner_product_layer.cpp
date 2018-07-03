@@ -59,7 +59,7 @@ void BinaryInnerProductLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bott
   mean_.Reshape(num_output, 1, 1, 1);
   alphas_.Reshape(num_output, 1, 1, 1);
   W_b.Reshape(this->blobs_[0]->shape());
-  caffe_set<Dtype>(weight_sum_multiplier.count(), Dtype(1), weight_sum_multiplier.mutable_cpu_data());
+  caffe_set<Dtype>(weight_dim, Dtype(1), weight_sum_multiplier.mutable_cpu_data());
   caffe_set<Dtype>(num_output, Dtype(1), mean_.mutable_cpu_data());
   caffe_set<Dtype>(num_output, Dtype(1), alphas_.mutable_cpu_data());
 }
