@@ -1,0 +1,286 @@
+I0629 22:28:11.747979 27821 upgrade_proto.cpp:1113] snapshot_prefix was a directory and is replaced to my/BWN/GroupConvolution/Mnist/snapshot/lenet_multistep_solver
+I0629 22:28:11.748229 27821 caffe.cpp:204] Using GPUs 0
+I0629 22:28:11.767367 27821 caffe.cpp:209] GPU 0: GeForce GTX TITAN X
+I0629 22:28:12.031411 27821 solver.cpp:45] Initializing solver from parameters: 
+test_iter: 100
+test_interval: 500
+base_lr: 0.01
+display: 100
+max_iter: 10000
+lr_policy: "multistep"
+gamma: 0.1
+momentum: 0.9
+weight_decay: 0.0005
+snapshot: 5000
+snapshot_prefix: "my/BWN/GroupConvolution/Mnist/snapshot/lenet_multistep_solver"
+solver_mode: GPU
+device_id: 0
+net: "my/BWN/GroupConvolution/Mnist/lenet_train_test_b.prototxt"
+train_state {
+  level: 0
+  stage: ""
+}
+stepvalue: 5000
+stepvalue: 7000
+stepvalue: 8000
+stepvalue: 9000
+stepvalue: 9500
+I0629 22:28:12.031643 27821 solver.cpp:102] Creating training net from net file: my/BWN/GroupConvolution/Mnist/lenet_train_test_b.prototxt
+I0629 22:28:12.032119 27821 net.cpp:294] The NetState phase (0) differed from the phase (1) specified by a rule in layer mnist
+I0629 22:28:12.032150 27821 net.cpp:294] The NetState phase (0) differed from the phase (1) specified by a rule in layer accuracy
+I0629 22:28:12.032259 27821 net.cpp:51] Initializing net from parameters: 
+name: "LeNet"
+state {
+  phase: TRAIN
+  level: 0
+  stage: ""
+}
+layer {
+  name: "mnist"
+  type: "Data"
+  top: "data"
+  top: "label"
+  include {
+    phase: TRAIN
+  }
+  transform_param {
+    scale: 0.00390625
+  }
+  data_param {
+    source: "examples/mnist/mnist_train_lmdb"
+    batch_size: 100
+    backend: LMDB
+  }
+}
+layer {
+  name: "conv1"
+  type: "BinaryConvolution"
+  bottom: "data"
+  top: "conv1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 20
+    kernel_size: 5
+    group: 5
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+  debug_param {
+    xnorno_grad: true
+  }
+}
+layer {
+  name: "norm1"
+  type: "BatchNorm"
+  bottom: "conv1"
+  top: "norm1"
+}
+layer {
+  name: "bn1_scal"
+  type: "Scale"
+  bottom: "norm1"
+  top: "conv1_sc"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "relu1"
+  type: "ReLU"
+  bottom: "conv1_sc"
+  top: "relu1"
+}
+layer {
+  name: "pool1"
+  type: "Pooling"
+  bottom: "relu1"
+  top: "pool1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "conv2"
+  type: "BinaryConvolution"
+  bottom: "pool1"
+  top: "conv2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 50
+    kernel_size: 5
+    group: 5
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+  debug_param {
+    xnorno_grad: true
+  }
+}
+layer {
+  name: "norm2"
+  type: "BatchNorm"
+  bottom: "conv2"
+  top: "norm2"
+}
+layer {
+  name: "bn2_scal"
+  type: "Scale"
+  bottom: "norm2"
+  top: "conv2_sc"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "relu2"
+  type: "ReLU"
+  bottom: "conv2_sc"
+  top: "relu2"
+}
+layer {
+  name: "pool2"
+  type: "Pooling"
+  bottom: "relu2"
+  top: "pool2"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "ip1"
+  type: "BinaryInnerProduct"
+  bottom: "pool2"
+  top: "ip1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 500
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+  debug_param {
+    xnorno_grad: true
+  }
+}
+layer {
+  name: "ip1_norm"
+  type: "BatchNorm"
+  bottom: "ip1"
+  top: "ip1_norm"
+}
+layer {
+  name: "ip1_sc"
+  type: "Scale"
+  bottom: "ip1_norm"
+  top: "ip1_sc"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "ip1_relu"
+  type: "ReLU"
+  bottom: "ip1_sc"
+  top: "ip1_relu"
+}
+layer {
+  name: "ip2"
+  type: "BinaryInnerProduct"
+  bottom: "ip1_relu"
+  top: "ip2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 10
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+  debug_param {
+    xnorno_grad: true
+  }
+}
+layer {
+  name: "loss"
+  type: "SoftmaxWithLoss"
+  bottom: "ip2"
+  bottom: "label"
+  top: "loss"
+}
+I0629 22:28:12.032701 27821 layer_factory.hpp:77] Creating layer mnist
+I0629 22:28:12.032930 27821 db_lmdb.cpp:35] Opened lmdb examples/mnist/mnist_train_lmdb
+I0629 22:28:12.032979 27821 net.cpp:84] Creating Layer mnist
+I0629 22:28:12.033007 27821 net.cpp:380] mnist -> data
+I0629 22:28:12.033125 27821 net.cpp:380] mnist -> label
+I0629 22:28:12.033702 27821 data_layer.cpp:45] output data size: 100,1,28,28
+I0629 22:28:12.035043 27821 base_data_layer.cpp:72] Initializing prefetch
+I0629 22:28:12.035372 27821 base_data_layer.cpp:75] Prefetch initialized.
+I0629 22:28:12.035383 27821 net.cpp:122] Setting up mnist
+I0629 22:28:12.035405 27821 net.cpp:129] Top shape: 100 1 28 28 (78400)
+I0629 22:28:12.035413 27821 net.cpp:129] Top shape: 100 (100)
+I0629 22:28:12.035418 27821 net.cpp:137] Memory required for data: 314000
+I0629 22:28:12.035439 27821 layer_factory.hpp:77] Creating layer conv1
+I0629 22:28:12.035480 27821 net.cpp:84] Creating Layer conv1
+I0629 22:28:12.035504 27821 net.cpp:406] conv1 <- data
+I0629 22:28:12.035557 27821 net.cpp:380] conv1 -> conv1
+F0629 22:28:12.035704 27821 base_conv_layer.cpp:121] Check failed: channels_ % group_ == 0 (1 vs. 0) 
+*** Check failure stack trace: ***
+    @     0x7f55835f85cd  google::LogMessage::Fail()
+    @     0x7f55835fa433  google::LogMessage::SendToLog()
+    @     0x7f55835f815b  google::LogMessage::Flush()
+    @     0x7f55835fae1e  google::LogMessageFatal::~LogMessageFatal()
+    @     0x7f5583f427c2  caffe::BaseConvolutionLayer<>::LayerSetUp()
+    @     0x7f5583e99058  caffe::BinaryConvolutionLayer<>::LayerSetUp()
+    @     0x7f5583df2a90  caffe::Layer<>::SetUp()
+    @     0x7f5583ddd3e4  caffe::Net<>::Init()
+    @     0x7f5583ddb8ee  caffe::Net<>::Net()
+    @     0x7f5583e698f5  caffe::Solver<>::InitTrainNet()
+    @     0x7f5583e69113  caffe::Solver<>::Init()
+    @     0x7f5583e68c0f  caffe::Solver<>::Solver()
+    @     0x7f5583e7e8a4  caffe::SGDSolver<>::SGDSolver()
+    @     0x7f5583e8cdd5  caffe::Creator_SGDSolver<>()
+    @           0x4234b6  caffe::SolverRegistry<>::CreateSolver()
+    @           0x41e77e  train()
+    @           0x420cdb  main
+    @     0x7f5581d8e830  __libc_start_main
+    @           0x41d539  _start
+    @              (nil)  (unknown)

@@ -41,6 +41,8 @@ __global__ void Gradient_adder(const int num, const int weight_dim, const Dtype*
 template <typename Dtype>
 void BinaryInnerProductLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
     const vector<Blob<Dtype>*>& top) {
+	
+  Phase phase = this->layer_param_.phase();
   const Dtype* bottom_data = bottom[0]->gpu_data();
   Dtype* top_data = top[0]->mutable_gpu_data(); 
   //TODO:
@@ -71,6 +73,11 @@ void BinaryInnerProductLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bot
   //binarize weights.
   binarize_kernel<Dtype> << <CAFFE_GET_BLOCKS(N), CAFFE_CUDA_NUM_THREADS >> >(alphas_.gpu_data(), weight,
 	  binaryweight, N, div); 
+	  
+  if(phase == TRAIN){
+		Dtype beta=0.001;
+		caffe_gpu_axpby(N,beta,weight,1-beta,binaryweight);
+	}
   if (M_ == 1) {
 	  caffe_gpu_gemv<Dtype>(CblasNoTrans, N_, K_, (Dtype)1.,
 		  binaryweight, bottom_data, (Dtype)0., top_data);

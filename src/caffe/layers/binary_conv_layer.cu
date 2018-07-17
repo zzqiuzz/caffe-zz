@@ -36,7 +36,7 @@ __global__ void Gradient_adder(const int num,const int weight_dim,const Dtype* w
 template <typename Dtype>
 void BinaryConvolutionLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
 	const vector<Blob<Dtype>*>& top){
-	 
+	Phase phase = this->layer_param_.phase();
 	//const int num = this->blobs_[0]->num();
 	const int num = this->num_output_;
 	const int div = this->blobs_[0]->count() / num;
@@ -67,7 +67,10 @@ void BinaryConvolutionLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bott
 	BinaryGpu_binarize<Dtype> << <CAFFE_GET_BLOCKS(N), CAFFE_CUDA_NUM_THREADS >> > (
 		N, div, this->alphas_.gpu_data(), weight, binaryweight);
 	
-
+	if(phase == TRAIN){
+		Dtype beta=0.001;
+		caffe_gpu_axpby(N,beta,weight,1-beta,binaryweight);
+	}
 	//normal conv operations,directly copied from conv_layer.cpp
 	//const Dtype* weight = this->blobs_[0]->gpu_data();
 	for (int i = 0; i < bottom.size(); ++i) {
