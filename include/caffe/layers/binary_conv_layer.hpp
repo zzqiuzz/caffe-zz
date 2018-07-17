@@ -4,8 +4,7 @@
 #include <vector>
 #include "caffe/blob.hpp"
 #include "caffe/layer.hpp"
-#include "caffe/proto/caffe.pb.h" 
-//#include "caffe/common.hpp"
+#include "caffe/proto/caffe.pb.h"  
 #include "caffe/layers/base_conv_layer.hpp"
 namespace caffe{
 template <typename Dtype>
@@ -18,12 +17,7 @@ public:
 	virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
 		const vector<Blob<Dtype>*>& top);
 protected:
-	//W_b store binarized weights
-	//W_buffer store original weights.
-	shared_ptr<Blob<Dtype> > W_b;
-	shared_ptr<Blob<Dtype> > W_buffer;
-	vector<Dtype> filterMean;
-	vector<Dtype> Alpha;
+	
 	virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
 		const vector<Blob<Dtype>*>& top);
 	virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
@@ -35,17 +29,12 @@ protected:
 	virtual void compute_output_shape();
 	virtual inline bool reverse_dimensions() { return false; }
 	/*user' function e.g binary/hardsigmoid*/
-	
-	void cpuMeanClampBinarizeConvParam(const shared_ptr<Blob<Dtype> > weights, const shared_ptr<Blob<Dtype> > wb);
-	void gpuMeanClampBinarizeConvParam(const shared_ptr<Blob<Dtype> > weights, const shared_ptr<Blob<Dtype> > wb);
-	inline void copyCpuFromTo(const shared_ptr<Blob<Dtype> > orig, const shared_ptr<Blob<Dtype> > buf){
-		CHECK_EQ(orig->count(), buf->count());
-		caffe_copy(orig->count(), orig->cpu_data(), buf->mutable_cpu_data());
-	}
-	inline void copyGpuFromTo(const shared_ptr<Blob<Dtype> > orig, const shared_ptr<Blob<Dtype> > buf){
-		CHECK_EQ(orig->count(), buf->count());
-		caffe_copy(orig->count(), orig->gpu_data(), buf->mutable_gpu_data());
-	}
+	//W_b store binarized weights
+	//W_buffer store original weights.
+	Blob<Dtype> W_b;
+	Blob<Dtype> alphas_;
+	Blob<Dtype> mean_;
+	Blob<Dtype> weight_sum_multiplier;
 	inline Dtype clampWeights(Dtype w){
 		return w = (w) < -1 ? -1 : (w) >1 ? 1 : (w);
 	}

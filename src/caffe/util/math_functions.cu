@@ -9,7 +9,30 @@
 #include "caffe/util/math_functions.hpp"
 
 namespace caffe {
+template <typename Dtype>
+__global__ void clip_kernel(const int n,Dtype* X){
+  CUDA_KERNEL_LOOP(index,n){
+    const Dtype a = X[index];
+    X[index] = (a > 1) - (a < -1) + a*(a <= 1 && a >= -1);
+  }
+}
+template <>
+void caffe_gpu_clip<float>(const int N,float* X){
+  clip_kernel<float> << <CAFFE_GET_BLOCKS(N),CAFFE_CUDA_NUM_THREADS >> >(N,X);
+}
 
+template <>
+void caffe_gpu_clip<double>(const int N,double* X){
+  clip_kernel<double> << <CAFFE_GET_BLOCKS(N),CAFFE_CUDA_NUM_THREADS >> >(N,X);
+}
+template <>
+void caffe_gpu_clip<int>(const int N,int* X){
+  //not implemented
+}
+template <>
+void caffe_gpu_clip<unsigned int>(const int N,unsigned int* X){
+   //not implemented
+}
 template <>
 void caffe_gpu_gemm<float>(const CBLAS_TRANSPOSE TransA,
     const CBLAS_TRANSPOSE TransB, const int M, const int N, const int K,

@@ -9,50 +9,87 @@ namespace caffe {
 #define clamp(x) ((x) < -1 ? -1 : (x) >1 ? 1 : (x))
 
 template <typename Dtype>
-__global__ void binarize_kernel(const Dtype* in, Dtype* out, const int num, const int kel){
-	CUDA_KERNEL_LOOP(index, num){ //num:numbers of filters
-		Dtype sum = 0;            //kel:numbers of elements of filters
-		Dtype mean = 0;
-		for (int coor = 0; coor < kel; coor++){
-			sum += std::abs(in[index*kel + coor]) / Dtype(kel);
-			mean += in[index*kel + coor] / Dtype(kel);
-		} 
-		for (int coor = 0; coor < kel; coor++){ 
-			out[index*kel + coor] = sign(clamp(in[index*kel + coor] - mean))*sum; 
+__global__ void binarize_kernel(const Dtype* alpha, const Dtype* in, Dtype* out, const int num, const int weight_col){
+	CUDA_KERNEL_LOOP(index, num){
+		int n = index / weight_col;
+		const Dtype binarycode = (in[index]) >= 0 ? 1 : -1; 
+		out[index] = binarycode*alpha[n];
+		/*for (int coor = 0; coor < weight_col; coor++){
+			out[index*weight_col + coor] = sign(in[index*weight_col + coor]) * alpha[index];
+		}*/
+	}
+}
+template <typename Dtype>
+__global__ void Gradient_adder(const int num, const int weight_dim, const Dtype* weight, Dtype* weight_diff, const Dtype* alpha){
+	CUDA_KERNEL_LOOP(index, num){
+		const int n = index / weight_dim;
+		Dtype multiplier = 0;
+		if (abs(weight[index]) >= 1)
+			multiplier = 0;
+		else
+		{
+			multiplier = 1;
+			multiplier *= alpha[n];
 		}
+		multiplier += Dtype(1) / weight_dim;
+    multiplier *= (1 - 1./weight_dim);
+		multiplier *= weight_dim;
+		weight_diff[index] *= multiplier;
 	}
 }
  
 template <typename Dtype>
 void BinaryInnerProductLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
     const vector<Blob<Dtype>*>& top) {
+	
+  Phase phase = this->layer_param_.phase();
   const Dtype* bottom_data = bottom[0]->gpu_data();
-  Dtype* top_data = top[0]->mutable_gpu_data();
-  
-
+  Dtype* top_data = top[0]->mutable_gpu_data(); 
   //TODO:
   //convert float weights to binary 
   const int num = this->N_;//numbers of output
-  const int kel = this->K_;
-  //int N = num*kel;
-  binarize_kernel<Dtype> << <CAFFE_GET_BLOCKS(num), CAFFE_CUDA_NUM_THREADS >> >(this->blobs_[0]->gpu_data(), this->W_b->mutable_gpu_data(), num, kel);
- 
-  caffe_copy(this->blobs_[0]->count(), this->blobs_[0]->gpu_data(), W_buffer->mutable_gpu_data());
-
-  caffe_copy(this->blobs_[0]->count(), W_b->gpu_data(), this->blobs_[0]->mutable_gpu_data());
-
+  const int div = this->K_;
+  int N = num*div;
   const Dtype* weight = this->blobs_[0]->gpu_data();
+  Dtype* binaryweight = W_b.mutable_gpu_data();
+  caffe_copy<Dtype>(N, weight, binaryweight);
+  if(this->layer_param_.debug_param().xnorno_grad()){
+    //calculate mean_.
+    caffe_gpu_gemv<Dtype>(CblasNoTrans, num, div, 1. / div, weight, weight_sum_multiplier.gpu_data(), 0.,
+       mean_.mutable_gpu_data()); 
+    //extract mean.
+     for(int i=0;i<num;++i){
+      caffe_gpu_add_scalar<Dtype>(div, -*(mean_.cpu_data() + i), this->blobs_[0]->mutable_gpu_data() + i*div);
+   }
+    //clamp weights
+     this->blobs_[0]->clip_data();
+  }
+  
+  //calculate alphas_
+  for (int n = 0; n < num; n++){
+	  caffe_gpu_asum<Dtype>(div, weight + n*div, alphas_.mutable_cpu_data() + n);
+	  alphas_.mutable_cpu_data()[n] /= div;
+  }
+  //binarize weights.
+  binarize_kernel<Dtype> << <CAFFE_GET_BLOCKS(N), CAFFE_CUDA_NUM_THREADS >> >(alphas_.gpu_data(), weight,
+	  binaryweight, N, div); 
+	  
+  if(phase == TRAIN){
+		Dtype beta=0.001;
+		caffe_gpu_axpby(N,beta,weight,1-beta,binaryweight);
+	}
   if (M_ == 1) {
-    caffe_gpu_gemv<Dtype>(CblasNoTrans, N_, K_, (Dtype)1.,
-                         weight, bottom_data, (Dtype)0., top_data);
-    if (bias_term_)
-      caffe_gpu_axpy<Dtype>(N_, bias_multiplier_.cpu_data()[0],
-                            this->blobs_[1]->gpu_data(), top_data);
-  } else {
+	  caffe_gpu_gemv<Dtype>(CblasNoTrans, N_, K_, (Dtype)1.,
+		  binaryweight, bottom_data, (Dtype)0., top_data);
+	  if (bias_term_)
+		  caffe_gpu_axpy<Dtype>(N_, bias_multiplier_.cpu_data()[0],
+		  this->blobs_[1]->gpu_data(), top_data);
+  }
+  else {
     caffe_gpu_gemm<Dtype>(CblasNoTrans,
                           transpose_ ? CblasNoTrans : CblasTrans,
                           M_, N_, K_, (Dtype)1.,
-                          bottom_data, weight, (Dtype)0., top_data);
+						  bottom_data, binaryweight, (Dtype)0., top_data);
     if (bias_term_)
       caffe_gpu_gemm<Dtype>(CblasNoTrans, CblasNoTrans, M_, N_, 1, (Dtype)1.,
                             bias_multiplier_.gpu_data(),
@@ -64,6 +101,7 @@ template <typename Dtype>
 void BinaryInnerProductLayer<Dtype>::Backward_gpu(const vector<Blob<Dtype>*>& top,
     const vector<bool>& propagate_down,
     const vector<Blob<Dtype>*>& bottom) {
+	const Dtype* binaryweight = W_b.gpu_data();
   if (this->param_propagate_down_[0]) {
     const Dtype* top_diff = top[0]->gpu_diff();
     const Dtype* bottom_data = bottom[0]->gpu_data();
@@ -78,6 +116,20 @@ void BinaryInnerProductLayer<Dtype>::Backward_gpu(const vector<Blob<Dtype>*>& to
           N_, K_, M_,
           (Dtype)1., top_diff, bottom_data,
           (Dtype)1., this->blobs_[0]->mutable_gpu_diff());
+	  
+	  //
+    if(this->layer_param_.debug_param().xnorno_grad()){
+      const Dtype* weight = this->blobs_[0]->gpu_data();
+      const int weight_dim = this->blobs_[0]->count() / this->blobs_[0]->num();
+      const int n = this->blobs_[0]->count();
+
+      Gradient_adder<Dtype> << <CAFFE_GET_BLOCKS(n), CAFFE_CUDA_NUM_THREADS >> >
+        (n, weight_dim, weight, this->blobs_[0]->mutable_gpu_diff(), alphas_.gpu_data());
+    }
+	  
+      
+	  //
+	  
     }
   }
   if (bias_term_ && this->param_propagate_down_[1]) {
@@ -93,16 +145,16 @@ void BinaryInnerProductLayer<Dtype>::Backward_gpu(const vector<Blob<Dtype>*>& to
     if (transpose_) {
       caffe_gpu_gemm<Dtype>(CblasNoTrans, CblasTrans,
           M_, K_, N_,
-          (Dtype)1., top_diff, this->blobs_[0]->gpu_data(),
+		  (Dtype)1., top_diff, binaryweight,
           (Dtype)0., bottom[0]->mutable_gpu_diff());
     } else {
       caffe_gpu_gemm<Dtype>(CblasNoTrans, CblasNoTrans,
           M_, K_, N_,
-         (Dtype)1., top_diff, this->blobs_[0]->gpu_data(),
+		  (Dtype)1., top_diff, binaryweight,
          (Dtype)0., bottom[0]->mutable_gpu_diff());
     }
   }
-  caffe_copy(this->blobs_[0]->count(), W_buffer->gpu_data(), this->blobs_[0]->mutable_gpu_data());
+ 
 }
 
 INSTANTIATE_LAYER_GPU_FUNCS(BinaryInnerProductLayer);

@@ -120,7 +120,30 @@ void SGDSolver<Dtype>::ApplyUpdate() {
     ComputeUpdateValue(param_id, rate);
   }
   this->net_->Update();
+  //clip weights within [-1,1]
+ /* if(this->param_.net_type() == "Binary"){
+     for(int param_id = 0;param_id < this->net_->learnable_params().size();++param_id){
+        MeanExtract(param_id);
+        ClipWeights(param_id);
+
+     } 
+    
+  }*/
+  
 }
+/*template <typename Dtype>
+void SGDSolver<Dtype>::MeanExtract(int param_id){
+  const vector<Blob<Dtype>*>& net_params = this->net_->learnable_params();
+  //
+  
+  //
+}
+
+template <typename Dtype>
+void SGDSolver<Dtype>::ClipWeights(int param_id){
+  const vector<Blob<Dtype>*>& net_params = this->net_->learnable_params();
+  net_params[param_id]->clip_data();
+}*/
 
 template <typename Dtype>
 void SGDSolver<Dtype>::Normalize(int param_id) {
@@ -173,7 +196,14 @@ void SGDSolver<Dtype>::Regularize(int param_id) {
             local_decay,
             temp_[param_id]->cpu_data(),
             net_params[param_id]->mutable_cpu_diff());
-      } else {
+      } else if(regularization_type == "Binary"){
+        local_decay *= -1;
+        caffe_axpy(net_params[param_id]->count(),
+            local_decay,
+            net_params[param_id]->cpu_data(),
+            net_params[param_id]->mutable_cpu_diff());
+      }
+       else {
         LOG(FATAL) << "Unknown regularization type: " << regularization_type;
       }
     }
@@ -195,6 +225,12 @@ void SGDSolver<Dtype>::Regularize(int param_id) {
         caffe_gpu_axpy(net_params[param_id]->count(),
             local_decay,
             temp_[param_id]->gpu_data(),
+            net_params[param_id]->mutable_gpu_diff());
+      }else if(regularization_type == "Binary"){
+        local_decay *= -1;
+        caffe_gpu_axpy(net_params[param_id]->count(),
+            local_decay,
+            net_params[param_id]->gpu_data(),
             net_params[param_id]->mutable_gpu_diff());
       } else {
         LOG(FATAL) << "Unknown regularization type: " << regularization_type;

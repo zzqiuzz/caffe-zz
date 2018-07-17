@@ -54,18 +54,14 @@ void BinaryInnerProductLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bott
   this->param_propagate_down_.resize(this->blobs_.size(), true);
 
   /*variable init*/
-  vector<int> weight_shape(1, N_);
-  //vector<int> sumHelper_shape(1, K_);
   const int weight_dim = this->blobs_[0]->count() / this->blobs_[0]->num();
-  this->sum_multiplier_.Reshape(weight_dim,1,1,1);//must be reshaped as 4 dim. no know reasons yet.
-  this->Alpha.Reshape(weight_shape);
-  this->filterMean.Reshape(weight_shape);
-  this->W_b = shared_ptr<Blob<Dtype> >(new Blob<Dtype>());
-  this->W_buffer = shared_ptr<Blob<Dtype> >(new Blob<Dtype>());
-  this->W_b->ReshapeLike(*(this->blobs_[0]));
-  this->W_buffer->ReshapeLike(*(this->blobs_[0]));
-  caffe_set<Dtype>(sum_multiplier_.count(), Dtype(1), sum_multiplier_.mutable_cpu_data());
-
+  weight_sum_multiplier.Reshape(weight_dim, 1, 1, 1);//must be reshaped as 4 dim. no know reasons yet.
+  mean_.Reshape(num_output, 1, 1, 1);
+  alphas_.Reshape(num_output, 1, 1, 1);
+  W_b.Reshape(this->blobs_[0]->shape());
+  caffe_set<Dtype>(weight_dim, Dtype(1), weight_sum_multiplier.mutable_cpu_data());
+  caffe_set<Dtype>(num_output, Dtype(1), mean_.mutable_cpu_data());
+  caffe_set<Dtype>(num_output, Dtype(1), alphas_.mutable_cpu_data());
 }
 
 template <typename Dtype>
@@ -93,54 +89,30 @@ void BinaryInnerProductLayer<Dtype>::Reshape(const vector<Blob<Dtype>*>& bottom,
     caffe_set(M_, Dtype(1), bias_multiplier_.mutable_cpu_data());
   }
 }
-template <typename Dtype>
-void BinaryInnerProductLayer<Dtype>::cpuMeanClampBinarizeParam(const shared_ptr<Blob<Dtype> > weights,
-	const shared_ptr<Blob<Dtype> > wb){
-	const int num = this->N_;//numbers of output
-	const int kel = this->K_;
-	int N = num*kel;  
-	const Dtype* weightdata = weights->cpu_data();
-	  
-	for (int n = 0; n < num; n++)
-		Alpha.mutable_cpu_data()[n] = caffe_cpu_asum<Dtype>(kel, weightdata + n*kel) / kel;
-	//std::cout << Alpha.cpu_data()[0] << " " << std::endl;
-	/*for (int id = 0; id < N; id++){
-		const int n = id / kel;
-		filterMean.mutable_cpu_data()[n] += weightdata[id] / Dtype(kel);
-	}
-	std::cout << filterMean.cpu_data()[0] << " " << std::endl;*/
- 	caffe_cpu_gemv<Dtype>(CblasNoTrans, num, kel, Dtype(1.0/kel), weightdata,
-		sum_multiplier_.cpu_data(), 0,
-		filterMean.mutable_cpu_data());//why failed to run?
-	//std::cout << filterMean.cpu_data()[0] << " " << std::endl;
-	 
-	for (int id = 0; id < N; id++){
-		const int num = id / kel;//for each filter in the layer.  
-		wb->mutable_cpu_data()[id] = Alpha.cpu_data()[num] * signWeights(clampWeights(weights->cpu_data()[id] - filterMean.cpu_data()[num]));
-		 
-	}
-	
-}
+
 template <typename Dtype>
 void BinaryInnerProductLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
     const vector<Blob<Dtype>*>& top) {
-  const Dtype* bottom_data = bottom[0]->cpu_data();
-  Dtype* top_data = top[0]->mutable_cpu_data();
-
-  /*modify weights*/
-  //TODO:
-  //convert float weights to bianry 
-  cpuMeanClampBinarizeParam(this->blobs_[0], W_b);
-  //store float weights to W_buffer
-  copyCpuFromTo(this->blobs_[0], W_buffer);
-  //reinitialize blob_ with binarized weights W_b.
-  copyCpuFromTo(W_b, this->blobs_[0]);
-
-
+  
+  const int num_output = this->layer_param_.inner_product_param().num_output();
+  const int weight_dim = this->blobs_[0]->count() / this->blobs_[0]->num();
+  const int N = this->blobs_[0]->count();
   const Dtype* weight = this->blobs_[0]->cpu_data();
+  caffe_copy(W_b.count(), weight, W_b.mutable_cpu_data());
+  caffe_abs(W_b.count(), weight, W_b.mutable_cpu_data());
+  const Dtype* binaryweight = W_b.cpu_data();
+  caffe_cpu_gemv<Dtype>(CblasNoTrans, num_output, weight_dim, 1. / weight_dim, binaryweight,
+	  weight_sum_multiplier.cpu_data(), 0, alphas_.mutable_cpu_data());
+  for (int i = 0; i < N; i++){
+	  int n = i / weight_dim;
+	  Dtype binary_code = (weight[i] >= 0) ? 1 : -1;
+	  W_b.mutable_cpu_data()[i] = binary_code*alphas_.cpu_data()[n];
+  }
+  Dtype* top_data = top[0]->mutable_cpu_data();
+  const Dtype* bottom_data = bottom[0]->cpu_data();
   caffe_cpu_gemm<Dtype>(CblasNoTrans, transpose_ ? CblasNoTrans : CblasTrans,
       M_, N_, K_, (Dtype)1.,
-      bottom_data, weight, (Dtype)0., top_data);
+	  bottom_data, binaryweight, (Dtype)0., top_data);
   if (bias_term_) {
     caffe_cpu_gemm<Dtype>(CblasNoTrans, CblasNoTrans, M_, N_, 1, (Dtype)1.,
         bias_multiplier_.cpu_data(),
@@ -152,6 +124,7 @@ template <typename Dtype>
 void BinaryInnerProductLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& top,
     const vector<bool>& propagate_down,
     const vector<Blob<Dtype>*>& bottom) {
+	const Dtype* binary_weights = W_b.cpu_data();
   if (this->param_propagate_down_[0]) {
     const Dtype* top_diff = top[0]->cpu_diff();
     const Dtype* bottom_data = bottom[0]->cpu_data();
@@ -166,6 +139,25 @@ void BinaryInnerProductLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& to
           N_, K_, M_,
           (Dtype)1., top_diff, bottom_data,
           (Dtype)1., this->blobs_[0]->mutable_cpu_diff());
+	  //
+	  //
+	  const Dtype* weight = this->blobs_[0]->cpu_data();
+	  Dtype* weight_diff = this->blobs_[0]->mutable_cpu_diff();
+	  const int weight_dim = this->blobs_[0]->count() / this->blobs_[0]->num();
+	  for (int i = 0; i < this->blobs_[0]->count(); i++){
+		  const int n = i / weight_dim;
+		  Dtype multiplier = 0;
+		  if (abs(weight[i]) >= 1)
+			  multiplier = 0;
+		  else
+		  {
+			  multiplier = 1;
+			  multiplier *= alphas_.cpu_data()[n];
+		  }
+		  multiplier += Dtype(1) / this->blobs_[0]->count();
+		  weight_diff[i] *= multiplier;
+	  }
+	  //
     }
   }
   if (bias_term_ && this->param_propagate_down_[1]) {
@@ -181,17 +173,16 @@ void BinaryInnerProductLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& to
     if (transpose_) {
       caffe_cpu_gemm<Dtype>(CblasNoTrans, CblasTrans,
           M_, K_, N_,
-          (Dtype)1., top_diff, this->blobs_[0]->cpu_data(),
+		  (Dtype)1., top_diff, binary_weights,
           (Dtype)0., bottom[0]->mutable_cpu_diff());
     } else {
       caffe_cpu_gemm<Dtype>(CblasNoTrans, CblasNoTrans,
           M_, K_, N_,
-          (Dtype)1., top_diff, this->blobs_[0]->cpu_data(),
+		  (Dtype)1., top_diff, binary_weights,
           (Dtype)0., bottom[0]->mutable_cpu_diff());
     }
   }
-  //need to compute gradients w.r.t sign clamp?
-  copyCpuFromTo(W_buffer, this->blobs_[0]);
+   
 }
 
 #ifdef CPU_ONLY

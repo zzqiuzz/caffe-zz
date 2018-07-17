@@ -8,6 +8,11 @@
 
 namespace caffe {
 
+
+template <typename Dtype>
+void Blob<Dtype>::clip_data(){
+	caffe_gpu_clip(count_,mutable_gpu_data());
+}
 template <typename Dtype>
 void Blob<Dtype>::Reshape(const int num, const int channels, const int height,
     const int width) {
