@@ -82,7 +82,11 @@ cv::Mat ReadImageToCVMat(const string& filename,
   }
   if (height > 0 && width > 0) {
     cv::resize(cv_img_origin, cv_img, cv::Size(width, height));
-  } else {
+  } else if(height == -1 && width == -1){
+	double ratio = 256.0 / std::min(cv_img_origin.cols,cv_img_origin.rows);
+  	cv::resize(cv_img_origin,cv_img,cv::Size(ratio * cv_img_origin.cols, ratio * cv_img_origin.rows)); 
+  }
+  else {
     cv_img = cv_img_origin;
   }
   return cv_img;

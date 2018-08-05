@@ -1,4 +1,4 @@
-net: "my/BWN/VGG9/train_test.prototxt"
+net: "my/CIFAR10/VGG9-BN/FWN/train_test.prototxt"
 test_iter: 100
 test_interval: 1000
 base_lr: 0.1
@@ -10,5 +10,5 @@ stepsize: 15000
 display: 200
 max_iter: 100000
 snapshot: 10000
-snapshot_prefix: "my/BWN/VGG9/snapshot"
+snapshot_prefix: "my/CIFAR10/VGG9-BN/FWN/cifar_vgg9_FWN"
 solver_mode: GPU

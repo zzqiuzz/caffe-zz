@@ -56,6 +56,9 @@ layer {
     }
     bias_term: false
   }
+  debug_param{
+    xnorno_grad:true
+  }
 }
 layer {
   name: "bn1"
@@ -110,6 +113,9 @@ layer {
     }
     bias_term: false
   }
+  debug_param{
+    xnorno_grad:true
+  }
 }
 layer {
   name: "bn2"
@@ -163,6 +169,9 @@ layer {
     }
     bias_term: false
   }
+  debug_param{
+    xnorno_grad:true
+  }
 }
 layer {
   name: "bn3"
@@ -206,6 +215,9 @@ layer {
     }
     bias_term: false
   }
+  debug_param{
+    xnorno_grad:true
+  }
 }
 layer {
   name: "bn4"
@@ -248,6 +260,9 @@ layer {
       type: "msra"
     }
     bias_term: false
+  }
+  debug_param{
+    xnorno_grad:true
   }
 }
 layer {
@@ -300,6 +315,9 @@ layer {
     }
     bias_term: false
   }
+  debug_param{
+    xnorno_grad:true
+  }
 }
 layer {
   name: "bn6"
@@ -348,6 +366,9 @@ layer {
       type: "msra"
     }
     bias_term: false
+  }
+  debug_param{
+    xnorno_grad:true
   }
 }
 layer {
@@ -404,6 +425,9 @@ layer {
       type: "constant"
       value: 0
     }
+  }
+  debug_param{
+    xnorno_grad:true
   }
 }
 layer {

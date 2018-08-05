@@ -1,0 +1,14 @@
+net: "my/CIFAR10/VGG9-BN/TWN/train_test.prototxt"
+test_iter: 100
+test_interval: 1000
+base_lr: 0.1
+momentum: 0.9
+weight_decay: 0.0001
+lr_policy: "step"
+gamma: 0.1
+stepsize: 15000
+display: 200
+max_iter: 100000
+snapshot: 10000
+snapshot_prefix: "my/CIFAR10/VGG9-BN/TWN/snapshot/cifar_vgg9_TWN"
+solver_mode: GPU

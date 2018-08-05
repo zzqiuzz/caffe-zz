@@ -75,8 +75,15 @@ void BinaryInnerProductLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bot
 	  binaryweight, N, div); 
 	  
   if(phase == TRAIN){
+		//case 1: vectorize all filters in one layer
 		Dtype beta=0.001;
 		caffe_gpu_axpby(N,beta,weight,1-beta,binaryweight);
+		
+		//case 2: vectorize one filter in one layer
+		/*Dtype beta = 0.001;
+		for(int i = 0; i < num; i++){
+		 	caffe_gpu_axpby(div,beta,weight + i * div,1-beta,binaryweight + i * div);
+		}*/
 	}
   if (M_ == 1) {
 	  caffe_gpu_gemv<Dtype>(CblasNoTrans, N_, K_, (Dtype)1.,

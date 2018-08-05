@@ -29,7 +29,17 @@ Dtype SGDSolver<Dtype>::GetLearningRate() {
   const string& lr_policy = this->param_.lr_policy();
   if (lr_policy == "fixed") {
     rate = this->param_.base_lr();
-  } else if (lr_policy == "step") {
+  } else if(lr_policy == "modified_lr"){
+    CHECK_EQ(this->param_.modified_lr().stepvalue_size(), this->param_.modified_lr().mlr_size());
+	if(this->current_step_ < this->param_.modified_lr().stepvalue_size() &&
+		this->iter_ >= this->param_.modified_lr().stepvalue(this->current_step_)){
+		this->current_step_++;	
+		LOG(INFO) << "Modified_lr Status: Iteration " <<
+      this->iter_ << ", step = " << this->current_step_;
+	}
+	rate = this->param_.modified_lr().mlr(this->current_step_);
+  }
+  else if (lr_policy == "step") {
     CHECK_GT(this->param_.stepsize(), 0);
     this->current_step_ = this->iter_ / this->param_.stepsize();
     CHECK_GE(this->param_.gamma(), 0);
