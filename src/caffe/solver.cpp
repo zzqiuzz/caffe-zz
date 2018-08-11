@@ -58,6 +58,8 @@ void Solver<Dtype>::Init(const SolverParameter& param) {
   }
   iter_ = 0;
   current_step_ = 0;
+  best_accuracy_1 = 0;
+  best_accuracy_5 = 0;
 }
 
 // Load weights from the caffemodel(s) specified in "weights" solver parameter
@@ -404,6 +406,7 @@ void Solver<Dtype>::Test(const int test_net_id) {
     loss /= param_.test_iter(test_net_id);
     LOG(INFO) << "Test loss: " << loss;
   }
+  bool flag=false;
   for (int i = 0; i < test_score.size(); ++i) {
     const int output_blob_index =
         test_net->output_blob_indices()[test_score_output_id[i]];
@@ -417,7 +420,19 @@ void Solver<Dtype>::Test(const int test_net_id) {
     }
     LOG(INFO) << "    Test net output #" << i << ": " << output_name << " = "
               << mean_score << loss_msg_stream.str();
+	
+	if(mean_score >= best_accuracy_1 && i == 0){
+	    flag = true;
+		best_accuracy_1 = mean_score; 
+	}
+	if(flag && i == 1 && test_score.size() == 3)
+		best_accuracy_5 = mean_score;
+		
   }
+  LOG(INFO) << "================================";
+  LOG(INFO) << "    Test net best accuracy1 is: " << best_accuracy_1;
+  if(test_score.size() == 3)
+  	LOG(INFO) << "    Test net best accuracy5 is: " << best_accuracy_5;
 }
 
 template <typename Dtype>

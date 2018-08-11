@@ -1,3 +1,4 @@
+BWN:
 withnoxnorgrad:89.5%
 withxnorgrad:89.66%
 
@@ -10,3 +11,8 @@ withnoxnorgrad & shrink angle:89.75% : beta 0.0001
    			      
 #vectorize one filter in one layer 
                               89.51% beta 0.001
+
+VGG9-BN on CIFAR-10 dataset
+FWN: 91.19%
+BWN: 89.5%
+TWN: 90.31%
