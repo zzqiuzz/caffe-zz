@@ -1,4 +1,4 @@
-#float version gets accuracy of 99.31%
+#float version gets accuracy of 99.21%
 
 name: "LeNet"
 is_quantization:true
@@ -38,7 +38,7 @@ layer {
 }
 layer {
   name: "conv1"
-  type: "BinaryConvolution"
+  type: "Convolution"
   bottom: "data"
   top: "conv1"
   param {
@@ -60,24 +60,9 @@ layer {
   }
 }
 layer{
-  name:"norm1"
-  type: "BatchNorm"
-  bottom: "conv1"
-  top: "norm1"
-}
-layer {
-  bottom: "norm1"
-  top: "conv1_2_sc"
-  name: "bn1_2_scal"
-  type: "Scale"
-  scale_param {
-    bias_term: true
-  }
-}
-layer{
   name: "relu1"
   type: "ReLU"
-  bottom: "conv1_2_sc"
+  bottom: "conv1"
   top: "relu1"
 
 } 
@@ -92,25 +77,10 @@ layer {
     stride: 2
   }
 }
-layer{
-  name:"norm2"
-  type: "BatchNorm"
-  bottom: "pool1"
-  top: "norm2"
-}
-layer {
-  bottom: "norm2"
-  top: "conv2_sc"
-  name: "bn2_scal"
-  type: "Scale"
-  scale_param {
-    bias_term: true
-  }
-}
 layer {
   name: "conv2"
-  type: "BinaryConvolution"
-  bottom: "conv2_sc"
+  type: "Convolution"
+  bottom: "pool1"
   top: "conv2"
   param {
     lr_mult: 1
@@ -144,7 +114,7 @@ layer {
 }
 layer {
   name: "ip1"
-  type: "BinaryInnerProduct"
+  type: "InnerProduct"
   bottom: "pool2"
   top: "ip1"
   param {
@@ -171,7 +141,7 @@ layer {
 }
 layer {
   name: "ip2"
-  type: "BinaryInnerProduct"
+  type: "InnerProduct"
   bottom: "ip1"
   top: "ip2"
   param {

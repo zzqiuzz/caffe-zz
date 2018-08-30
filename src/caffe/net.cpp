@@ -4,7 +4,7 @@
 #include <string>
 #include <utility>
 #include <vector>
-
+#include <map>
 #include "hdf5.h"
 
 #include "caffe/common.hpp"
@@ -728,10 +728,87 @@ void Net<Dtype>::Reshape() {
     layers_[i]->Reshape(bottom_vecs_[i], top_vecs_[i]);
   }
 }
+template <typename Dtype>
+void Net<Dtype>::QuantizeLayer(const NetParameter& param,Dtype ratio){
+  int num_source_layers = param.layer_size();
+  for(int i = 0; i < num_source_layers; ++i){
+  	const LayerParameter& source_layer = param.layer(i);
+    const string& source_layer_name = source_layer.name();
+    int target_layer_id = 0;
+    while (target_layer_id != layer_names_.size() &&
+        layer_names_[target_layer_id] != source_layer_name) {
+      ++target_layer_id;
+    }
+    if (target_layer_id == layer_names_.size()) {
+      LOG(INFO) << "Ignoring source layer " << source_layer_name;
+      continue;
+    }
+    
+    vector<shared_ptr<Blob<Dtype> > >& target_blobs =
+        layers_[target_layer_id]->blobs();
+    /*CHECK_EQ(target_blobs.size(), source_layer.blobs_size())
+        << "Incompatible number of blobs for layer " << source_layer_name;*/
+    for (int j = 0; j < target_blobs.size(); ++j) {
+	  if(source_layer.type() == "BatchNorm" || source_layer.type() == "Scale"){
+	  	//avoid to quantize bn layers
+		//do nothing
+	  }
+	  else{
+	  	if(j == 0){
+			DLOG(INFO) << "Quantizing layer " << source_layer_name;
+			Dtype* mask_data = target_blobs[j]->mutable_cpu_mask();
+			const Dtype* data = target_blobs[j]->cpu_data();
+			vector<Dtype> asum_kernel_data_nonfixed;
+			vector<Dtype> tmp;
+			map<int,Dtype> asum_kernel_nonfixed; 
+			typename map<int,Dtype>::iterator iter;
+			const int num = target_blobs[j]->num();
+			const int weight_dim = target_blobs[j]->count() / num;
+			for(int kernel = 0; kernel < num; kernel++){
+				
+				Dtype mask_sum = caffe_cpu_asum<Dtype>(weight_dim,mask_data + kernel * weight_dim);
+				Dtype result = 0;
+				CHECK(mask_sum == 0 || mask_sum == weight_dim) << "Mask Calculation Error!";
+				if(mask_sum){//not quantized
+					result = caffe_cpu_asum<Dtype>(weight_dim,data + kernel * weight_dim);
+					asum_kernel_nonfixed[kernel] = result;
+					asum_kernel_data_nonfixed.push_back(result);
+				}
+			}
+			if(asum_kernel_data_nonfixed.size() != 0){//filters to quantize
+			  	tmp = asum_kernel_data_nonfixed;
+				std::sort(tmp.begin(),tmp.end());
+				//int partition = std::abs(asum_kernel_nonfixed.size() - int(num * ratio)); problematic
+				int partition = int(num * ratio);
+				LOG(INFO)<<"partition index: "<<partition<<"; nonfixed filters' size: "<<asum_kernel_nonfixed.size(); 
+				Dtype threhold = tmp[partition];
+				for(iter = asum_kernel_nonfixed.begin(); iter != asum_kernel_nonfixed.end(); iter++){
+					if(iter->second >= threhold){//quantize
+						caffe_set<Dtype>(weight_dim,0,mask_data + iter->first * weight_dim);
+					}
+				} 
+			}
+			else{//no filters to quantize
+				return;
+			}
+				
+			
+		}//ignore j==1 bias 
+	  }
+	 
+	 
+	 
+	 
+    }
+  }
 
+
+}
 template <typename Dtype>
 void Net<Dtype>::CopyTrainedLayersFrom(const NetParameter& param) {
   int num_source_layers = param.layer_size();
+  bool is_quantization = false;//only quantize weights not bias.
+  LOG(INFO) << "net quantization's state : " << param.is_quantization();
   for (int i = 0; i < num_source_layers; ++i) {
     const LayerParameter& source_layer = param.layer(i);
     const string& source_layer_name = source_layer.name();
@@ -750,10 +827,19 @@ void Net<Dtype>::CopyTrainedLayersFrom(const NetParameter& param) {
     CHECK_EQ(target_blobs.size(), source_layer.blobs_size())
         << "Incompatible number of blobs for layer " << source_layer_name;
     for (int j = 0; j < target_blobs.size(); ++j) {
+	  if(source_layer.type() == "BatchNorm" || source_layer.type() == "Scale"){//avoid to quantize bn layers
+	  	is_quantization = false;
+	  }
+	  else{
+	  	if(j == 0)//weights
+	  		is_quantization = true;
+	  	else if(j == 1)//bias
+	  		is_quantization = false; 
+	  } 
       if (!target_blobs[j]->ShapeEquals(source_layer.blobs(j))) {
         Blob<Dtype> source_blob;
         const bool kReshape = true;
-        source_blob.FromProto(source_layer.blobs(j), kReshape);
+        source_blob.FromProto(source_layer.blobs(j), kReshape,is_quantization);
         LOG(FATAL) << "Cannot copy param " << j << " weights from layer '"
             << source_layer_name << "'; shape mismatch.  Source param shape is "
             << source_blob.shape_string() << "; target param shape is "
@@ -762,7 +848,7 @@ void Net<Dtype>::CopyTrainedLayersFrom(const NetParameter& param) {
             << "copying from a saved net, rename the layer.";
       }
       const bool kReshape = false;
-      target_blobs[j]->FromProto(source_layer.blobs(j), kReshape);
+      target_blobs[j]->FromProto(source_layer.blobs(j), kReshape,is_quantization);
     }
   }
 }

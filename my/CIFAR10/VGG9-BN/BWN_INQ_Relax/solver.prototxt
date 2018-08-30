@@ -1,0 +1,18 @@
+net: "my/CIFAR10/VGG9-BN/BWN_INQ_Relax/train_test.prototxt"
+test_iter: 100
+test_interval: 1000
+base_lr: 0.005
+momentum: 0.9
+weight_decay: 0.0001
+lr_policy: "step"
+isquantize:true
+quantize_phase_ratio:0.4
+quantize_phase_ratio:0.2
+quantize_phase_ratio:0
+gamma: 0.1
+stepsize: 15000
+display: 200
+max_iter: 60000
+snapshot: 10000
+snapshot_prefix: "my/CIFAR10/VGG9-BN/BWN_INQ_Relax/snapshot"
+solver_mode: GPU

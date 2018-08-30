@@ -67,7 +67,7 @@ void caffe_set(const int N, const Dtype alpha, Dtype* Y) {
 template void caffe_set<int>(const int N, const int alpha, int* Y);
 template void caffe_set<float>(const int N, const float alpha, float* Y);
 template void caffe_set<double>(const int N, const double alpha, double* Y);
-
+template void caffe_set<unsigned int>(const int N, const unsigned int alpha, unsigned int* Y);
 template <>
 void caffe_add_scalar(const int N, const float alpha, float* Y) {
   for (int i = 0; i < N; ++i) {
@@ -235,7 +235,15 @@ template <>
 void caffe_abs<double>(const int n, const double* a, double* y) {
     vdAbs(n, a, y);
 }
+template <>
+void caffe_abs<int>(const int n, const int* a, int* y) {
+    //vdAbs(n, a, y);
+}
 
+template <>
+void caffe_abs<unsigned int>(const int n, const unsigned int* a, unsigned int* y) {
+    //vdAbs(n, a, y);
+}
 unsigned int caffe_rng_rand() {
   return (*caffe_rng())();
 }
@@ -367,7 +375,18 @@ template <>
 double caffe_cpu_asum<double>(const int n, const double* x) {
   return cblas_dasum(n, x, 1);
 }
-
+//add
+template <>
+int caffe_cpu_asum<int>(const int n, const int* x) {
+  //
+	return 0;
+}
+template <>
+unsigned int caffe_cpu_asum<unsigned int>(const int n, const unsigned int* x) {
+  //
+	return 0;
+}
+//
 template <>
 void caffe_cpu_scale<float>(const int n, const float alpha, const float *x,
                             float* y) {

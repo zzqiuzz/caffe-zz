@@ -73,8 +73,9 @@ void BinaryInnerProductLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bot
   //binarize weights.
   binarize_kernel<Dtype> << <CAFFE_GET_BLOCKS(N), CAFFE_CUDA_NUM_THREADS >> >(alphas_.gpu_data(), weight,
 	  binaryweight, N, div); 
-	  
-  if(phase == TRAIN){
+  if(this->layer_param_.debug_param().binary_relax())  
+  {
+  	if(phase == TRAIN){
 		//case 1: vectorize all filters in one layer
 		Dtype beta=0.001;
 		caffe_gpu_axpby(N,beta,weight,1-beta,binaryweight);
@@ -85,6 +86,7 @@ void BinaryInnerProductLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bot
 		 	caffe_gpu_axpby(div,beta,weight + i * div,1-beta,binaryweight + i * div);
 		}*/
 	}
+  }
   if (M_ == 1) {
 	  caffe_gpu_gemv<Dtype>(CblasNoTrans, N_, K_, (Dtype)1.,
 		  binaryweight, bottom_data, (Dtype)0., top_data);

@@ -23,3 +23,7 @@ This model was trained by Evan Shelhamer @shelhamer
 ## License
 
 This model is released for unrestricted use.
+
+accuracy@1 = 0.56822
+accuracy@5 = 0.801061
+loss = 1.85121 (* 1 = 1.85121 loss)

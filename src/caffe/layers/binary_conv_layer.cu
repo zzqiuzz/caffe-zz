@@ -66,8 +66,8 @@ void BinaryConvolutionLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bott
 	//binarize weights.
 	BinaryGpu_binarize<Dtype> << <CAFFE_GET_BLOCKS(N), CAFFE_CUDA_NUM_THREADS >> > (
 		N, div, this->alphas_.gpu_data(), weight, binaryweight);
-	
-	if(phase == TRAIN){
+	if(this->layer_param_.debug_param().binary_relax()){
+		if(phase == TRAIN){
 		//case 1: vectorize all filters in one layer
 		Dtype beta=0.001;
 		caffe_gpu_axpby(N,beta,weight,1-beta,binaryweight);
@@ -78,6 +78,8 @@ void BinaryConvolutionLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bott
 		 	caffe_gpu_axpby(div,beta,weight + i * div,1-beta,binaryweight + i * div);
 		}*/
 		
+	}
+	
 	}
 	//normal conv operations,directly copied from conv_layer.cpp
 	//const Dtype* weight = this->blobs_[0]->gpu_data();

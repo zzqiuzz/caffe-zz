@@ -58,6 +58,7 @@ void Solver<Dtype>::Init(const SolverParameter& param) {
   }
   iter_ = 0;
   current_step_ = 0;
+  quantize_step_ = 0;
   best_accuracy_1 = 0;
   best_accuracy_5 = 0;
 }
@@ -271,7 +272,7 @@ void Solver<Dtype>::Step(int iters) {
     // Increment the internal iter_ counter -- its value should always indicate
     // the number of times the weights have been updated.
     ++iter_;
-
+ 
     SolverAction::Enum request = GetRequestedAction();
 
     // Save a snapshot if needed.
@@ -306,7 +307,30 @@ void Solver<Dtype>::Solve(const char* resume_file) {
   // For a network that is trained by the solver, no bottom or top vecs
   // should be given, and we will just provide dummy vecs.
   int start_iter = iter_;
-  Step(param_.max_iter() - iter_);
+  Step(param_.max_iter() - iter_);//threhold already 0.7
+  
+  
+  //whether perform next incremental quantization.
+  while(this->quantize_step_ < this->param_.quantize_phase_ratio_size()){ 
+  	Dtype quantize_ratio = this->param_.quantize_phase_ratio(this->quantize_step_);
+  	LOG(INFO) << "Quantize phase ratio: " << quantize_ratio; 
+	NetParameter net_param;
+	ReadNetParamsFromTextFileOrDie(param_.net(), &net_param);
+	//INQ
+	net_->QuantizeLayer(net_param,quantize_ratio);
+	//
+	iter_ = 0;
+    current_step_ = 0; 
+    best_accuracy_1 = 0;
+    best_accuracy_5 = 0;
+	this->quantize_step_++;	
+	if(this->param_.quantize_phase_ratio(this->quantize_step_) == 0)//ratio == 0
+		break;
+	Step(param_.max_iter() - iter_);
+  }
+  //
+  LOG(INFO) << "Quantization completed!" ;
+  
   // If we haven't already, save a snapshot after optimization, unless
   // overridden by setting snapshot_after_train := false
   if (param_.snapshot_after_train()

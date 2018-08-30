@@ -1,40 +1,9 @@
-#float version gets accuracy of 99.31%
-
 name: "LeNet"
-is_quantization:true
 layer {
-  name: "mnist"
-  type: "Data"
+  name: "data"
+  type: "Input"
   top: "data"
-  top: "label"
-  include {
-    phase: TRAIN
-  }
-  transform_param {
-    scale: 0.00390625
-  }
-  data_param {
-    source: "examples/mnist/mnist_train_lmdb"
-    batch_size: 100
-    backend: LMDB
-  }
-}
-layer {
-  name: "mnist"
-  type: "Data"
-  top: "data"
-  top: "label"
-  include {
-    phase: TEST
-  }
-  transform_param {
-    scale: 0.00390625
-  }
-  data_param {
-    source: "examples/mnist/mnist_test_lmdb"
-    batch_size: 100
-    backend: LMDB
-  }
+  input_param { shape: { dim: 64 dim: 1 dim: 28 dim: 28 } }
 }
 layer {
   name: "conv1"
@@ -59,32 +28,10 @@ layer {
     }
   }
 }
-layer{
-  name:"norm1"
-  type: "BatchNorm"
-  bottom: "conv1"
-  top: "norm1"
-}
-layer {
-  bottom: "norm1"
-  top: "conv1_2_sc"
-  name: "bn1_2_scal"
-  type: "Scale"
-  scale_param {
-    bias_term: true
-  }
-}
-layer{
-  name: "relu1"
-  type: "ReLU"
-  bottom: "conv1_2_sc"
-  top: "relu1"
-
-} 
 layer {
   name: "pool1"
   type: "Pooling"
-  bottom: "relu1"
+  bottom: "conv1"
   top: "pool1"
   pooling_param {
     pool: MAX
@@ -92,25 +39,10 @@ layer {
     stride: 2
   }
 }
-layer{
-  name:"norm2"
-  type: "BatchNorm"
-  bottom: "pool1"
-  top: "norm2"
-}
-layer {
-  bottom: "norm2"
-  top: "conv2_sc"
-  name: "bn2_scal"
-  type: "Scale"
-  scale_param {
-    bias_term: true
-  }
-}
 layer {
   name: "conv2"
   type: "BinaryConvolution"
-  bottom: "conv2_sc"
+  bottom: "pool1"
   top: "conv2"
   param {
     lr_mult: 1
@@ -130,7 +62,6 @@ layer {
     }
   }
 }
-
 layer {
   name: "pool2"
   type: "Pooling"

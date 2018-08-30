@@ -5,7 +5,9 @@
 #include "caffe/common.hpp"
 #include "caffe/syncedmem.hpp"
 #include "caffe/util/math_functions.hpp"
-
+#include "caffe/util/power2.hpp"
+#include <cmath>
+#include <algorithm>  
 namespace caffe {
 
 
@@ -46,6 +48,7 @@ void Blob<Dtype>::Reshape(const vector<int>& shape) {
     capacity_ = count_;
     data_.reset(new SyncedMemory(capacity_ * sizeof(Dtype)));
     diff_.reset(new SyncedMemory(capacity_ * sizeof(Dtype)));
+	mask_.reset(new SyncedMemory(capacity_ * sizeof(Dtype)));
   }
 }
 
@@ -132,7 +135,31 @@ const Dtype* Blob<Dtype>::gpu_diff() const {
   CHECK(diff_);
   return (const Dtype*)diff_->gpu_data();
 }
+//add start
+template <typename Dtype>
+const Dtype* Blob<Dtype>::cpu_mask() const{
 
+  CHECK(mask_);
+  return (const Dtype*)mask_->cpu_data();
+}
+
+template <typename Dtype>
+const Dtype* Blob<Dtype>::gpu_mask() const{
+  CHECK(mask_);
+  return (const Dtype*)mask_->gpu_data();
+}
+
+template <typename Dtype>
+Dtype* Blob<Dtype>::mutable_cpu_mask(){
+  CHECK(mask_);
+  return static_cast<Dtype*>(mask_->mutable_cpu_data());
+}
+template <typename Dtype>
+Dtype* Blob<Dtype>::mutable_gpu_mask() {
+  CHECK(mask_);
+  return static_cast<Dtype*>(mask_->mutable_gpu_data());
+}
+//add end
 template <typename Dtype>
 Dtype* Blob<Dtype>::mutable_cpu_data() {
   CHECK(data_);
@@ -468,7 +495,7 @@ void Blob<Dtype>::CopyFrom(const Blob& source, bool copy_diff, bool reshape) {
 }
 
 template <typename Dtype>
-void Blob<Dtype>::FromProto(const BlobProto& proto, bool reshape) {
+void Blob<Dtype>::FromProto(const BlobProto& proto, bool reshape,bool is_quantization) {
   if (reshape) {
     vector<int> shape;
     if (proto.has_num() || proto.has_channels() ||
@@ -492,16 +519,45 @@ void Blob<Dtype>::FromProto(const BlobProto& proto, bool reshape) {
   }
   // copy data
   Dtype* data_vec = mutable_cpu_data();
+  Dtype* mask_vec= mutable_cpu_mask();
   if (proto.double_data_size() > 0) {
     CHECK_EQ(count_, proto.double_data_size());
     for (int i = 0; i < count_; ++i) {
       data_vec[i] = proto.double_data(i);
+	  mask_vec[i]=1;//float weights
     }
   } else {
     CHECK_EQ(count_, proto.data_size());
     for (int i = 0; i < count_; ++i) {
       data_vec[i] = proto.data(i);
+	  mask_vec[i]=1;
     }
+	
+  }
+  // INQ  	
+  if(is_quantization)
+  { 
+	const int n_kernel = num();
+	CHECK_GT(n_kernel,0);
+	const int weight_dim = count_ / n_kernel;
+    Dtype* data_copy=(Dtype*) malloc(count_*sizeof(Dtype));
+	std::vector<Dtype> asum_kernel(0,n_kernel);  
+	std::vector<Dtype> tmp(0,n_kernel);
+    caffe_copy(count_,data_vec,data_copy);
+    caffe_abs(count_,data_copy,data_copy); 
+	for(int i = 0;i < n_kernel; i++){ 
+		asum_kernel.push_back(caffe_cpu_asum<Dtype>(weight_dim,data_copy + i * weight_dim));
+	}
+	tmp = asum_kernel;
+ 	std::sort(tmp.begin(),tmp.end());//small --> big
+	int partition = int(n_kernel * 0.7);
+	Dtype threhold = tmp[partition]; 
+	for(int i = 0;i < n_kernel; i ++){ 
+		if(asum_kernel[i] >= threhold){
+			caffe_set<Dtype>(weight_dim, 0, mask_vec + i*weight_dim);
+		}
+	} 
+	delete data_copy;
   }
   if (proto.double_diff_size() > 0) {
     CHECK_EQ(count_, proto.double_diff_size());

@@ -93,12 +93,13 @@ message NetParameter {
 
   // DEPRECATED: use 'layer' instead.
   repeated V1LayerParameter layers = 2;
+  optional bool is_quantization = 9 [default = false];
 }
 
 // NOTE
 // Update the next available ID when you add a new SolverParameter field.
 //
-// SolverParameter next available ID: 45 (last added: Modified_lr)
+// SolverParameter next available ID: 47 (last added: isquantize)
 message SolverParameter {
   //////////////////////////////////////////////////////////////////////////////
   // Specifying the train and test networks
@@ -257,11 +258,14 @@ message SolverParameter {
   repeated string weights = 42;
   optional string net_type = 43;
   optional Modified_lr modified_lr = 44;
+  repeated float quantize_phase_ratio = 45;
+  optional bool isquantize = 46 [default = false];
 }
 message Modified_lr{
   repeated int32 stepvalue = 1;
   repeated float mlr = 2;
 }
+
 // A message that stores the solver snapshots
 message SolverState {
   optional int32 iter = 1; // The current iteration
@@ -430,6 +434,7 @@ message LayerParameter {
 }
 message DebugParameter{
   optional bool xnorno_grad  = 1 [default = false];
+  optional bool binary_relax = 2 [default = false];
 }
 message AllPassParameter{
   optional float key = 1 [default = 0];
