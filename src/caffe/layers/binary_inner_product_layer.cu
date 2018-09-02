@@ -77,7 +77,7 @@ void BinaryInnerProductLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bot
   {
   	if(phase == TRAIN){
 		//case 1: vectorize all filters in one layer
-		Dtype beta=0.001;
+		Dtype beta=0.01;//0.001->0.01->0.05->0.1
 		caffe_gpu_axpby(N,beta,weight,1-beta,binaryweight);
 		
 		//case 2: vectorize one filter in one layer

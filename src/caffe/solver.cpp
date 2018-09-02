@@ -324,7 +324,7 @@ void Solver<Dtype>::Solve(const char* resume_file) {
     best_accuracy_1 = 0;
     best_accuracy_5 = 0;
 	this->quantize_step_++;	
-	if(this->param_.quantize_phase_ratio(this->quantize_step_) == 0)//ratio == 0
+	if(quantize_ratio == 0)//ratio == 0
 		break;
 	Step(param_.max_iter() - iter_);
   }

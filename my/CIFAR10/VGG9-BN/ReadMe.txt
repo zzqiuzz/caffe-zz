@@ -14,5 +14,10 @@ withnoxnorgrad & shrink angle:89.75% : beta 0.0001
 
 VGG9-BN on CIFAR-10 dataset
 FWN: 91.19%
-BWN: 89.5%
 TWN: 90.31%
+BWN: 89.5%
+BWN_INQ_Relax:last89.89%  best89.93%coe:0.0001
+BWN_INQ_Relax:last89.96%  best90.2% coe:0.001
+BWN_INQ_Relax:last   best  coe:0.01
+
+
