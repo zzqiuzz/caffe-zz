@@ -264,6 +264,7 @@ message SolverParameter {
 message Modified_lr{
   repeated int32 stepvalue = 1;
   repeated float mlr = 2;
+  repeated float weight_decay = 3;
 }
 
 // A message that stores the solver snapshots

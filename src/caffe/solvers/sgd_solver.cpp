@@ -130,30 +130,7 @@ void SGDSolver<Dtype>::ApplyUpdate() {
     ComputeUpdateValue(param_id, rate);
   }
   this->net_->Update();
-  //clip weights within [-1,1]
- /* if(this->param_.net_type() == "Binary"){
-     for(int param_id = 0;param_id < this->net_->learnable_params().size();++param_id){
-        MeanExtract(param_id);
-        ClipWeights(param_id);
-
-     } 
-    
-  }*/
-  
 }
-/*template <typename Dtype>
-void SGDSolver<Dtype>::MeanExtract(int param_id){
-  const vector<Blob<Dtype>*>& net_params = this->net_->learnable_params();
-  //
-  
-  //
-}
-
-template <typename Dtype>
-void SGDSolver<Dtype>::ClipWeights(int param_id){
-  const vector<Blob<Dtype>*>& net_params = this->net_->learnable_params();
-  net_params[param_id]->clip_data();
-}*/
 
 template <typename Dtype>
 void SGDSolver<Dtype>::Normalize(int param_id) {
@@ -186,7 +163,12 @@ void SGDSolver<Dtype>::Regularize(int param_id) {
   const vector<Blob<Dtype>*>& net_params = this->net_->learnable_params();
   const vector<float>& net_params_weight_decay =
       this->net_->params_weight_decay();
-  Dtype weight_decay = this->param_.weight_decay();
+  Dtype weight_decay=-1;
+  if(this->param_.lr_policy() == "modified_lr")
+  	weight_decay = this->param_.modified_lr().weight_decay(this->current_step_);
+  else
+  	weight_decay = this->param_.weight_decay();
+  CHECK_GE(weight_decay,0) << "ERROR! Weight_decay setting!";
   string regularization_type = this->param_.regularization_type();
   Dtype local_decay = weight_decay * net_params_weight_decay[param_id];
   switch (Caffe::mode()) {

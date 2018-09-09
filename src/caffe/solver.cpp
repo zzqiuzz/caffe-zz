@@ -268,6 +268,9 @@ void Solver<Dtype>::Step(int iters) {
       callbacks_[i]->on_gradients_ready();
     }
     ApplyUpdate();
+	//debug modified_lr
+	//LOG(INFO) << "weight_decay = " << this->param_.modified_lr().weight_decay(this->current_step_);
+	//LOG(INFO) << "learning rate = " << this->param_.modified_lr().mlr(this->current_step_);
 
     // Increment the internal iter_ counter -- its value should always indicate
     // the number of times the weights have been updated.
@@ -311,7 +314,8 @@ void Solver<Dtype>::Solve(const char* resume_file) {
   
   
   //whether perform next incremental quantization.
-  while(this->quantize_step_ < this->param_.quantize_phase_ratio_size()){ 
+  if(this->param_.isquantize()){
+  	while(this->quantize_step_ < this->param_.quantize_phase_ratio_size()){ 
   	Dtype quantize_ratio = this->param_.quantize_phase_ratio(this->quantize_step_);
   	LOG(INFO) << "Quantize phase ratio: " << quantize_ratio; 
 	NetParameter net_param;
@@ -327,9 +331,12 @@ void Solver<Dtype>::Solve(const char* resume_file) {
 	if(quantize_ratio == 0)//ratio == 0
 		break;
 	Step(param_.max_iter() - iter_);
+  	}
+	//
+  	LOG(INFO) << "Quantization completed!" ;
   }
-  //
-  LOG(INFO) << "Quantization completed!" ;
+  
+  
   
   // If we haven't already, save a snapshot after optimization, unless
   // overridden by setting snapshot_after_train := false
