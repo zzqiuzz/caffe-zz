@@ -15,7 +15,7 @@ layer {
     mean_value: 123.68
   }
   data_param {
-    source: "/mnt/data/ilsvrc12/keep/ilsvrc12_train_lmdb"
+    source: "/mnt/data/ilsvrc12/origin/ilsvrc12_train_lmdb"
     batch_size: 128
     backend: LMDB
   }
@@ -36,14 +36,14 @@ layer {
     mean_value: 123.68
   }
   data_param {
-    source: "/mnt/data/ilsvrc12/keep/ilsvrc12_val_lmdb"
+    source: "/mnt/data/ilsvrc12/origin/ilsvrc12_val_lmdb"
     batch_size: 50
     backend: LMDB
   }
 }
 layer {
   name: "conv1"
-  type: "BinaryConvolution"
+  type: "Convolution"
   bottom: "data"
   top: "conv1"
   param {
@@ -67,9 +67,6 @@ layer {
       type: "constant"
       value: 0
     }
-  }
-  debug_param{
-    xnorno_grad:true
   }
 }
 layer {
@@ -464,7 +461,7 @@ layer {
 }
 layer {
   name: "fc8"
-  type: "BinaryInnerProduct"
+  type: "InnerProduct"
   bottom: "fc7"
   top: "fc8"
   param {
@@ -486,9 +483,6 @@ layer {
       type: "constant"
       value: 0
     }
-  }
-  debug_param{
-    xnorno_grad:true
   }
 }
 layer {
