@@ -52,7 +52,8 @@ void BinaryInnerProductLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bot
   int N = num*div;
   const Dtype* weight = this->blobs_[0]->gpu_data();
   Dtype* binaryweight = W_b.mutable_gpu_data();
-  caffe_copy<Dtype>(N, weight, binaryweight);
+  //caffe_copy<Dtype>(N, weight, binaryweight);
+  caffe_gpu_abs(N,weight,binaryweight);
   if(this->layer_param_.debug_param().xnorno_grad() && phase == TRAIN){//only in the train phase!
   	//LOG(INFO) << "TRAIN phase";
     //calculate mean_.
@@ -71,7 +72,7 @@ void BinaryInnerProductLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bot
 	  caffe_gpu_asum<Dtype>(div, weight + n*div, alphas_.mutable_cpu_data() + n);
 	  alphas_.mutable_cpu_data()[n] /= div;
   }*/
-  caffe_gpu_gemv<Dtype>(CblasNoTrans, num, div, 1. / div, weight, weight_sum_multiplier.gpu_data(), 0.,
+  caffe_gpu_gemv<Dtype>(CblasNoTrans, num, div, 1. / div, binaryweight, weight_sum_multiplier.gpu_data(), 0.,
     alphas_.mutable_gpu_data());
 
   //binarize weights.

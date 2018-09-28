@@ -38,12 +38,14 @@ void BinaryConvolutionLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bott
 	const vector<Blob<Dtype>*>& top){
 	Phase phase = this->layer_param_.phase();
 	//const int num = this->blobs_[0]->num();
-	const int num = this->num_output_;
-	const int div = this->blobs_[0]->count() / num;
 	const int N = this->blobs_[0]->count();
+	const int num = this->num_output_;
+	const int div = N / num;
+	
 	const Dtype* weight = this->blobs_[0]->gpu_data();
 	Dtype* binaryweight = this->W_b.mutable_gpu_data();
-	caffe_copy<Dtype>(N, weight, binaryweight);
+	//caffe_copy<Dtype>(N, weight, binaryweight);
+	caffe_gpu_abs(N,weight,binaryweight);
 	if(this->layer_param_.debug_param().xnorno_grad() && phase == TRAIN){//only in train phase!
 		//calculate mean_.
 		caffe_gpu_gemv<Dtype>(CblasNoTrans, num, div, 1. / div, weight, weight_sum_multiplier.gpu_data(), 0.,
@@ -63,7 +65,7 @@ void BinaryConvolutionLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bott
 		caffe_gpu_asum<Dtype>(div, weight + n*div, alphas_.mutable_cpu_data() + n); 
 		alphas_.mutable_cpu_data()[n] /= div; 
 	}*/
-	caffe_cpu_gemv<Dtype>(CblasNoTrans, num, div, 1. / div, weight, weight_sum_multiplier.gpu_data(), 0.,
+	caffe_gpu_gemv<Dtype>(CblasNoTrans, num, div, 1. / div, binaryweight, weight_sum_multiplier.gpu_data(), 0.,
 		alphas_.mutable_gpu_data());
 
 	//binarize weights.

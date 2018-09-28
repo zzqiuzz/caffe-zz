@@ -57,7 +57,7 @@ layer {
     bias_term: false
   }
   debug_param{
-    binary_relax:true
+    binary_relax:false
   }
 }
 layer {
@@ -114,7 +114,7 @@ layer {
     bias_term: false
   }
   debug_param{
-    binary_relax:true
+    binary_relax:false
   }
 }
 layer {
@@ -170,7 +170,7 @@ layer {
     bias_term: false
   }
   debug_param{
-    binary_relax:true
+    binary_relax:false
   }
 }
 layer {
@@ -216,7 +216,7 @@ layer {
     bias_term: false
   }
   debug_param{
-    binary_relax:true
+    binary_relax:false
   }
 }
 layer {
@@ -262,7 +262,7 @@ layer {
     bias_term: false
   }
   debug_param{
-    binary_relax:true
+    binary_relax:false
   }
 }
 layer {
@@ -316,7 +316,7 @@ layer {
     bias_term: false
   }
   debug_param{
-    binary_relax:true
+    binary_relax:false
   }
 }
 layer {
@@ -368,7 +368,7 @@ layer {
     bias_term: false
   }
   debug_param{
-    binary_relax:true
+    binary_relax:false
   }
 }
 layer {
@@ -427,7 +427,7 @@ layer {
     }
   }
   debug_param{
-    binary_relax:true
+    binary_relax:false
   }
 }
 layer {
@@ -455,28 +455,5 @@ layer {
     top_k:5
   }
 }
-layer {
-  name: "accuracy_train_1"
-  type: "Accuracy"
-  bottom: "fc8"
-  bottom: "label"
-  top: "accuracy_train_1"
-  include {
-    phase: TRAIN
-  }
-}
-layer { 
-  name: "accuracy_train_5"
-  type: "Accuracy"
-  bottom: "fc8"
-  bottom: "label"
-  top: "accuracy_train_5"
-  include {
-    phase: TRAIN
-  }
-  accuracy_param
-  { 
-    top_k:5
-  }
-}
+
 
