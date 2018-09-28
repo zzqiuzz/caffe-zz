@@ -1,4 +1,4 @@
-name: "AlexNet"
+name: "AlexNet-BN"
 layer {
   name: "data"
   type: "Data"
@@ -9,12 +9,12 @@ layer {
   }
   transform_param {
     mirror: true
-    crop_size: 227
+    crop_size: 224
     mean_file: "/mnt/data/ilsvrc12/origin/imagenet_mean.binaryproto"
   }
   data_param {
-   source: "/mnt/data/ilsvrc12/origin/ilsvrc12_train_lmdb/"
-    batch_size: 256
+    source: "/mnt/data/ilsvrc12/origin/ilsvrc12_train_lmdb"
+    batch_size: 128
     backend: LMDB
   }
 }
@@ -28,11 +28,11 @@ layer {
   }
   transform_param {
     mirror: false
-    crop_size: 227
+    crop_size: 224
     mean_file: "/mnt/data/ilsvrc12/origin/imagenet_mean.binaryproto"
   }
   data_param {
-    source: "/mnt/data/ilsvrc12/origin/ilsvrc12_val_lmdb/"
+    source: "/mnt/data/ilsvrc12/origin/ilsvrc12_val_lmdb"
     batch_size: 50
     backend: LMDB
   }
@@ -46,26 +46,34 @@ layer {
     lr_mult: 1
     decay_mult: 1
   }
-  param {
-    lr_mult: 2
-    decay_mult: 0
-  }
   convolution_param {
     num_output: 96
     kernel_size: 11
     stride: 4
+    pad: 2
     weight_filler {
-      type: "gaussian"
-      std: 0.01
+      type: "msra"
     }
-    bias_filler {
-      type: "constant"
-      value: 0
-    }
-#engine:CUDNN
+    bias_term: false
   }
   debug_param{
     binary_relax:true
+  }
+}
+layer {
+  name: "bn1"
+  type: "BatchNorm"
+  bottom: "conv1"
+  top: "conv1"
+  
+}
+layer {
+  name: "scale1"
+  type: "Scale"
+  bottom: "conv1"
+  top: "conv1"
+  scale_param {
+    bias_term: true
   }
 }
 layer {
@@ -75,20 +83,9 @@ layer {
   top: "conv1"
 }
 layer {
-  name: "norm1"
-  type: "LRN"
-  bottom: "conv1"
-  top: "norm1"
-  lrn_param {
-    local_size: 5
-    alpha: 0.0001
-    beta: 0.75
-  }
-}
-layer {
   name: "pool1"
   type: "Pooling"
-  bottom: "norm1"
+  bottom: "conv1"
   top: "pool1"
   pooling_param {
     pool: MAX
@@ -105,27 +102,35 @@ layer {
     lr_mult: 1
     decay_mult: 1
   }
-  param {
-    lr_mult: 2
-    decay_mult: 0
-  }
+
   convolution_param {
     num_output: 256
     pad: 2
     kernel_size: 5
-    group: 2
+    #group: 2
     weight_filler {
-      type: "gaussian"
-      std: 0.01
+      type: "msra"
     }
-    bias_filler {
-      type: "constant"
-      value: 0.1
-    }
-#engine:CUDNN
+    bias_term: false
   }
   debug_param{
     binary_relax:true
+  }
+}
+layer {
+  name: "bn2"
+  type: "BatchNorm"
+  bottom: "conv2"
+  top: "conv2"
+  
+}
+layer {
+  name: "scale2"
+  type: "Scale"
+  bottom: "conv2"
+  top: "conv2"
+  scale_param {
+    bias_term: true
   }
 }
 layer {
@@ -135,20 +140,9 @@ layer {
   top: "conv2"
 }
 layer {
-  name: "norm2"
-  type: "LRN"
-  bottom: "conv2"
-  top: "norm2"
-  lrn_param {
-    local_size: 5
-    alpha: 0.0001
-    beta: 0.75
-  }
-}
-layer {
   name: "pool2"
   type: "Pooling"
-  bottom: "norm2"
+  bottom: "conv2"
   top: "pool2"
   pooling_param {
     pool: MAX
@@ -165,26 +159,34 @@ layer {
     lr_mult: 1
     decay_mult: 1
   }
-  param {
-    lr_mult: 2
-    decay_mult: 0
-  }
+
   convolution_param {
     num_output: 384
     pad: 1
     kernel_size: 3
     weight_filler {
-      type: "gaussian"
-      std: 0.01
+      type: "msra"
     }
-    bias_filler {
-      type: "constant"
-      value: 0
-    }
-#engine:CUDNN
+    bias_term: false
   }
   debug_param{
     binary_relax:true
+  }
+}
+layer {
+  name: "bn3"
+  type: "BatchNorm"
+  bottom: "conv3"
+  top: "conv3"
+  
+}
+layer {
+  name: "scale3"
+  type: "Scale"
+  bottom: "conv3"
+  top: "conv3"
+  scale_param {
+    bias_term: true
   }
 }
 layer {
@@ -202,27 +204,35 @@ layer {
     lr_mult: 1
     decay_mult: 1
   }
-  param {
-    lr_mult: 2
-    decay_mult: 0
-  }
+
   convolution_param {
     num_output: 384
     pad: 1
     kernel_size: 3
-    group: 2
+    #group: 2
     weight_filler {
-      type: "gaussian"
-      std: 0.01
+      type: "msra"
     }
-    bias_filler {
-      type: "constant"
-      value: 0.1
-    }
-#engine:CUDNN
+    bias_term: false
   }
   debug_param{
     binary_relax:true
+  }
+}
+layer {
+  name: "bn4"
+  type: "BatchNorm"
+  bottom: "conv4"
+  top: "conv4"
+  
+}
+layer {
+  name: "scale4"
+  type: "Scale"
+  bottom: "conv4"
+  top: "conv4"
+  scale_param {
+    bias_term: true
   }
 }
 layer {
@@ -240,27 +250,35 @@ layer {
     lr_mult: 1
     decay_mult: 1
   }
-  param {
-    lr_mult: 2
-    decay_mult: 0
-  }
+
   convolution_param {
     num_output: 256
     pad: 1
     kernel_size: 3
-    group: 2
+    #group: 2
     weight_filler {
-      type: "gaussian"
-      std: 0.01
+      type: "msra"
     }
-    bias_filler {
-      type: "constant"
-      value: 0.1
-    }
-#engine:CUDNN
+    bias_term: false
   }
   debug_param{
     binary_relax:true
+  }
+}
+layer {
+  name: "bn5"
+  type: "BatchNorm"
+  bottom: "conv5"
+  top: "conv5"
+  
+}
+layer {
+  name: "scale5"
+  type: "Scale"
+  bottom: "conv5"
+  top: "conv5"
+  scale_param {
+    bias_term: true
   }
 }
 layer {
@@ -289,23 +307,32 @@ layer {
     lr_mult: 1
     decay_mult: 1
   }
-  param {
-    lr_mult: 2
-    decay_mult: 0
-  }
+
   inner_product_param {
     num_output: 4096
     weight_filler {
-      type: "gaussian"
-      std: 0.005
+      type: "msra"
     }
-    bias_filler {
-      type: "constant"
-      value: 0.1
-    }
+    bias_term: false
   }
   debug_param{
     binary_relax:true
+  }
+}
+layer {
+  name: "bn6"
+  type: "BatchNorm"
+  bottom: "fc6"
+  top: "fc6"
+  
+}
+layer {
+  name: "scale6"
+  type: "Scale"
+  bottom: "fc6"
+  top: "fc6"
+  scale_param {
+    bias_term: true
   }
 }
 layer {
@@ -332,23 +359,32 @@ layer {
     lr_mult: 1
     decay_mult: 1
   }
-  param {
-    lr_mult: 2
-    decay_mult: 0
-  }
+
   inner_product_param {
     num_output: 4096
     weight_filler {
-      type: "gaussian"
-      std: 0.005
+      type: "msra"
     }
-    bias_filler {
-      type: "constant"
-      value: 0.1
-    }
+    bias_term: false
   }
   debug_param{
     binary_relax:true
+  }
+}
+layer {
+  name: "bn7"
+  type: "BatchNorm"
+  bottom: "fc7"
+  top: "fc7"
+  
+}
+layer {
+  name: "scale7"
+  type: "Scale"
+  bottom: "fc7"
+  top: "fc7"
+  scale_param {
+    bias_term: true
   }
 }
 layer {
@@ -379,11 +415,11 @@ layer {
     lr_mult: 2
     decay_mult: 0
   }
+
   inner_product_param {
     num_output: 1000
     weight_filler {
-      type: "gaussian"
-      std: 0.01
+      type: "msra"
     }
     bias_filler {
       type: "constant"
@@ -395,35 +431,52 @@ layer {
   }
 }
 layer {
-  name: "accuracy@1"
-  type: "Accuracy"
-  bottom: "fc8"
-  bottom: "label"
-  top: "accuracy@1"
-  include {
-    phase: TEST
-  }
-accuracy_param{
-   top_k:1
- }
-}
-layer {
-  name: "accuracy@5"
-  type:"Accuracy"
-  bottom:"fc8"
-  bottom:"label"
-  top: "accuracy@5"
-  include{
-    phase:TEST
-  }
-  accuracy_param{
-    top_k:5
-  }
-}
-layer {
   name: "loss"
   type: "SoftmaxWithLoss"
   bottom: "fc8"
   bottom: "label"
   top: "loss"
 }
+layer {
+  name: "accuracy"
+  type: "Accuracy"
+  bottom: "fc8"
+  bottom: "label"
+  top: "accuracy"
+}
+layer { 
+  name: "accuracy_5"
+  type: "Accuracy"
+  bottom: "fc8"
+  bottom: "label"
+  top: "accuracy_5"
+  accuracy_param
+  { 
+    top_k:5
+  }
+}
+layer {
+  name: "accuracy_train_1"
+  type: "Accuracy"
+  bottom: "fc8"
+  bottom: "label"
+  top: "accuracy_train_1"
+  include {
+    phase: TRAIN
+  }
+}
+layer { 
+  name: "accuracy_train_5"
+  type: "Accuracy"
+  bottom: "fc8"
+  bottom: "label"
+  top: "accuracy_train_5"
+  include {
+    phase: TRAIN
+  }
+  accuracy_param
+  { 
+    top_k:5
+  }
+}
+

@@ -16,6 +16,10 @@ VGG9-BN on CIFAR-10 dataset
 FWN: 91.19%
 TWN: 90.31%
 BWN: 89.5%
+SQ-BWN: 90.6%
+BWNH:90.8%
+ours:90.2
+
 BWN_INQ_Relax:last89.89%  best89.93%  coe:0.0001
 BWN_INQ_Relax:last89.96%  best90.2%   coe:0.001
 BWN_INQ_Relax:last90.03%  best90.14%  coe:0.01

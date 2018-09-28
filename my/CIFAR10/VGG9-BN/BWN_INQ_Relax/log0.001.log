@@ -169,7 +169,7 @@ layer {
 }
 layer {
   name: "conv3"
-  type: "BinaryConvolution"
+  type: "BinaryConvolution"0.005
   bottom: "pool1"
   top: "conv3"
   param {

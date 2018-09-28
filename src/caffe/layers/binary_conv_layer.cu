@@ -59,17 +59,20 @@ void BinaryConvolutionLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bott
 	}
 	
 	//calculate alphas_.
-	for (int n = 0; n < num; n++){
+	/*for (int n = 0; n < num; n++){
 		caffe_gpu_asum<Dtype>(div, weight + n*div, alphas_.mutable_cpu_data() + n); 
 		alphas_.mutable_cpu_data()[n] /= div; 
-	}
+	}*/
+	caffe_cpu_gemv<Dtype>(CblasNoTrans, num, div, 1. / div, weight, weight_sum_multiplier.gpu_data(), 0.,
+		alphas_.mutable_gpu_data());
+
 	//binarize weights.
 	BinaryGpu_binarize<Dtype> << <CAFFE_GET_BLOCKS(N), CAFFE_CUDA_NUM_THREADS >> > (
 		N, div, this->alphas_.gpu_data(), weight, binaryweight);
 	if(this->layer_param_.debug_param().binary_relax()){
 		if(phase == TRAIN){
 		//case 1: vectorize all filters in one layer
-		Dtype beta=0.05;//0.001->0.01->0.05->0.1
+		Dtype beta=0.001;//0.001->0.01->0.05->0.1
 		caffe_gpu_axpby(N,beta,weight,1-beta,binaryweight);
 		
 		//case 2: vectorize one filter in one layer
