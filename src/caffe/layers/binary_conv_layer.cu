@@ -34,6 +34,13 @@ __global__ void Gradient_adder(const int num,const int weight_dim,const Dtype* w
 	}
 }
 template <typename Dtype>
+__global__ void Mean_sub(const int num,const int weight_dim,const Dtype* mean_data,Dtype* out){
+	CUDA_KERNEL_LOOP(index,num){
+		int n = index / weight_dim ;
+		out[index]-=mean_data[n];
+	}
+}
+template <typename Dtype>
 void BinaryConvolutionLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
 	const vector<Blob<Dtype>*>& top){
 	Phase phase = this->layer_param_.phase();
@@ -52,10 +59,12 @@ void BinaryConvolutionLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bott
 			mean_.mutable_gpu_data()); 
 
 		//extract mean.
-		const Dtype* mean_data=mean_.cpu_data();
-		for(int i=0;i<num;++i){
+		const Dtype* mean_data=mean_.gpu_data();
+		Mean_sub<Dtype><< <CAFFE_GET_BLOCKS(N),CAFFE_CUDA_NUM_THREADS>> >(N,div,mean_data,this->blobs_[0]->mutable_gpu_data());
+		//TODO：to gpu
+		/*for(int i=0;i<num;++i){
 			caffe_gpu_add_scalar<Dtype>(div, -*(mean_data + i), this->blobs_[0]->mutable_gpu_data() + i*div);
-		}
+		}*/
 		//clamp weights
 		this->blobs_[0]->clip_data(); 
 	}

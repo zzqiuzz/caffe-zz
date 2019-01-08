@@ -15,7 +15,7 @@ layer {
     mean_value: 123.68
   }
   data_param {
-    source: "/mnt/data/ilsvrc12/keep/ilsvrc12_train_lmdb"
+    source: "/home/zhengzhe/Data/imagenet_shrt256/ilsvrc12_train_lmdb"
     batch_size: 256
     backend: LMDB
   }
@@ -36,7 +36,7 @@ layer {
     mean_value: 123.68
   }
   data_param {
-    source: "/mnt/data/ilsvrc12/keep/ilsvrc12_val_lmdb"
+    source: "/home/zhengzhe/Data/imagenet_shrt256/ilsvrc12_val_lmdb"
     batch_size: 50
     backend: LMDB
   }

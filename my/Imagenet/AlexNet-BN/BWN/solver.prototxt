@@ -1,14 +1,31 @@
 net: "train_test.prototxt"
 test_iter: 1000
 test_interval: 1000
-base_lr: 0.05
-display:20
-lr_policy: "poly"
-power: 1
-gamma: 0.1 
-max_iter: 320000
+base_lr: 0.01
+display:200
+lr_policy: "modified_lr"
+modified_lr{
+  stepvalue: 90000
+  stepvalue: 140000
+  stepvalue: 210000
+  stepvalue: 250000
+  stepvalue: 500000
+  mlr: 0.01
+  mlr: 0.005
+  mlr: 0.001
+  mlr: 0.0005 
+  mlr: 0.0001
+  weight_decay:0.0005
+  weight_decay:0.0005
+  weight_decay:0
+  weight_decay:0
+  weight_decay:0
+} 
+#power: 1
+#gamma: 0.1 
+max_iter: 1000000
 momentum: 0.9
-weight_decay: 0.00005
+#weight_decay: 0.00005
 snapshot: 10000
-snapshot_prefix: "my/BWN/AlexNet-BN"
+snapshot_prefix: "snapshot"
 solver_mode: GPU

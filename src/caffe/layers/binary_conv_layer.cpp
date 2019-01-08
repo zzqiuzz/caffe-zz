@@ -122,5 +122,5 @@ STUB_GPU(BinaryConvolutionLayer);
 #endif
 
 INSTANTIATE_CLASS(BinaryConvolutionLayer);
-REGISTER_LAYER_CLASS(BinaryConvolution);
+//REGISTER_LAYER_CLASS(BinaryConvolution);
 }

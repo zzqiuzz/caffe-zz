@@ -4,11 +4,11 @@
 set -e
 
 EXAMPLE=examples/imagenet
-DATA=/mnt/data/ilsvrc12/keep
+DATA=/home/zhengzhe/Data/imagenet_shrt256
 TOOLS=build/tools
 
-TRAIN_DATA_ROOT=/mnt/data/ilsvrc12/origin/ILSVRC2012_img_train/
-VAL_DATA_ROOT=/mnt/data/ilsvrc12/origin/ILSVRC2012_img_val/
+TRAIN_DATA_ROOT=/home/share/data/ilsvrc12_shrt_256/ilsvrc12_train/
+VAL_DATA_ROOT=/home/share/data/ilsvrc12_shrt_256/ilsvrc12_val/
 
 # Set RESIZE=true to resize the images to 256x256. Leave as false if images have
 # already been resized using another tool.
@@ -45,6 +45,7 @@ GLOG_logtostderr=1 $TOOLS/convert_imageset \
     $TRAIN_DATA_ROOT \
     $DATA/train.txt \
     $DATA/ilsvrc12_train_lmdb
+
 
 echo "Creating val lmdb..."
 
