@@ -27,16 +27,9 @@ template <typename Dtype>
 __global__ void BinActiveBackward(const int n,const Dtype* in_diff,const Dtype* in_data,Dtype* out_diff)
 {
 	CUDA_KERNEL_LOOP(index,n){
-		if(in_data[index] >= 0){
-			out_diff[index] = Dtype(1);
-			if(in_data[index] > 1)
-				out_diff[index] = 0;
-		}
-		else{
-			out_diff[index] = Dtype(-1);
-			if(in_data[index] < Dtype(-1))
-				out_diff[index] = 0;
-		}
+		out_diff[index] = in_diff[index];
+		if(in_data[index] >= Dtype(1) || in_data[index] <= Dtype(-1))
+			out_diff[index] = 0;
 	}	
 }
 template <typename Dtype>
