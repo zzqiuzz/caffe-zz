@@ -1,7 +1,7 @@
-I0108 22:11:31.145834 14998 upgrade_proto.cpp:1113] snapshot_prefix was a directory and is replaced to snapshot/solver
-I0108 22:11:31.146570 14998 caffe.cpp:204] Using GPUs 6
-I0108 22:11:31.238108 14998 caffe.cpp:209] GPU 6: GeForce GTX 1080 Ti
-I0108 22:11:32.173293 14998 solver.cpp:45] Initializing solver from parameters: 
+I0110 16:22:24.401581  2020 upgrade_proto.cpp:1113] snapshot_prefix was a directory and is replaced to snapshot/solver
+I0110 16:22:24.402503  2020 caffe.cpp:204] Using GPUs 3
+I0110 16:22:24.509747  2020 caffe.cpp:209] GPU 3: GeForce GTX 1080 Ti
+I0110 16:22:28.082257  2020 solver.cpp:45] Initializing solver from parameters: 
 test_iter: 1000
 test_interval: 1000
 base_lr: 0.001
@@ -15,15 +15,15 @@ stepsize: 100000
 snapshot: 10000
 snapshot_prefix: "snapshot/solver"
 solver_mode: GPU
-device_id: 6
+device_id: 3
 net: "train_test.prototxt"
 train_state {
   level: 0
   stage: ""
 }
-I0108 22:11:32.173888 14998 solver.cpp:105] Creating training net from net file: train_test.prototxt
-I0108 22:11:32.175523 14998 net.cpp:294] The NetState phase (0) differed from the phase (1) specified by a rule in layer data
-I0108 22:11:32.175900 14998 net.cpp:51] Initializing net from parameters: 
+I0110 16:22:28.082775  2020 solver.cpp:105] Creating training net from net file: train_test.prototxt
+I0110 16:22:28.084177  2020 net.cpp:294] The NetState phase (0) differed from the phase (1) specified by a rule in layer data
+I0110 16:22:28.084429  2020 net.cpp:51] Initializing net from parameters: 
 name: "AlexNet-BN"
 state {
   phase: TRAIN
@@ -448,372 +448,372 @@ layer {
     top_k: 5
   }
 }
-I0108 22:11:32.176949 14998 layer_factory.hpp:78] Creating layer data
-I0108 22:11:32.177254 14998 db_lmdb.cpp:35] Opened lmdb /home/zhengzhe/Data/imagenet_shrt256/ilsvrc12_train_lmdb
-I0108 22:11:32.177387 14998 net.cpp:84] Creating Layer data
-I0108 22:11:32.177434 14998 net.cpp:380] data -> data
-I0108 22:11:32.177650 14998 net.cpp:380] data -> label
-I0108 22:11:32.180944 14998 data_layer.cpp:45] output data size: 256,3,224,224
-I0108 22:11:32.714380 14998 base_data_layer.cpp:72] Initializing prefetch
-I0108 22:11:32.714722 14998 base_data_layer.cpp:75] Prefetch initialized.
-I0108 22:11:32.714758 14998 net.cpp:122] Setting up data
-I0108 22:11:32.714814 14998 net.cpp:129] Top shape: 256 3 224 224 (38535168)
-I0108 22:11:32.714843 14998 net.cpp:129] Top shape: 256 (256)
-I0108 22:11:32.714859 14998 net.cpp:137] Memory required for data: 154141696
-I0108 22:11:32.714907 14998 layer_factory.hpp:78] Creating layer label_data_1_split
-I0108 22:11:32.714987 14998 net.cpp:84] Creating Layer label_data_1_split
-I0108 22:11:32.715032 14998 net.cpp:406] label_data_1_split <- label
-I0108 22:11:32.715116 14998 net.cpp:380] label_data_1_split -> label_data_1_split_0
-I0108 22:11:32.715183 14998 net.cpp:380] label_data_1_split -> label_data_1_split_1
-I0108 22:11:32.715224 14998 net.cpp:380] label_data_1_split -> label_data_1_split_2
-I0108 22:11:32.715350 14998 net.cpp:122] Setting up label_data_1_split
-I0108 22:11:32.715400 14998 net.cpp:129] Top shape: 256 (256)
-I0108 22:11:32.715431 14998 net.cpp:129] Top shape: 256 (256)
-I0108 22:11:32.715472 14998 net.cpp:129] Top shape: 256 (256)
-I0108 22:11:32.715488 14998 net.cpp:137] Memory required for data: 154144768
-I0108 22:11:32.715508 14998 layer_factory.hpp:78] Creating layer conv1
-I0108 22:11:32.715608 14998 net.cpp:84] Creating Layer conv1
-I0108 22:11:32.715638 14998 net.cpp:406] conv1 <- data
-I0108 22:11:32.715679 14998 net.cpp:380] conv1 -> conv1
-I0108 22:11:34.400485 14998 cudnn_conv_layer.cpp:194] Reallocating workspace storage: 127416
-I0108 22:11:34.400827 14998 net.cpp:122] Setting up conv1
-I0108 22:11:34.400853 14998 net.cpp:129] Top shape: 256 96 55 55 (74342400)
-I0108 22:11:34.400864 14998 net.cpp:137] Memory required for data: 451514368
-I0108 22:11:34.400954 14998 layer_factory.hpp:78] Creating layer bn1
-I0108 22:11:34.400998 14998 net.cpp:84] Creating Layer bn1
-I0108 22:11:34.401011 14998 net.cpp:406] bn1 <- conv1
-I0108 22:11:34.401041 14998 net.cpp:367] bn1 -> conv1 (in-place)
-I0108 22:11:34.402704 14998 net.cpp:122] Setting up bn1
-I0108 22:11:34.402720 14998 net.cpp:129] Top shape: 256 96 55 55 (74342400)
-I0108 22:11:34.402724 14998 net.cpp:137] Memory required for data: 748883968
-I0108 22:11:34.402771 14998 layer_factory.hpp:78] Creating layer scale1
-I0108 22:11:34.402808 14998 net.cpp:84] Creating Layer scale1
-I0108 22:11:34.402817 14998 net.cpp:406] scale1 <- conv1
-I0108 22:11:34.402833 14998 net.cpp:367] scale1 -> conv1 (in-place)
-I0108 22:11:34.402925 14998 layer_factory.hpp:78] Creating layer scale1
-I0108 22:11:34.403142 14998 net.cpp:122] Setting up scale1
-I0108 22:11:34.403157 14998 net.cpp:129] Top shape: 256 96 55 55 (74342400)
-I0108 22:11:34.403161 14998 net.cpp:137] Memory required for data: 1046253568
-I0108 22:11:34.403184 14998 layer_factory.hpp:78] Creating layer relu1
-I0108 22:11:34.403214 14998 net.cpp:84] Creating Layer relu1
-I0108 22:11:34.403223 14998 net.cpp:406] relu1 <- conv1
-I0108 22:11:34.403236 14998 net.cpp:367] relu1 -> conv1 (in-place)
-I0108 22:11:34.403837 14998 net.cpp:122] Setting up relu1
-I0108 22:11:34.403851 14998 net.cpp:129] Top shape: 256 96 55 55 (74342400)
-I0108 22:11:34.403854 14998 net.cpp:137] Memory required for data: 1343623168
-I0108 22:11:34.403861 14998 layer_factory.hpp:78] Creating layer pool1
-I0108 22:11:34.403887 14998 net.cpp:84] Creating Layer pool1
-I0108 22:11:34.403894 14998 net.cpp:406] pool1 <- conv1
-I0108 22:11:34.403911 14998 net.cpp:380] pool1 -> pool1
-I0108 22:11:34.403997 14998 net.cpp:122] Setting up pool1
-I0108 22:11:34.404011 14998 net.cpp:129] Top shape: 256 96 27 27 (17915904)
-I0108 22:11:34.404016 14998 net.cpp:137] Memory required for data: 1415286784
-I0108 22:11:34.404021 14998 layer_factory.hpp:78] Creating layer bn2
-I0108 22:11:34.404034 14998 net.cpp:84] Creating Layer bn2
-I0108 22:11:34.404042 14998 net.cpp:406] bn2 <- pool1
-I0108 22:11:34.404058 14998 net.cpp:367] bn2 -> pool1 (in-place)
-I0108 22:11:34.405619 14998 net.cpp:122] Setting up bn2
-I0108 22:11:34.405635 14998 net.cpp:129] Top shape: 256 96 27 27 (17915904)
-I0108 22:11:34.405639 14998 net.cpp:137] Memory required for data: 1486950400
-I0108 22:11:34.405673 14998 layer_factory.hpp:78] Creating layer scale2
-I0108 22:11:34.405696 14998 net.cpp:84] Creating Layer scale2
-I0108 22:11:34.405705 14998 net.cpp:406] scale2 <- pool1
-I0108 22:11:34.405724 14998 net.cpp:367] scale2 -> pool1 (in-place)
-I0108 22:11:34.405787 14998 layer_factory.hpp:78] Creating layer scale2
-I0108 22:11:34.405967 14998 net.cpp:122] Setting up scale2
-I0108 22:11:34.405979 14998 net.cpp:129] Top shape: 256 96 27 27 (17915904)
-I0108 22:11:34.405982 14998 net.cpp:137] Memory required for data: 1558614016
-I0108 22:11:34.405997 14998 layer_factory.hpp:78] Creating layer binactive1
-I0108 22:11:34.406016 14998 net.cpp:84] Creating Layer binactive1
-I0108 22:11:34.406024 14998 net.cpp:406] binactive1 <- pool1
-I0108 22:11:34.406042 14998 net.cpp:380] binactive1 -> binactive1
-I0108 22:11:34.406085 14998 net.cpp:122] Setting up binactive1
-I0108 22:11:34.406096 14998 net.cpp:129] Top shape: 256 96 27 27 (17915904)
-I0108 22:11:34.406100 14998 net.cpp:137] Memory required for data: 1630277632
-I0108 22:11:34.406127 14998 layer_factory.hpp:78] Creating layer conv2
-I0108 22:11:34.406167 14998 net.cpp:84] Creating Layer conv2
-I0108 22:11:34.406177 14998 net.cpp:406] conv2 <- binactive1
-I0108 22:11:34.406196 14998 net.cpp:380] conv2 -> conv2
-I0108 22:11:34.466025 14998 cudnn_binary_conv_layer.cpp:194] Reallocating workspace storage: 19668
-I0108 22:11:34.466071 14998 net.cpp:122] Setting up conv2
-I0108 22:11:34.466089 14998 net.cpp:129] Top shape: 256 256 27 27 (47775744)
-I0108 22:11:34.466094 14998 net.cpp:137] Memory required for data: 1821380608
-I0108 22:11:34.466118 14998 layer_factory.hpp:78] Creating layer pool2
-I0108 22:11:34.466157 14998 net.cpp:84] Creating Layer pool2
-I0108 22:11:34.466169 14998 net.cpp:406] pool2 <- conv2
-I0108 22:11:34.466197 14998 net.cpp:380] pool2 -> pool2
-I0108 22:11:34.466267 14998 net.cpp:122] Setting up pool2
-I0108 22:11:34.466284 14998 net.cpp:129] Top shape: 256 256 13 13 (11075584)
-I0108 22:11:34.466287 14998 net.cpp:137] Memory required for data: 1865682944
-I0108 22:11:34.466293 14998 layer_factory.hpp:78] Creating layer bn3
-I0108 22:11:34.466307 14998 net.cpp:84] Creating Layer bn3
-I0108 22:11:34.466313 14998 net.cpp:406] bn3 <- pool2
-I0108 22:11:34.466326 14998 net.cpp:367] bn3 -> pool2 (in-place)
-I0108 22:11:34.466559 14998 net.cpp:122] Setting up bn3
-I0108 22:11:34.466572 14998 net.cpp:129] Top shape: 256 256 13 13 (11075584)
-I0108 22:11:34.466576 14998 net.cpp:137] Memory required for data: 1909985280
-I0108 22:11:34.466606 14998 layer_factory.hpp:78] Creating layer scale3
-I0108 22:11:34.466629 14998 net.cpp:84] Creating Layer scale3
-I0108 22:11:34.466636 14998 net.cpp:406] scale3 <- pool2
-I0108 22:11:34.466651 14998 net.cpp:367] scale3 -> pool2 (in-place)
-I0108 22:11:34.466717 14998 layer_factory.hpp:78] Creating layer scale3
-I0108 22:11:34.466876 14998 net.cpp:122] Setting up scale3
-I0108 22:11:34.466890 14998 net.cpp:129] Top shape: 256 256 13 13 (11075584)
-I0108 22:11:34.466895 14998 net.cpp:137] Memory required for data: 1954287616
-I0108 22:11:34.466922 14998 layer_factory.hpp:78] Creating layer binactive2
-I0108 22:11:34.466938 14998 net.cpp:84] Creating Layer binactive2
-I0108 22:11:34.466946 14998 net.cpp:406] binactive2 <- pool2
-I0108 22:11:34.466959 14998 net.cpp:380] binactive2 -> binactive2
-I0108 22:11:34.466996 14998 net.cpp:122] Setting up binactive2
-I0108 22:11:34.467007 14998 net.cpp:129] Top shape: 256 256 13 13 (11075584)
-I0108 22:11:34.467011 14998 net.cpp:137] Memory required for data: 1998589952
-I0108 22:11:34.467017 14998 layer_factory.hpp:78] Creating layer conv3
-I0108 22:11:34.467049 14998 net.cpp:84] Creating Layer conv3
-I0108 22:11:34.467058 14998 net.cpp:406] conv3 <- binactive2
-I0108 22:11:34.467077 14998 net.cpp:380] conv3 -> conv3
-I0108 22:11:34.550063 14998 cudnn_binary_conv_layer.cpp:194] Reallocating workspace storage: 18874368
-I0108 22:11:34.552021 14998 net.cpp:122] Setting up conv3
-I0108 22:11:34.552045 14998 net.cpp:129] Top shape: 256 384 13 13 (16613376)
-I0108 22:11:34.552049 14998 net.cpp:137] Memory required for data: 2065043456
-I0108 22:11:34.552079 14998 layer_factory.hpp:78] Creating layer bn4
-I0108 22:11:34.552125 14998 net.cpp:84] Creating Layer bn4
-I0108 22:11:34.552139 14998 net.cpp:406] bn4 <- conv3
-I0108 22:11:34.552166 14998 net.cpp:367] bn4 -> conv3 (in-place)
-I0108 22:11:34.552423 14998 net.cpp:122] Setting up bn4
-I0108 22:11:34.552434 14998 net.cpp:129] Top shape: 256 384 13 13 (16613376)
-I0108 22:11:34.552438 14998 net.cpp:137] Memory required for data: 2131496960
-I0108 22:11:34.552461 14998 layer_factory.hpp:78] Creating layer scale4
-I0108 22:11:34.552485 14998 net.cpp:84] Creating Layer scale4
-I0108 22:11:34.552491 14998 net.cpp:406] scale4 <- conv3
-I0108 22:11:34.552505 14998 net.cpp:367] scale4 -> conv3 (in-place)
-I0108 22:11:34.552568 14998 layer_factory.hpp:78] Creating layer scale4
-I0108 22:11:34.552737 14998 net.cpp:122] Setting up scale4
-I0108 22:11:34.552749 14998 net.cpp:129] Top shape: 256 384 13 13 (16613376)
-I0108 22:11:34.552752 14998 net.cpp:137] Memory required for data: 2197950464
-I0108 22:11:34.552793 14998 layer_factory.hpp:78] Creating layer binactive3
-I0108 22:11:34.552812 14998 net.cpp:84] Creating Layer binactive3
-I0108 22:11:34.552819 14998 net.cpp:406] binactive3 <- conv3
-I0108 22:11:34.552834 14998 net.cpp:380] binactive3 -> binactive3
-I0108 22:11:34.552873 14998 net.cpp:122] Setting up binactive3
-I0108 22:11:34.552886 14998 net.cpp:129] Top shape: 256 384 13 13 (16613376)
-I0108 22:11:34.552888 14998 net.cpp:137] Memory required for data: 2264403968
-I0108 22:11:34.552894 14998 layer_factory.hpp:78] Creating layer conv4
-I0108 22:11:34.552927 14998 net.cpp:84] Creating Layer conv4
-I0108 22:11:34.552935 14998 net.cpp:406] conv4 <- binactive3
-I0108 22:11:34.552953 14998 net.cpp:380] conv4 -> conv4
-I0108 22:11:34.674500 14998 cudnn_binary_conv_layer.cpp:194] Reallocating workspace storage: 9840
-I0108 22:11:34.674547 14998 net.cpp:122] Setting up conv4
-I0108 22:11:34.674566 14998 net.cpp:129] Top shape: 256 384 13 13 (16613376)
-I0108 22:11:34.674569 14998 net.cpp:137] Memory required for data: 2330857472
-I0108 22:11:34.674597 14998 layer_factory.hpp:78] Creating layer bn5
-I0108 22:11:34.674633 14998 net.cpp:84] Creating Layer bn5
-I0108 22:11:34.674646 14998 net.cpp:406] bn5 <- conv4
-I0108 22:11:34.674670 14998 net.cpp:367] bn5 -> conv4 (in-place)
-I0108 22:11:34.674911 14998 net.cpp:122] Setting up bn5
-I0108 22:11:34.674922 14998 net.cpp:129] Top shape: 256 384 13 13 (16613376)
-I0108 22:11:34.674926 14998 net.cpp:137] Memory required for data: 2397310976
-I0108 22:11:34.674947 14998 layer_factory.hpp:78] Creating layer scale5
-I0108 22:11:34.674968 14998 net.cpp:84] Creating Layer scale5
-I0108 22:11:34.674975 14998 net.cpp:406] scale5 <- conv4
-I0108 22:11:34.674989 14998 net.cpp:367] scale5 -> conv4 (in-place)
-I0108 22:11:34.675056 14998 layer_factory.hpp:78] Creating layer scale5
-I0108 22:11:34.675226 14998 net.cpp:122] Setting up scale5
-I0108 22:11:34.675238 14998 net.cpp:129] Top shape: 256 384 13 13 (16613376)
-I0108 22:11:34.675243 14998 net.cpp:137] Memory required for data: 2463764480
-I0108 22:11:34.675258 14998 layer_factory.hpp:78] Creating layer binactive4
-I0108 22:11:34.675272 14998 net.cpp:84] Creating Layer binactive4
-I0108 22:11:34.675279 14998 net.cpp:406] binactive4 <- conv4
-I0108 22:11:34.675294 14998 net.cpp:380] binactive4 -> binactive4
-I0108 22:11:34.675333 14998 net.cpp:122] Setting up binactive4
-I0108 22:11:34.675352 14998 net.cpp:129] Top shape: 256 384 13 13 (16613376)
-I0108 22:11:34.675356 14998 net.cpp:137] Memory required for data: 2530217984
-I0108 22:11:34.675362 14998 layer_factory.hpp:78] Creating layer conv5
-I0108 22:11:34.675395 14998 net.cpp:84] Creating Layer conv5
-I0108 22:11:34.675403 14998 net.cpp:406] conv5 <- binactive4
-I0108 22:11:34.675422 14998 net.cpp:380] conv5 -> conv5
-I0108 22:11:34.757064 14998 cudnn_binary_conv_layer.cpp:194] Reallocating workspace storage: 18874368
-I0108 22:11:34.757436 14998 net.cpp:122] Setting up conv5
-I0108 22:11:34.757459 14998 net.cpp:129] Top shape: 256 256 13 13 (11075584)
-I0108 22:11:34.757464 14998 net.cpp:137] Memory required for data: 2574520320
-I0108 22:11:34.757493 14998 layer_factory.hpp:78] Creating layer pool5
-I0108 22:11:34.757532 14998 net.cpp:84] Creating Layer pool5
-I0108 22:11:34.757546 14998 net.cpp:406] pool5 <- conv5
-I0108 22:11:34.757572 14998 net.cpp:380] pool5 -> pool5
-I0108 22:11:34.757658 14998 net.cpp:122] Setting up pool5
-I0108 22:11:34.757673 14998 net.cpp:129] Top shape: 256 256 6 6 (2359296)
-I0108 22:11:34.757676 14998 net.cpp:137] Memory required for data: 2583957504
-I0108 22:11:34.757683 14998 layer_factory.hpp:78] Creating layer bn6
-I0108 22:11:34.757696 14998 net.cpp:84] Creating Layer bn6
-I0108 22:11:34.757704 14998 net.cpp:406] bn6 <- pool5
-I0108 22:11:34.757725 14998 net.cpp:367] bn6 -> pool5 (in-place)
-I0108 22:11:34.757951 14998 net.cpp:122] Setting up bn6
-I0108 22:11:34.757961 14998 net.cpp:129] Top shape: 256 256 6 6 (2359296)
-I0108 22:11:34.757966 14998 net.cpp:137] Memory required for data: 2593394688
-I0108 22:11:34.758002 14998 layer_factory.hpp:78] Creating layer scale6
-I0108 22:11:34.758049 14998 net.cpp:84] Creating Layer scale6
-I0108 22:11:34.758059 14998 net.cpp:406] scale6 <- pool5
-I0108 22:11:34.758074 14998 net.cpp:367] scale6 -> pool5 (in-place)
-I0108 22:11:34.758146 14998 layer_factory.hpp:78] Creating layer scale6
-I0108 22:11:34.758308 14998 net.cpp:122] Setting up scale6
-I0108 22:11:34.758322 14998 net.cpp:129] Top shape: 256 256 6 6 (2359296)
-I0108 22:11:34.758327 14998 net.cpp:137] Memory required for data: 2602831872
-I0108 22:11:34.758347 14998 layer_factory.hpp:78] Creating layer binactive5
-I0108 22:11:34.758363 14998 net.cpp:84] Creating Layer binactive5
-I0108 22:11:34.758369 14998 net.cpp:406] binactive5 <- pool5
-I0108 22:11:34.758385 14998 net.cpp:380] binactive5 -> binactive5
-I0108 22:11:34.758433 14998 net.cpp:122] Setting up binactive5
-I0108 22:11:34.758443 14998 net.cpp:129] Top shape: 256 256 6 6 (2359296)
-I0108 22:11:34.758446 14998 net.cpp:137] Memory required for data: 2612269056
-I0108 22:11:34.758452 14998 layer_factory.hpp:78] Creating layer fc6
-I0108 22:11:34.758483 14998 net.cpp:84] Creating Layer fc6
-I0108 22:11:34.758492 14998 net.cpp:406] fc6 <- binactive5
-I0108 22:11:34.758509 14998 net.cpp:380] fc6 -> fc6
-I0108 22:11:38.096129 14998 net.cpp:122] Setting up fc6
-I0108 22:11:38.096189 14998 net.cpp:129] Top shape: 256 4096 (1048576)
-I0108 22:11:38.096194 14998 net.cpp:137] Memory required for data: 2616463360
-I0108 22:11:38.096241 14998 layer_factory.hpp:78] Creating layer bn7
-I0108 22:11:38.096297 14998 net.cpp:84] Creating Layer bn7
-I0108 22:11:38.096328 14998 net.cpp:406] bn7 <- fc6
-I0108 22:11:38.096376 14998 net.cpp:367] bn7 -> fc6 (in-place)
-I0108 22:11:38.096632 14998 net.cpp:122] Setting up bn7
-I0108 22:11:38.096657 14998 net.cpp:129] Top shape: 256 4096 (1048576)
-I0108 22:11:38.096662 14998 net.cpp:137] Memory required for data: 2620657664
-I0108 22:11:38.096704 14998 layer_factory.hpp:78] Creating layer scale7
-I0108 22:11:38.096730 14998 net.cpp:84] Creating Layer scale7
-I0108 22:11:38.096741 14998 net.cpp:406] scale7 <- fc6
-I0108 22:11:38.096756 14998 net.cpp:367] scale7 -> fc6 (in-place)
-I0108 22:11:38.096851 14998 layer_factory.hpp:78] Creating layer scale7
-I0108 22:11:38.097051 14998 net.cpp:122] Setting up scale7
-I0108 22:11:38.097064 14998 net.cpp:129] Top shape: 256 4096 (1048576)
-I0108 22:11:38.097069 14998 net.cpp:137] Memory required for data: 2624851968
-I0108 22:11:38.097097 14998 layer_factory.hpp:78] Creating layer binactive6
-I0108 22:11:38.097110 14998 net.cpp:84] Creating Layer binactive6
-I0108 22:11:38.097117 14998 net.cpp:406] binactive6 <- fc6
-I0108 22:11:38.097139 14998 net.cpp:380] binactive6 -> binactive6
-I0108 22:11:38.097180 14998 net.cpp:122] Setting up binactive6
-I0108 22:11:38.097193 14998 net.cpp:129] Top shape: 256 4096 (1048576)
-I0108 22:11:38.097198 14998 net.cpp:137] Memory required for data: 2629046272
-I0108 22:11:38.097203 14998 layer_factory.hpp:78] Creating layer fc7
-I0108 22:11:38.097237 14998 net.cpp:84] Creating Layer fc7
-I0108 22:11:38.097246 14998 net.cpp:406] fc7 <- binactive6
-I0108 22:11:38.097265 14998 net.cpp:380] fc7 -> fc7
-I0108 22:11:40.200212 14998 net.cpp:122] Setting up fc7
-I0108 22:11:40.200332 14998 net.cpp:129] Top shape: 256 4096 (1048576)
-I0108 22:11:40.200361 14998 net.cpp:137] Memory required for data: 2633240576
-I0108 22:11:40.200417 14998 layer_factory.hpp:78] Creating layer bn8
-I0108 22:11:40.200489 14998 net.cpp:84] Creating Layer bn8
-I0108 22:11:40.200525 14998 net.cpp:406] bn8 <- fc7
-I0108 22:11:40.200575 14998 net.cpp:367] bn8 -> fc7 (in-place)
-I0108 22:11:40.200947 14998 net.cpp:122] Setting up bn8
-I0108 22:11:40.200981 14998 net.cpp:129] Top shape: 256 4096 (1048576)
-I0108 22:11:40.201004 14998 net.cpp:137] Memory required for data: 2637434880
-I0108 22:11:40.201054 14998 layer_factory.hpp:78] Creating layer scale8
-I0108 22:11:40.201108 14998 net.cpp:84] Creating Layer scale8
-I0108 22:11:40.201138 14998 net.cpp:406] scale8 <- fc7
-I0108 22:11:40.201179 14998 net.cpp:367] scale8 -> fc7 (in-place)
-I0108 22:11:40.201321 14998 layer_factory.hpp:78] Creating layer scale8
-I0108 22:11:40.201608 14998 net.cpp:122] Setting up scale8
-I0108 22:11:40.201664 14998 net.cpp:129] Top shape: 256 4096 (1048576)
-I0108 22:11:40.201687 14998 net.cpp:137] Memory required for data: 2641629184
-I0108 22:11:40.201722 14998 layer_factory.hpp:78] Creating layer relu7
-I0108 22:11:40.201761 14998 net.cpp:84] Creating Layer relu7
-I0108 22:11:40.201787 14998 net.cpp:406] relu7 <- fc7
-I0108 22:11:40.201826 14998 net.cpp:367] relu7 -> fc7 (in-place)
-I0108 22:11:40.203145 14998 net.cpp:122] Setting up relu7
-I0108 22:11:40.203187 14998 net.cpp:129] Top shape: 256 4096 (1048576)
-I0108 22:11:40.203210 14998 net.cpp:137] Memory required for data: 2645823488
-I0108 22:11:40.203233 14998 layer_factory.hpp:78] Creating layer fc8
-I0108 22:11:40.203291 14998 net.cpp:84] Creating Layer fc8
-I0108 22:11:40.203322 14998 net.cpp:406] fc8 <- fc7
-I0108 22:11:40.203375 14998 net.cpp:380] fc8 -> fc8
-I0108 22:11:40.590618 14998 net.cpp:122] Setting up fc8
-I0108 22:11:40.590689 14998 net.cpp:129] Top shape: 256 1000 (256000)
-I0108 22:11:40.590694 14998 net.cpp:137] Memory required for data: 2646847488
-I0108 22:11:40.590728 14998 layer_factory.hpp:78] Creating layer fc8_fc8_0_split
-I0108 22:11:40.590760 14998 net.cpp:84] Creating Layer fc8_fc8_0_split
-I0108 22:11:40.590775 14998 net.cpp:406] fc8_fc8_0_split <- fc8
-I0108 22:11:40.590798 14998 net.cpp:380] fc8_fc8_0_split -> fc8_fc8_0_split_0
-I0108 22:11:40.590823 14998 net.cpp:380] fc8_fc8_0_split -> fc8_fc8_0_split_1
-I0108 22:11:40.590837 14998 net.cpp:380] fc8_fc8_0_split -> fc8_fc8_0_split_2
-I0108 22:11:40.590903 14998 net.cpp:122] Setting up fc8_fc8_0_split
-I0108 22:11:40.590914 14998 net.cpp:129] Top shape: 256 1000 (256000)
-I0108 22:11:40.590919 14998 net.cpp:129] Top shape: 256 1000 (256000)
-I0108 22:11:40.590924 14998 net.cpp:129] Top shape: 256 1000 (256000)
-I0108 22:11:40.590925 14998 net.cpp:137] Memory required for data: 2649919488
-I0108 22:11:40.590931 14998 layer_factory.hpp:78] Creating layer loss
-I0108 22:11:40.590961 14998 net.cpp:84] Creating Layer loss
-I0108 22:11:40.590970 14998 net.cpp:406] loss <- fc8_fc8_0_split_0
-I0108 22:11:40.590982 14998 net.cpp:406] loss <- label_data_1_split_0
-I0108 22:11:40.591001 14998 net.cpp:380] loss -> loss
-I0108 22:11:40.591048 14998 layer_factory.hpp:78] Creating layer loss
-I0108 22:11:40.593888 14998 net.cpp:122] Setting up loss
-I0108 22:11:40.593904 14998 net.cpp:129] Top shape: (1)
-I0108 22:11:40.593909 14998 net.cpp:132]     with loss weight 1
-I0108 22:11:40.593945 14998 net.cpp:137] Memory required for data: 2649919492
-I0108 22:11:40.593952 14998 layer_factory.hpp:78] Creating layer accuracy
-I0108 22:11:40.593971 14998 net.cpp:84] Creating Layer accuracy
-I0108 22:11:40.593981 14998 net.cpp:406] accuracy <- fc8_fc8_0_split_1
-I0108 22:11:40.594008 14998 net.cpp:406] accuracy <- label_data_1_split_1
-I0108 22:11:40.594018 14998 net.cpp:380] accuracy -> accuracy
-I0108 22:11:40.594041 14998 net.cpp:122] Setting up accuracy
-I0108 22:11:40.594050 14998 net.cpp:129] Top shape: (1)
-I0108 22:11:40.594053 14998 net.cpp:137] Memory required for data: 2649919496
-I0108 22:11:40.594058 14998 layer_factory.hpp:78] Creating layer accuracy_5
-I0108 22:11:40.594070 14998 net.cpp:84] Creating Layer accuracy_5
-I0108 22:11:40.594079 14998 net.cpp:406] accuracy_5 <- fc8_fc8_0_split_2
-I0108 22:11:40.594105 14998 net.cpp:406] accuracy_5 <- label_data_1_split_2
-I0108 22:11:40.594118 14998 net.cpp:380] accuracy_5 -> accuracy_5
-I0108 22:11:40.594141 14998 net.cpp:122] Setting up accuracy_5
-I0108 22:11:40.594149 14998 net.cpp:129] Top shape: (1)
-I0108 22:11:40.594152 14998 net.cpp:137] Memory required for data: 2649919500
-I0108 22:11:40.594159 14998 net.cpp:200] accuracy_5 does not need backward computation.
-I0108 22:11:40.594166 14998 net.cpp:200] accuracy does not need backward computation.
-I0108 22:11:40.594172 14998 net.cpp:198] loss needs backward computation.
-I0108 22:11:40.594177 14998 net.cpp:198] fc8_fc8_0_split needs backward computation.
-I0108 22:11:40.594180 14998 net.cpp:198] fc8 needs backward computation.
-I0108 22:11:40.594184 14998 net.cpp:198] relu7 needs backward computation.
-I0108 22:11:40.594211 14998 net.cpp:198] scale8 needs backward computation.
-I0108 22:11:40.594215 14998 net.cpp:198] bn8 needs backward computation.
-I0108 22:11:40.594218 14998 net.cpp:198] fc7 needs backward computation.
-I0108 22:11:40.594223 14998 net.cpp:198] binactive6 needs backward computation.
-I0108 22:11:40.594228 14998 net.cpp:198] scale7 needs backward computation.
-I0108 22:11:40.594230 14998 net.cpp:198] bn7 needs backward computation.
-I0108 22:11:40.594234 14998 net.cpp:198] fc6 needs backward computation.
-I0108 22:11:40.594238 14998 net.cpp:198] binactive5 needs backward computation.
-I0108 22:11:40.594242 14998 net.cpp:198] scale6 needs backward computation.
-I0108 22:11:40.594246 14998 net.cpp:198] bn6 needs backward computation.
-I0108 22:11:40.594249 14998 net.cpp:198] pool5 needs backward computation.
-I0108 22:11:40.594254 14998 net.cpp:198] conv5 needs backward computation.
-I0108 22:11:40.594259 14998 net.cpp:198] binactive4 needs backward computation.
-I0108 22:11:40.594264 14998 net.cpp:198] scale5 needs backward computation.
-I0108 22:11:40.594267 14998 net.cpp:198] bn5 needs backward computation.
-I0108 22:11:40.594270 14998 net.cpp:198] conv4 needs backward computation.
-I0108 22:11:40.594275 14998 net.cpp:198] binactive3 needs backward computation.
-I0108 22:11:40.594280 14998 net.cpp:198] scale4 needs backward computation.
-I0108 22:11:40.594282 14998 net.cpp:198] bn4 needs backward computation.
-I0108 22:11:40.594286 14998 net.cpp:198] conv3 needs backward computation.
-I0108 22:11:40.594290 14998 net.cpp:198] binactive2 needs backward computation.
-I0108 22:11:40.594301 14998 net.cpp:198] scale3 needs backward computation.
-I0108 22:11:40.594305 14998 net.cpp:198] bn3 needs backward computation.
-I0108 22:11:40.594310 14998 net.cpp:198] pool2 needs backward computation.
-I0108 22:11:40.594313 14998 net.cpp:198] conv2 needs backward computation.
-I0108 22:11:40.594317 14998 net.cpp:198] binactive1 needs backward computation.
-I0108 22:11:40.594321 14998 net.cpp:198] scale2 needs backward computation.
-I0108 22:11:40.594324 14998 net.cpp:198] bn2 needs backward computation.
-I0108 22:11:40.594334 14998 net.cpp:198] pool1 needs backward computation.
-I0108 22:11:40.594346 14998 net.cpp:198] relu1 needs backward computation.
-I0108 22:11:40.594349 14998 net.cpp:198] scale1 needs backward computation.
-I0108 22:11:40.594369 14998 net.cpp:198] bn1 needs backward computation.
-I0108 22:11:40.594377 14998 net.cpp:198] conv1 needs backward computation.
-I0108 22:11:40.594388 14998 net.cpp:200] label_data_1_split does not need backward computation.
-I0108 22:11:40.594395 14998 net.cpp:200] data does not need backward computation.
-I0108 22:11:40.594408 14998 net.cpp:242] This network produces output accuracy
-I0108 22:11:40.594415 14998 net.cpp:242] This network produces output accuracy_5
-I0108 22:11:40.594420 14998 net.cpp:242] This network produces output loss
-I0108 22:11:40.594492 14998 net.cpp:255] Network initialization done.
-I0108 22:11:40.595381 14998 solver.cpp:193] Creating test net (#0) specified by net file: train_test.prototxt
-I0108 22:11:40.595485 14998 net.cpp:294] The NetState phase (1) differed from the phase (0) specified by a rule in layer data
-I0108 22:11:40.595685 14998 net.cpp:51] Initializing net from parameters: 
+I0110 16:22:28.085299  2020 layer_factory.hpp:78] Creating layer data
+I0110 16:22:28.085570  2020 db_lmdb.cpp:35] Opened lmdb /home/zhengzhe/Data/imagenet_shrt256/ilsvrc12_train_lmdb
+I0110 16:22:28.085670  2020 net.cpp:84] Creating Layer data
+I0110 16:22:28.085713  2020 net.cpp:380] data -> data
+I0110 16:22:28.085901  2020 net.cpp:380] data -> label
+I0110 16:22:28.088213  2020 data_layer.cpp:45] output data size: 256,3,224,224
+I0110 16:22:28.558890  2020 base_data_layer.cpp:72] Initializing prefetch
+I0110 16:22:28.819991  2020 base_data_layer.cpp:75] Prefetch initialized.
+I0110 16:22:28.820034  2020 net.cpp:122] Setting up data
+I0110 16:22:28.820075  2020 net.cpp:129] Top shape: 256 3 224 224 (38535168)
+I0110 16:22:28.820086  2020 net.cpp:129] Top shape: 256 (256)
+I0110 16:22:28.820091  2020 net.cpp:137] Memory required for data: 154141696
+I0110 16:22:28.820128  2020 layer_factory.hpp:78] Creating layer label_data_1_split
+I0110 16:22:28.820184  2020 net.cpp:84] Creating Layer label_data_1_split
+I0110 16:22:28.820335  2020 net.cpp:406] label_data_1_split <- label
+I0110 16:22:28.820408  2020 net.cpp:380] label_data_1_split -> label_data_1_split_0
+I0110 16:22:28.820456  2020 net.cpp:380] label_data_1_split -> label_data_1_split_1
+I0110 16:22:28.820478  2020 net.cpp:380] label_data_1_split -> label_data_1_split_2
+I0110 16:22:28.820591  2020 net.cpp:122] Setting up label_data_1_split
+I0110 16:22:28.820610  2020 net.cpp:129] Top shape: 256 (256)
+I0110 16:22:28.820623  2020 net.cpp:129] Top shape: 256 (256)
+I0110 16:22:28.820664  2020 net.cpp:129] Top shape: 256 (256)
+I0110 16:22:28.820672  2020 net.cpp:137] Memory required for data: 154144768
+I0110 16:22:28.820679  2020 layer_factory.hpp:78] Creating layer conv1
+I0110 16:22:28.820794  2020 net.cpp:84] Creating Layer conv1
+I0110 16:22:28.820827  2020 net.cpp:406] conv1 <- data
+I0110 16:22:28.820874  2020 net.cpp:380] conv1 -> conv1
+I0110 16:22:36.681533  2020 cudnn_conv_layer.cpp:194] Reallocating workspace storage: 127416
+I0110 16:22:36.681898  2020 net.cpp:122] Setting up conv1
+I0110 16:22:36.681933  2020 net.cpp:129] Top shape: 256 96 55 55 (74342400)
+I0110 16:22:36.681941  2020 net.cpp:137] Memory required for data: 451514368
+I0110 16:22:36.682057  2020 layer_factory.hpp:78] Creating layer bn1
+I0110 16:22:36.682111  2020 net.cpp:84] Creating Layer bn1
+I0110 16:22:36.682127  2020 net.cpp:406] bn1 <- conv1
+I0110 16:22:36.682160  2020 net.cpp:367] bn1 -> conv1 (in-place)
+I0110 16:22:36.683773  2020 net.cpp:122] Setting up bn1
+I0110 16:22:36.683792  2020 net.cpp:129] Top shape: 256 96 55 55 (74342400)
+I0110 16:22:36.683796  2020 net.cpp:137] Memory required for data: 748883968
+I0110 16:22:36.683851  2020 layer_factory.hpp:78] Creating layer scale1
+I0110 16:22:36.683900  2020 net.cpp:84] Creating Layer scale1
+I0110 16:22:36.683910  2020 net.cpp:406] scale1 <- conv1
+I0110 16:22:36.683929  2020 net.cpp:367] scale1 -> conv1 (in-place)
+I0110 16:22:36.684032  2020 layer_factory.hpp:78] Creating layer scale1
+I0110 16:22:36.684286  2020 net.cpp:122] Setting up scale1
+I0110 16:22:36.684300  2020 net.cpp:129] Top shape: 256 96 55 55 (74342400)
+I0110 16:22:36.684304  2020 net.cpp:137] Memory required for data: 1046253568
+I0110 16:22:36.684330  2020 layer_factory.hpp:78] Creating layer relu1
+I0110 16:22:36.684373  2020 net.cpp:84] Creating Layer relu1
+I0110 16:22:36.684383  2020 net.cpp:406] relu1 <- conv1
+I0110 16:22:36.684398  2020 net.cpp:367] relu1 -> conv1 (in-place)
+I0110 16:22:36.684929  2020 net.cpp:122] Setting up relu1
+I0110 16:22:36.684943  2020 net.cpp:129] Top shape: 256 96 55 55 (74342400)
+I0110 16:22:36.684947  2020 net.cpp:137] Memory required for data: 1343623168
+I0110 16:22:36.684952  2020 layer_factory.hpp:78] Creating layer pool1
+I0110 16:22:36.684985  2020 net.cpp:84] Creating Layer pool1
+I0110 16:22:36.684993  2020 net.cpp:406] pool1 <- conv1
+I0110 16:22:36.685011  2020 net.cpp:380] pool1 -> pool1
+I0110 16:22:36.685109  2020 net.cpp:122] Setting up pool1
+I0110 16:22:36.685124  2020 net.cpp:129] Top shape: 256 96 27 27 (17915904)
+I0110 16:22:36.685128  2020 net.cpp:137] Memory required for data: 1415286784
+I0110 16:22:36.685134  2020 layer_factory.hpp:78] Creating layer bn2
+I0110 16:22:36.685148  2020 net.cpp:84] Creating Layer bn2
+I0110 16:22:36.685158  2020 net.cpp:406] bn2 <- pool1
+I0110 16:22:36.685171  2020 net.cpp:367] bn2 -> pool1 (in-place)
+I0110 16:22:36.686697  2020 net.cpp:122] Setting up bn2
+I0110 16:22:36.686713  2020 net.cpp:129] Top shape: 256 96 27 27 (17915904)
+I0110 16:22:36.686717  2020 net.cpp:137] Memory required for data: 1486950400
+I0110 16:22:36.686753  2020 layer_factory.hpp:78] Creating layer scale2
+I0110 16:22:36.686780  2020 net.cpp:84] Creating Layer scale2
+I0110 16:22:36.686790  2020 net.cpp:406] scale2 <- pool1
+I0110 16:22:36.686806  2020 net.cpp:367] scale2 -> pool1 (in-place)
+I0110 16:22:36.686875  2020 layer_factory.hpp:78] Creating layer scale2
+I0110 16:22:36.687075  2020 net.cpp:122] Setting up scale2
+I0110 16:22:36.687088  2020 net.cpp:129] Top shape: 256 96 27 27 (17915904)
+I0110 16:22:36.687093  2020 net.cpp:137] Memory required for data: 1558614016
+I0110 16:22:36.687108  2020 layer_factory.hpp:78] Creating layer binactive1
+I0110 16:22:36.687129  2020 net.cpp:84] Creating Layer binactive1
+I0110 16:22:36.687139  2020 net.cpp:406] binactive1 <- pool1
+I0110 16:22:36.687153  2020 net.cpp:380] binactive1 -> binactive1
+I0110 16:22:36.687201  2020 net.cpp:122] Setting up binactive1
+I0110 16:22:36.687212  2020 net.cpp:129] Top shape: 256 96 27 27 (17915904)
+I0110 16:22:36.687216  2020 net.cpp:137] Memory required for data: 1630277632
+I0110 16:22:36.687252  2020 layer_factory.hpp:78] Creating layer conv2
+I0110 16:22:36.687297  2020 net.cpp:84] Creating Layer conv2
+I0110 16:22:36.687307  2020 net.cpp:406] conv2 <- binactive1
+I0110 16:22:36.687328  2020 net.cpp:380] conv2 -> conv2
+I0110 16:22:36.751829  2020 cudnn_binary_conv_layer.cpp:194] Reallocating workspace storage: 19668
+I0110 16:22:36.751895  2020 net.cpp:122] Setting up conv2
+I0110 16:22:36.751922  2020 net.cpp:129] Top shape: 256 256 27 27 (47775744)
+I0110 16:22:36.751926  2020 net.cpp:137] Memory required for data: 1821380608
+I0110 16:22:36.751991  2020 layer_factory.hpp:78] Creating layer pool2
+I0110 16:22:36.752050  2020 net.cpp:84] Creating Layer pool2
+I0110 16:22:36.752074  2020 net.cpp:406] pool2 <- conv2
+I0110 16:22:36.752110  2020 net.cpp:380] pool2 -> pool2
+I0110 16:22:36.752203  2020 net.cpp:122] Setting up pool2
+I0110 16:22:36.752218  2020 net.cpp:129] Top shape: 256 256 13 13 (11075584)
+I0110 16:22:36.752223  2020 net.cpp:137] Memory required for data: 1865682944
+I0110 16:22:36.752229  2020 layer_factory.hpp:78] Creating layer bn3
+I0110 16:22:36.752248  2020 net.cpp:84] Creating Layer bn3
+I0110 16:22:36.752254  2020 net.cpp:406] bn3 <- pool2
+I0110 16:22:36.752269  2020 net.cpp:367] bn3 -> pool2 (in-place)
+I0110 16:22:36.752509  2020 net.cpp:122] Setting up bn3
+I0110 16:22:36.752521  2020 net.cpp:129] Top shape: 256 256 13 13 (11075584)
+I0110 16:22:36.752527  2020 net.cpp:137] Memory required for data: 1909985280
+I0110 16:22:36.752552  2020 layer_factory.hpp:78] Creating layer scale3
+I0110 16:22:36.752578  2020 net.cpp:84] Creating Layer scale3
+I0110 16:22:36.752586  2020 net.cpp:406] scale3 <- pool2
+I0110 16:22:36.752604  2020 net.cpp:367] scale3 -> pool2 (in-place)
+I0110 16:22:36.752676  2020 layer_factory.hpp:78] Creating layer scale3
+I0110 16:22:36.752856  2020 net.cpp:122] Setting up scale3
+I0110 16:22:36.752868  2020 net.cpp:129] Top shape: 256 256 13 13 (11075584)
+I0110 16:22:36.752873  2020 net.cpp:137] Memory required for data: 1954287616
+I0110 16:22:36.752904  2020 layer_factory.hpp:78] Creating layer binactive2
+I0110 16:22:36.752919  2020 net.cpp:84] Creating Layer binactive2
+I0110 16:22:36.752928  2020 net.cpp:406] binactive2 <- pool2
+I0110 16:22:36.752943  2020 net.cpp:380] binactive2 -> binactive2
+I0110 16:22:36.752980  2020 net.cpp:122] Setting up binactive2
+I0110 16:22:36.752992  2020 net.cpp:129] Top shape: 256 256 13 13 (11075584)
+I0110 16:22:36.752997  2020 net.cpp:137] Memory required for data: 1998589952
+I0110 16:22:36.753003  2020 layer_factory.hpp:78] Creating layer conv3
+I0110 16:22:36.753039  2020 net.cpp:84] Creating Layer conv3
+I0110 16:22:36.753048  2020 net.cpp:406] conv3 <- binactive2
+I0110 16:22:36.753068  2020 net.cpp:380] conv3 -> conv3
+I0110 16:22:36.851588  2020 cudnn_binary_conv_layer.cpp:194] Reallocating workspace storage: 18874368
+I0110 16:22:36.852655  2020 net.cpp:122] Setting up conv3
+I0110 16:22:36.852841  2020 net.cpp:129] Top shape: 256 384 13 13 (16613376)
+I0110 16:22:36.852862  2020 net.cpp:137] Memory required for data: 2065043456
+I0110 16:22:36.852977  2020 layer_factory.hpp:78] Creating layer bn4
+I0110 16:22:36.853173  2020 net.cpp:84] Creating Layer bn4
+I0110 16:22:36.853230  2020 net.cpp:406] bn4 <- conv3
+I0110 16:22:36.853328  2020 net.cpp:367] bn4 -> conv3 (in-place)
+I0110 16:22:36.854853  2020 net.cpp:122] Setting up bn4
+I0110 16:22:36.854902  2020 net.cpp:129] Top shape: 256 384 13 13 (16613376)
+I0110 16:22:36.854923  2020 net.cpp:137] Memory required for data: 2131496960
+I0110 16:22:36.855017  2020 layer_factory.hpp:78] Creating layer scale4
+I0110 16:22:36.855109  2020 net.cpp:84] Creating Layer scale4
+I0110 16:22:36.855154  2020 net.cpp:406] scale4 <- conv3
+I0110 16:22:36.855233  2020 net.cpp:367] scale4 -> conv3 (in-place)
+I0110 16:22:36.855613  2020 layer_factory.hpp:78] Creating layer scale4
+I0110 16:22:36.856464  2020 net.cpp:122] Setting up scale4
+I0110 16:22:36.856528  2020 net.cpp:129] Top shape: 256 384 13 13 (16613376)
+I0110 16:22:36.856549  2020 net.cpp:137] Memory required for data: 2197950464
+I0110 16:22:36.856703  2020 layer_factory.hpp:78] Creating layer binactive3
+I0110 16:22:36.856778  2020 net.cpp:84] Creating Layer binactive3
+I0110 16:22:36.856817  2020 net.cpp:406] binactive3 <- conv3
+I0110 16:22:36.856897  2020 net.cpp:380] binactive3 -> binactive3
+I0110 16:22:36.857065  2020 net.cpp:122] Setting up binactive3
+I0110 16:22:36.857126  2020 net.cpp:129] Top shape: 256 384 13 13 (16613376)
+I0110 16:22:36.857138  2020 net.cpp:137] Memory required for data: 2264403968
+I0110 16:22:36.857167  2020 layer_factory.hpp:78] Creating layer conv4
+I0110 16:22:36.857292  2020 net.cpp:84] Creating Layer conv4
+I0110 16:22:36.857326  2020 net.cpp:406] conv4 <- binactive3
+I0110 16:22:36.857432  2020 net.cpp:380] conv4 -> conv4
+I0110 16:22:37.100505  2020 cudnn_binary_conv_layer.cpp:194] Reallocating workspace storage: 9840
+I0110 16:22:37.100576  2020 net.cpp:122] Setting up conv4
+I0110 16:22:37.100608  2020 net.cpp:129] Top shape: 256 384 13 13 (16613376)
+I0110 16:22:37.100620  2020 net.cpp:137] Memory required for data: 2330857472
+I0110 16:22:37.100693  2020 layer_factory.hpp:78] Creating layer bn5
+I0110 16:22:37.100757  2020 net.cpp:84] Creating Layer bn5
+I0110 16:22:37.100777  2020 net.cpp:406] bn5 <- conv4
+I0110 16:22:37.100819  2020 net.cpp:367] bn5 -> conv4 (in-place)
+I0110 16:22:37.101130  2020 net.cpp:122] Setting up bn5
+I0110 16:22:37.101150  2020 net.cpp:129] Top shape: 256 384 13 13 (16613376)
+I0110 16:22:37.101155  2020 net.cpp:137] Memory required for data: 2397310976
+I0110 16:22:37.101188  2020 layer_factory.hpp:78] Creating layer scale5
+I0110 16:22:37.101219  2020 net.cpp:84] Creating Layer scale5
+I0110 16:22:37.101230  2020 net.cpp:406] scale5 <- conv4
+I0110 16:22:37.101253  2020 net.cpp:367] scale5 -> conv4 (in-place)
+I0110 16:22:37.101351  2020 layer_factory.hpp:78] Creating layer scale5
+I0110 16:22:37.101572  2020 net.cpp:122] Setting up scale5
+I0110 16:22:37.101588  2020 net.cpp:129] Top shape: 256 384 13 13 (16613376)
+I0110 16:22:37.101593  2020 net.cpp:137] Memory required for data: 2463764480
+I0110 16:22:37.101616  2020 layer_factory.hpp:78] Creating layer binactive4
+I0110 16:22:37.101655  2020 net.cpp:84] Creating Layer binactive4
+I0110 16:22:37.101675  2020 net.cpp:406] binactive4 <- conv4
+I0110 16:22:37.101716  2020 net.cpp:380] binactive4 -> binactive4
+I0110 16:22:37.101768  2020 net.cpp:122] Setting up binactive4
+I0110 16:22:37.101784  2020 net.cpp:129] Top shape: 256 384 13 13 (16613376)
+I0110 16:22:37.101789  2020 net.cpp:137] Memory required for data: 2530217984
+I0110 16:22:37.101797  2020 layer_factory.hpp:78] Creating layer conv5
+I0110 16:22:37.101845  2020 net.cpp:84] Creating Layer conv5
+I0110 16:22:37.101857  2020 net.cpp:406] conv5 <- binactive4
+I0110 16:22:37.101886  2020 net.cpp:380] conv5 -> conv5
+I0110 16:22:37.216737  2020 cudnn_binary_conv_layer.cpp:194] Reallocating workspace storage: 18874368
+I0110 16:22:37.217185  2020 net.cpp:122] Setting up conv5
+I0110 16:22:37.217222  2020 net.cpp:129] Top shape: 256 256 13 13 (11075584)
+I0110 16:22:37.217231  2020 net.cpp:137] Memory required for data: 2574520320
+I0110 16:22:37.217285  2020 layer_factory.hpp:78] Creating layer pool5
+I0110 16:22:37.217362  2020 net.cpp:84] Creating Layer pool5
+I0110 16:22:37.217389  2020 net.cpp:406] pool5 <- conv5
+I0110 16:22:37.217484  2020 net.cpp:380] pool5 -> pool5
+I0110 16:22:37.217648  2020 net.cpp:122] Setting up pool5
+I0110 16:22:37.217671  2020 net.cpp:129] Top shape: 256 256 6 6 (2359296)
+I0110 16:22:37.217676  2020 net.cpp:137] Memory required for data: 2583957504
+I0110 16:22:37.217687  2020 layer_factory.hpp:78] Creating layer bn6
+I0110 16:22:37.217708  2020 net.cpp:84] Creating Layer bn6
+I0110 16:22:37.217718  2020 net.cpp:406] bn6 <- pool5
+I0110 16:22:37.217738  2020 net.cpp:367] bn6 -> pool5 (in-place)
+I0110 16:22:37.218122  2020 net.cpp:122] Setting up bn6
+I0110 16:22:37.218138  2020 net.cpp:129] Top shape: 256 256 6 6 (2359296)
+I0110 16:22:37.218143  2020 net.cpp:137] Memory required for data: 2593394688
+I0110 16:22:37.218225  2020 layer_factory.hpp:78] Creating layer scale6
+I0110 16:22:37.218289  2020 net.cpp:84] Creating Layer scale6
+I0110 16:22:37.218312  2020 net.cpp:406] scale6 <- pool5
+I0110 16:22:37.218358  2020 net.cpp:367] scale6 -> pool5 (in-place)
+I0110 16:22:37.218484  2020 layer_factory.hpp:78] Creating layer scale6
+I0110 16:22:37.218786  2020 net.cpp:122] Setting up scale6
+I0110 16:22:37.218809  2020 net.cpp:129] Top shape: 256 256 6 6 (2359296)
+I0110 16:22:37.218821  2020 net.cpp:137] Memory required for data: 2602831872
+I0110 16:22:37.218855  2020 layer_factory.hpp:78] Creating layer binactive5
+I0110 16:22:37.218878  2020 net.cpp:84] Creating Layer binactive5
+I0110 16:22:37.218888  2020 net.cpp:406] binactive5 <- pool5
+I0110 16:22:37.218911  2020 net.cpp:380] binactive5 -> binactive5
+I0110 16:22:37.218989  2020 net.cpp:122] Setting up binactive5
+I0110 16:22:37.219004  2020 net.cpp:129] Top shape: 256 256 6 6 (2359296)
+I0110 16:22:37.219012  2020 net.cpp:137] Memory required for data: 2612269056
+I0110 16:22:37.219020  2020 layer_factory.hpp:78] Creating layer fc6
+I0110 16:22:37.219086  2020 net.cpp:84] Creating Layer fc6
+I0110 16:22:37.219103  2020 net.cpp:406] fc6 <- binactive5
+I0110 16:22:37.219130  2020 net.cpp:380] fc6 -> fc6
+I0110 16:22:41.054697  2020 net.cpp:122] Setting up fc6
+I0110 16:22:41.054787  2020 net.cpp:129] Top shape: 256 4096 (1048576)
+I0110 16:22:41.054795  2020 net.cpp:137] Memory required for data: 2616463360
+I0110 16:22:41.054839  2020 layer_factory.hpp:78] Creating layer bn7
+I0110 16:22:41.054889  2020 net.cpp:84] Creating Layer bn7
+I0110 16:22:41.054910  2020 net.cpp:406] bn7 <- fc6
+I0110 16:22:41.054939  2020 net.cpp:367] bn7 -> fc6 (in-place)
+I0110 16:22:41.055228  2020 net.cpp:122] Setting up bn7
+I0110 16:22:41.055258  2020 net.cpp:129] Top shape: 256 4096 (1048576)
+I0110 16:22:41.055279  2020 net.cpp:137] Memory required for data: 2620657664
+I0110 16:22:41.055308  2020 layer_factory.hpp:78] Creating layer scale7
+I0110 16:22:41.055336  2020 net.cpp:84] Creating Layer scale7
+I0110 16:22:41.055352  2020 net.cpp:406] scale7 <- fc6
+I0110 16:22:41.055373  2020 net.cpp:367] scale7 -> fc6 (in-place)
+I0110 16:22:41.055464  2020 layer_factory.hpp:78] Creating layer scale7
+I0110 16:22:41.055670  2020 net.cpp:122] Setting up scale7
+I0110 16:22:41.055698  2020 net.cpp:129] Top shape: 256 4096 (1048576)
+I0110 16:22:41.055703  2020 net.cpp:137] Memory required for data: 2624851968
+I0110 16:22:41.055721  2020 layer_factory.hpp:78] Creating layer binactive6
+I0110 16:22:41.055742  2020 net.cpp:84] Creating Layer binactive6
+I0110 16:22:41.055750  2020 net.cpp:406] binactive6 <- fc6
+I0110 16:22:41.055770  2020 net.cpp:380] binactive6 -> binactive6
+I0110 16:22:41.055816  2020 net.cpp:122] Setting up binactive6
+I0110 16:22:41.055830  2020 net.cpp:129] Top shape: 256 4096 (1048576)
+I0110 16:22:41.055835  2020 net.cpp:137] Memory required for data: 2629046272
+I0110 16:22:41.055841  2020 layer_factory.hpp:78] Creating layer fc7
+I0110 16:22:41.055877  2020 net.cpp:84] Creating Layer fc7
+I0110 16:22:41.055888  2020 net.cpp:406] fc7 <- binactive6
+I0110 16:22:41.055912  2020 net.cpp:380] fc7 -> fc7
+I0110 16:22:42.856609  2020 net.cpp:122] Setting up fc7
+I0110 16:22:42.856673  2020 net.cpp:129] Top shape: 256 4096 (1048576)
+I0110 16:22:42.856678  2020 net.cpp:137] Memory required for data: 2633240576
+I0110 16:22:42.856712  2020 layer_factory.hpp:78] Creating layer bn8
+I0110 16:22:42.856758  2020 net.cpp:84] Creating Layer bn8
+I0110 16:22:42.856776  2020 net.cpp:406] bn8 <- fc7
+I0110 16:22:42.856806  2020 net.cpp:367] bn8 -> fc7 (in-place)
+I0110 16:22:42.857084  2020 net.cpp:122] Setting up bn8
+I0110 16:22:42.857096  2020 net.cpp:129] Top shape: 256 4096 (1048576)
+I0110 16:22:42.857100  2020 net.cpp:137] Memory required for data: 2637434880
+I0110 16:22:42.857121  2020 layer_factory.hpp:78] Creating layer scale8
+I0110 16:22:42.857158  2020 net.cpp:84] Creating Layer scale8
+I0110 16:22:42.857167  2020 net.cpp:406] scale8 <- fc7
+I0110 16:22:42.857185  2020 net.cpp:367] scale8 -> fc7 (in-place)
+I0110 16:22:42.857266  2020 layer_factory.hpp:78] Creating layer scale8
+I0110 16:22:42.857470  2020 net.cpp:122] Setting up scale8
+I0110 16:22:42.857507  2020 net.cpp:129] Top shape: 256 4096 (1048576)
+I0110 16:22:42.857513  2020 net.cpp:137] Memory required for data: 2641629184
+I0110 16:22:42.857529  2020 layer_factory.hpp:78] Creating layer relu7
+I0110 16:22:42.857547  2020 net.cpp:84] Creating Layer relu7
+I0110 16:22:42.857554  2020 net.cpp:406] relu7 <- fc7
+I0110 16:22:42.857574  2020 net.cpp:367] relu7 -> fc7 (in-place)
+I0110 16:22:42.858700  2020 net.cpp:122] Setting up relu7
+I0110 16:22:42.858713  2020 net.cpp:129] Top shape: 256 4096 (1048576)
+I0110 16:22:42.858733  2020 net.cpp:137] Memory required for data: 2645823488
+I0110 16:22:42.858741  2020 layer_factory.hpp:78] Creating layer fc8
+I0110 16:22:42.858775  2020 net.cpp:84] Creating Layer fc8
+I0110 16:22:42.858785  2020 net.cpp:406] fc8 <- fc7
+I0110 16:22:42.858809  2020 net.cpp:380] fc8 -> fc8
+I0110 16:22:43.285890  2020 net.cpp:122] Setting up fc8
+I0110 16:22:43.285943  2020 net.cpp:129] Top shape: 256 1000 (256000)
+I0110 16:22:43.285948  2020 net.cpp:137] Memory required for data: 2646847488
+I0110 16:22:43.285984  2020 layer_factory.hpp:78] Creating layer fc8_fc8_0_split
+I0110 16:22:43.286025  2020 net.cpp:84] Creating Layer fc8_fc8_0_split
+I0110 16:22:43.286041  2020 net.cpp:406] fc8_fc8_0_split <- fc8
+I0110 16:22:43.286069  2020 net.cpp:380] fc8_fc8_0_split -> fc8_fc8_0_split_0
+I0110 16:22:43.286099  2020 net.cpp:380] fc8_fc8_0_split -> fc8_fc8_0_split_1
+I0110 16:22:43.286119  2020 net.cpp:380] fc8_fc8_0_split -> fc8_fc8_0_split_2
+I0110 16:22:43.286192  2020 net.cpp:122] Setting up fc8_fc8_0_split
+I0110 16:22:43.286204  2020 net.cpp:129] Top shape: 256 1000 (256000)
+I0110 16:22:43.286211  2020 net.cpp:129] Top shape: 256 1000 (256000)
+I0110 16:22:43.286216  2020 net.cpp:129] Top shape: 256 1000 (256000)
+I0110 16:22:43.286219  2020 net.cpp:137] Memory required for data: 2649919488
+I0110 16:22:43.286224  2020 layer_factory.hpp:78] Creating layer loss
+I0110 16:22:43.286260  2020 net.cpp:84] Creating Layer loss
+I0110 16:22:43.286269  2020 net.cpp:406] loss <- fc8_fc8_0_split_0
+I0110 16:22:43.286285  2020 net.cpp:406] loss <- label_data_1_split_0
+I0110 16:22:43.286303  2020 net.cpp:380] loss -> loss
+I0110 16:22:43.286334  2020 layer_factory.hpp:78] Creating layer loss
+I0110 16:22:43.290024  2020 net.cpp:122] Setting up loss
+I0110 16:22:43.290042  2020 net.cpp:129] Top shape: (1)
+I0110 16:22:43.290047  2020 net.cpp:132]     with loss weight 1
+I0110 16:22:43.290105  2020 net.cpp:137] Memory required for data: 2649919492
+I0110 16:22:43.290114  2020 layer_factory.hpp:78] Creating layer accuracy
+I0110 16:22:43.290138  2020 net.cpp:84] Creating Layer accuracy
+I0110 16:22:43.290146  2020 net.cpp:406] accuracy <- fc8_fc8_0_split_1
+I0110 16:22:43.290165  2020 net.cpp:406] accuracy <- label_data_1_split_1
+I0110 16:22:43.290179  2020 net.cpp:380] accuracy -> accuracy
+I0110 16:22:43.290206  2020 net.cpp:122] Setting up accuracy
+I0110 16:22:43.290217  2020 net.cpp:129] Top shape: (1)
+I0110 16:22:43.290220  2020 net.cpp:137] Memory required for data: 2649919496
+I0110 16:22:43.290228  2020 layer_factory.hpp:78] Creating layer accuracy_5
+I0110 16:22:43.290244  2020 net.cpp:84] Creating Layer accuracy_5
+I0110 16:22:43.290252  2020 net.cpp:406] accuracy_5 <- fc8_fc8_0_split_2
+I0110 16:22:43.290264  2020 net.cpp:406] accuracy_5 <- label_data_1_split_2
+I0110 16:22:43.290277  2020 net.cpp:380] accuracy_5 -> accuracy_5
+I0110 16:22:43.290300  2020 net.cpp:122] Setting up accuracy_5
+I0110 16:22:43.290309  2020 net.cpp:129] Top shape: (1)
+I0110 16:22:43.290313  2020 net.cpp:137] Memory required for data: 2649919500
+I0110 16:22:43.290320  2020 net.cpp:200] accuracy_5 does not need backward computation.
+I0110 16:22:43.290328  2020 net.cpp:200] accuracy does not need backward computation.
+I0110 16:22:43.290334  2020 net.cpp:198] loss needs backward computation.
+I0110 16:22:43.290346  2020 net.cpp:198] fc8_fc8_0_split needs backward computation.
+I0110 16:22:43.290351  2020 net.cpp:198] fc8 needs backward computation.
+I0110 16:22:43.290355  2020 net.cpp:198] relu7 needs backward computation.
+I0110 16:22:43.290383  2020 net.cpp:198] scale8 needs backward computation.
+I0110 16:22:43.290397  2020 net.cpp:198] bn8 needs backward computation.
+I0110 16:22:43.290403  2020 net.cpp:198] fc7 needs backward computation.
+I0110 16:22:43.290408  2020 net.cpp:198] binactive6 needs backward computation.
+I0110 16:22:43.290413  2020 net.cpp:198] scale7 needs backward computation.
+I0110 16:22:43.290418  2020 net.cpp:198] bn7 needs backward computation.
+I0110 16:22:43.290422  2020 net.cpp:198] fc6 needs backward computation.
+I0110 16:22:43.290429  2020 net.cpp:198] binactive5 needs backward computation.
+I0110 16:22:43.290436  2020 net.cpp:198] scale6 needs backward computation.
+I0110 16:22:43.290441  2020 net.cpp:198] bn6 needs backward computation.
+I0110 16:22:43.290444  2020 net.cpp:198] pool5 needs backward computation.
+I0110 16:22:43.290452  2020 net.cpp:198] conv5 needs backward computation.
+I0110 16:22:43.290458  2020 net.cpp:198] binactive4 needs backward computation.
+I0110 16:22:43.290463  2020 net.cpp:198] scale5 needs backward computation.
+I0110 16:22:43.290474  2020 net.cpp:198] bn5 needs backward computation.
+I0110 16:22:43.290480  2020 net.cpp:198] conv4 needs backward computation.
+I0110 16:22:43.290486  2020 net.cpp:198] binactive3 needs backward computation.
+I0110 16:22:43.290493  2020 net.cpp:198] scale4 needs backward computation.
+I0110 16:22:43.290496  2020 net.cpp:198] bn4 needs backward computation.
+I0110 16:22:43.290503  2020 net.cpp:198] conv3 needs backward computation.
+I0110 16:22:43.290506  2020 net.cpp:198] binactive2 needs backward computation.
+I0110 16:22:43.290511  2020 net.cpp:198] scale3 needs backward computation.
+I0110 16:22:43.290516  2020 net.cpp:198] bn3 needs backward computation.
+I0110 16:22:43.290522  2020 net.cpp:198] pool2 needs backward computation.
+I0110 16:22:43.290527  2020 net.cpp:198] conv2 needs backward computation.
+I0110 16:22:43.290532  2020 net.cpp:198] binactive1 needs backward computation.
+I0110 16:22:43.290537  2020 net.cpp:198] scale2 needs backward computation.
+I0110 16:22:43.290542  2020 net.cpp:198] bn2 needs backward computation.
+I0110 16:22:43.290557  2020 net.cpp:198] pool1 needs backward computation.
+I0110 16:22:43.290561  2020 net.cpp:198] relu1 needs backward computation.
+I0110 16:22:43.290565  2020 net.cpp:198] scale1 needs backward computation.
+I0110 16:22:43.290570  2020 net.cpp:198] bn1 needs backward computation.
+I0110 16:22:43.290573  2020 net.cpp:198] conv1 needs backward computation.
+I0110 16:22:43.290581  2020 net.cpp:200] label_data_1_split does not need backward computation.
+I0110 16:22:43.290587  2020 net.cpp:200] data does not need backward computation.
+I0110 16:22:43.290596  2020 net.cpp:242] This network produces output accuracy
+I0110 16:22:43.290604  2020 net.cpp:242] This network produces output accuracy_5
+I0110 16:22:43.290609  2020 net.cpp:242] This network produces output loss
+I0110 16:22:43.290673  2020 net.cpp:255] Network initialization done.
+I0110 16:22:43.291682  2020 solver.cpp:193] Creating test net (#0) specified by net file: train_test.prototxt
+I0110 16:22:43.291808  2020 net.cpp:294] The NetState phase (1) differed from the phase (0) specified by a rule in layer data
+I0110 16:22:43.292026  2020 net.cpp:51] Initializing net from parameters: 
 name: "AlexNet-BN"
 state {
   phase: TEST
@@ -1236,434 +1236,395 @@ layer {
     top_k: 5
   }
 }
-I0108 22:11:40.596048 14998 layer_factory.hpp:78] Creating layer data
-I0108 22:11:40.596134 14998 db_lmdb.cpp:35] Opened lmdb /home/zhengzhe/Data/imagenet_shrt256/ilsvrc12_val_lmdb
-I0108 22:11:40.596168 14998 net.cpp:84] Creating Layer data
-I0108 22:11:40.596184 14998 net.cpp:380] data -> data
-I0108 22:11:40.596231 14998 net.cpp:380] data -> label
-I0108 22:11:40.596801 14998 data_layer.cpp:45] output data size: 50,3,224,224
-I0108 22:11:40.675067 14998 base_data_layer.cpp:72] Initializing prefetch
-I0108 22:11:40.912631 14998 base_data_layer.cpp:75] Prefetch initialized.
-I0108 22:11:40.912667 14998 net.cpp:122] Setting up data
-I0108 22:11:40.912693 14998 net.cpp:129] Top shape: 50 3 224 224 (7526400)
-I0108 22:11:40.912700 14998 net.cpp:129] Top shape: 50 (50)
-I0108 22:11:40.912703 14998 net.cpp:137] Memory required for data: 30105800
-I0108 22:11:40.912730 14998 layer_factory.hpp:78] Creating layer label_data_1_split
-I0108 22:11:40.912781 14998 net.cpp:84] Creating Layer label_data_1_split
-I0108 22:11:40.912796 14998 net.cpp:406] label_data_1_split <- label
-I0108 22:11:40.912827 14998 net.cpp:380] label_data_1_split -> label_data_1_split_0
-I0108 22:11:40.912860 14998 net.cpp:380] label_data_1_split -> label_data_1_split_1
-I0108 22:11:40.912875 14998 net.cpp:380] label_data_1_split -> label_data_1_split_2
-I0108 22:11:40.913056 14998 net.cpp:122] Setting up label_data_1_split
-I0108 22:11:40.913071 14998 net.cpp:129] Top shape: 50 (50)
-I0108 22:11:40.913076 14998 net.cpp:129] Top shape: 50 (50)
-I0108 22:11:40.913081 14998 net.cpp:129] Top shape: 50 (50)
-I0108 22:11:40.913084 14998 net.cpp:137] Memory required for data: 30106400
-I0108 22:11:40.913090 14998 layer_factory.hpp:78] Creating layer conv1
-I0108 22:11:40.913130 14998 net.cpp:84] Creating Layer conv1
-I0108 22:11:40.913139 14998 net.cpp:406] conv1 <- data
-I0108 22:11:40.913157 14998 net.cpp:380] conv1 -> conv1
-I0108 22:11:40.920897 14998 cudnn_conv_layer.cpp:194] Reallocating workspace storage: 127416
-I0108 22:11:40.920995 14998 net.cpp:122] Setting up conv1
-I0108 22:11:40.921008 14998 net.cpp:129] Top shape: 50 96 55 55 (14520000)
-I0108 22:11:40.921013 14998 net.cpp:137] Memory required for data: 88186400
-I0108 22:11:40.921043 14998 layer_factory.hpp:78] Creating layer bn1
-I0108 22:11:40.921061 14998 net.cpp:84] Creating Layer bn1
-I0108 22:11:40.921072 14998 net.cpp:406] bn1 <- conv1
-I0108 22:11:40.921084 14998 net.cpp:367] bn1 -> conv1 (in-place)
-I0108 22:11:40.921437 14998 net.cpp:122] Setting up bn1
-I0108 22:11:40.921450 14998 net.cpp:129] Top shape: 50 96 55 55 (14520000)
-I0108 22:11:40.921453 14998 net.cpp:137] Memory required for data: 146266400
-I0108 22:11:40.921486 14998 layer_factory.hpp:78] Creating layer scale1
-I0108 22:11:40.921512 14998 net.cpp:84] Creating Layer scale1
-I0108 22:11:40.921519 14998 net.cpp:406] scale1 <- conv1
-I0108 22:11:40.921536 14998 net.cpp:367] scale1 -> conv1 (in-place)
-I0108 22:11:40.921612 14998 layer_factory.hpp:78] Creating layer scale1
-I0108 22:11:40.921867 14998 net.cpp:122] Setting up scale1
-I0108 22:11:40.921880 14998 net.cpp:129] Top shape: 50 96 55 55 (14520000)
-I0108 22:11:40.921883 14998 net.cpp:137] Memory required for data: 204346400
-I0108 22:11:40.921933 14998 layer_factory.hpp:78] Creating layer relu1
-I0108 22:11:40.921950 14998 net.cpp:84] Creating Layer relu1
-I0108 22:11:40.921957 14998 net.cpp:406] relu1 <- conv1
-I0108 22:11:40.921972 14998 net.cpp:367] relu1 -> conv1 (in-place)
-I0108 22:11:40.922631 14998 net.cpp:122] Setting up relu1
-I0108 22:11:40.922659 14998 net.cpp:129] Top shape: 50 96 55 55 (14520000)
-I0108 22:11:40.922673 14998 net.cpp:137] Memory required for data: 262426400
-I0108 22:11:40.922679 14998 layer_factory.hpp:78] Creating layer pool1
-I0108 22:11:40.922701 14998 net.cpp:84] Creating Layer pool1
-I0108 22:11:40.922710 14998 net.cpp:406] pool1 <- conv1
-I0108 22:11:40.922727 14998 net.cpp:380] pool1 -> pool1
-I0108 22:11:40.922798 14998 net.cpp:122] Setting up pool1
-I0108 22:11:40.922811 14998 net.cpp:129] Top shape: 50 96 27 27 (3499200)
-I0108 22:11:40.922816 14998 net.cpp:137] Memory required for data: 276423200
-I0108 22:11:40.922821 14998 layer_factory.hpp:78] Creating layer bn2
-I0108 22:11:40.922834 14998 net.cpp:84] Creating Layer bn2
-I0108 22:11:40.922840 14998 net.cpp:406] bn2 <- pool1
-I0108 22:11:40.922857 14998 net.cpp:367] bn2 -> pool1 (in-place)
-I0108 22:11:40.923115 14998 net.cpp:122] Setting up bn2
-I0108 22:11:40.923125 14998 net.cpp:129] Top shape: 50 96 27 27 (3499200)
-I0108 22:11:40.923128 14998 net.cpp:137] Memory required for data: 290420000
-I0108 22:11:40.923157 14998 layer_factory.hpp:78] Creating layer scale2
-I0108 22:11:40.923179 14998 net.cpp:84] Creating Layer scale2
-I0108 22:11:40.923187 14998 net.cpp:406] scale2 <- pool1
-I0108 22:11:40.923203 14998 net.cpp:367] scale2 -> pool1 (in-place)
-I0108 22:11:40.923276 14998 layer_factory.hpp:78] Creating layer scale2
-I0108 22:11:40.923547 14998 net.cpp:122] Setting up scale2
-I0108 22:11:40.923574 14998 net.cpp:129] Top shape: 50 96 27 27 (3499200)
-I0108 22:11:40.923578 14998 net.cpp:137] Memory required for data: 304416800
-I0108 22:11:40.923593 14998 layer_factory.hpp:78] Creating layer binactive1
-I0108 22:11:40.923609 14998 net.cpp:84] Creating Layer binactive1
-I0108 22:11:40.923615 14998 net.cpp:406] binactive1 <- pool1
-I0108 22:11:40.923645 14998 net.cpp:380] binactive1 -> binactive1
-I0108 22:11:40.923686 14998 net.cpp:122] Setting up binactive1
-I0108 22:11:40.923697 14998 net.cpp:129] Top shape: 50 96 27 27 (3499200)
-I0108 22:11:40.923701 14998 net.cpp:137] Memory required for data: 318413600
-I0108 22:11:40.923705 14998 layer_factory.hpp:78] Creating layer conv2
-I0108 22:11:40.923732 14998 net.cpp:84] Creating Layer conv2
-I0108 22:11:40.923741 14998 net.cpp:406] conv2 <- binactive1
-I0108 22:11:40.923758 14998 net.cpp:380] conv2 -> conv2
-I0108 22:11:40.981945 14998 cudnn_binary_conv_layer.cpp:194] Reallocating workspace storage: 19668
-I0108 22:11:40.982005 14998 net.cpp:122] Setting up conv2
-I0108 22:11:40.982023 14998 net.cpp:129] Top shape: 50 256 27 27 (9331200)
-I0108 22:11:40.982026 14998 net.cpp:137] Memory required for data: 355738400
-I0108 22:11:40.982060 14998 layer_factory.hpp:78] Creating layer pool2
-I0108 22:11:40.982097 14998 net.cpp:84] Creating Layer pool2
-I0108 22:11:40.982110 14998 net.cpp:406] pool2 <- conv2
-I0108 22:11:40.982151 14998 net.cpp:380] pool2 -> pool2
-I0108 22:11:40.982225 14998 net.cpp:122] Setting up pool2
-I0108 22:11:40.982237 14998 net.cpp:129] Top shape: 50 256 13 13 (2163200)
-I0108 22:11:40.982242 14998 net.cpp:137] Memory required for data: 364391200
-I0108 22:11:40.982249 14998 layer_factory.hpp:78] Creating layer bn3
-I0108 22:11:40.982262 14998 net.cpp:84] Creating Layer bn3
-I0108 22:11:40.982270 14998 net.cpp:406] bn3 <- pool2
-I0108 22:11:40.982282 14998 net.cpp:367] bn3 -> pool2 (in-place)
-I0108 22:11:40.982571 14998 net.cpp:122] Setting up bn3
-I0108 22:11:40.982583 14998 net.cpp:129] Top shape: 50 256 13 13 (2163200)
-I0108 22:11:40.982586 14998 net.cpp:137] Memory required for data: 373044000
-I0108 22:11:40.982607 14998 layer_factory.hpp:78] Creating layer scale3
-I0108 22:11:40.982627 14998 net.cpp:84] Creating Layer scale3
-I0108 22:11:40.982635 14998 net.cpp:406] scale3 <- pool2
-I0108 22:11:40.982683 14998 net.cpp:367] scale3 -> pool2 (in-place)
-I0108 22:11:40.982782 14998 layer_factory.hpp:78] Creating layer scale3
-I0108 22:11:40.982955 14998 net.cpp:122] Setting up scale3
-I0108 22:11:40.982967 14998 net.cpp:129] Top shape: 50 256 13 13 (2163200)
-I0108 22:11:40.982970 14998 net.cpp:137] Memory required for data: 381696800
-I0108 22:11:40.982996 14998 layer_factory.hpp:78] Creating layer binactive2
-I0108 22:11:40.983011 14998 net.cpp:84] Creating Layer binactive2
-I0108 22:11:40.983019 14998 net.cpp:406] binactive2 <- pool2
-I0108 22:11:40.983047 14998 net.cpp:380] binactive2 -> binactive2
-I0108 22:11:40.983094 14998 net.cpp:122] Setting up binactive2
-I0108 22:11:40.983105 14998 net.cpp:129] Top shape: 50 256 13 13 (2163200)
-I0108 22:11:40.983109 14998 net.cpp:137] Memory required for data: 390349600
-I0108 22:11:40.983114 14998 layer_factory.hpp:78] Creating layer conv3
-I0108 22:11:40.983142 14998 net.cpp:84] Creating Layer conv3
-I0108 22:11:40.983151 14998 net.cpp:406] conv3 <- binactive2
-I0108 22:11:40.983171 14998 net.cpp:380] conv3 -> conv3
-I0108 22:11:41.069594 14998 cudnn_binary_conv_layer.cpp:194] Reallocating workspace storage: 18874368
-I0108 22:11:41.069985 14998 net.cpp:122] Setting up conv3
-I0108 22:11:41.070019 14998 net.cpp:129] Top shape: 50 384 13 13 (3244800)
-I0108 22:11:41.070022 14998 net.cpp:137] Memory required for data: 403328800
-I0108 22:11:41.070042 14998 layer_factory.hpp:78] Creating layer bn4
-I0108 22:11:41.070081 14998 net.cpp:84] Creating Layer bn4
-I0108 22:11:41.070092 14998 net.cpp:406] bn4 <- conv3
-I0108 22:11:41.070122 14998 net.cpp:367] bn4 -> conv3 (in-place)
-I0108 22:11:41.070403 14998 net.cpp:122] Setting up bn4
-I0108 22:11:41.070415 14998 net.cpp:129] Top shape: 50 384 13 13 (3244800)
-I0108 22:11:41.070420 14998 net.cpp:137] Memory required for data: 416308000
-I0108 22:11:41.070441 14998 layer_factory.hpp:78] Creating layer scale4
-I0108 22:11:41.070461 14998 net.cpp:84] Creating Layer scale4
-I0108 22:11:41.070469 14998 net.cpp:406] scale4 <- conv3
-I0108 22:11:41.070484 14998 net.cpp:367] scale4 -> conv3 (in-place)
-I0108 22:11:41.070552 14998 layer_factory.hpp:78] Creating layer scale4
-I0108 22:11:41.070756 14998 net.cpp:122] Setting up scale4
-I0108 22:11:41.070767 14998 net.cpp:129] Top shape: 50 384 13 13 (3244800)
-I0108 22:11:41.070771 14998 net.cpp:137] Memory required for data: 429287200
-I0108 22:11:41.070799 14998 layer_factory.hpp:78] Creating layer binactive3
-I0108 22:11:41.070819 14998 net.cpp:84] Creating Layer binactive3
-I0108 22:11:41.070827 14998 net.cpp:406] binactive3 <- conv3
-I0108 22:11:41.070843 14998 net.cpp:380] binactive3 -> binactive3
-I0108 22:11:41.070904 14998 net.cpp:122] Setting up binactive3
-I0108 22:11:41.070914 14998 net.cpp:129] Top shape: 50 384 13 13 (3244800)
-I0108 22:11:41.070919 14998 net.cpp:137] Memory required for data: 442266400
-I0108 22:11:41.070924 14998 layer_factory.hpp:78] Creating layer conv4
-I0108 22:11:41.070952 14998 net.cpp:84] Creating Layer conv4
-I0108 22:11:41.070961 14998 net.cpp:406] conv4 <- binactive3
-I0108 22:11:41.070981 14998 net.cpp:380] conv4 -> conv4
-I0108 22:11:41.193356 14998 cudnn_binary_conv_layer.cpp:194] Reallocating workspace storage: 9840
-I0108 22:11:41.193408 14998 net.cpp:122] Setting up conv4
-I0108 22:11:41.193445 14998 net.cpp:129] Top shape: 50 384 13 13 (3244800)
-I0108 22:11:41.193449 14998 net.cpp:137] Memory required for data: 455245600
-I0108 22:11:41.193475 14998 layer_factory.hpp:78] Creating layer bn5
-I0108 22:11:41.193503 14998 net.cpp:84] Creating Layer bn5
-I0108 22:11:41.193516 14998 net.cpp:406] bn5 <- conv4
-I0108 22:11:41.193538 14998 net.cpp:367] bn5 -> conv4 (in-place)
-I0108 22:11:41.193819 14998 net.cpp:122] Setting up bn5
-I0108 22:11:41.193830 14998 net.cpp:129] Top shape: 50 384 13 13 (3244800)
-I0108 22:11:41.193835 14998 net.cpp:137] Memory required for data: 468224800
-I0108 22:11:41.193871 14998 layer_factory.hpp:78] Creating layer scale5
-I0108 22:11:41.193889 14998 net.cpp:84] Creating Layer scale5
-I0108 22:11:41.193897 14998 net.cpp:406] scale5 <- conv4
-I0108 22:11:41.193935 14998 net.cpp:367] scale5 -> conv4 (in-place)
-I0108 22:11:41.194016 14998 layer_factory.hpp:78] Creating layer scale5
-I0108 22:11:41.194198 14998 net.cpp:122] Setting up scale5
-I0108 22:11:41.194209 14998 net.cpp:129] Top shape: 50 384 13 13 (3244800)
-I0108 22:11:41.194213 14998 net.cpp:137] Memory required for data: 481204000
-I0108 22:11:41.194228 14998 layer_factory.hpp:78] Creating layer binactive4
-I0108 22:11:41.194244 14998 net.cpp:84] Creating Layer binactive4
-I0108 22:11:41.194252 14998 net.cpp:406] binactive4 <- conv4
-I0108 22:11:41.194267 14998 net.cpp:380] binactive4 -> binactive4
-I0108 22:11:41.194310 14998 net.cpp:122] Setting up binactive4
-I0108 22:11:41.194325 14998 net.cpp:129] Top shape: 50 384 13 13 (3244800)
-I0108 22:11:41.194329 14998 net.cpp:137] Memory required for data: 494183200
-I0108 22:11:41.194335 14998 layer_factory.hpp:78] Creating layer conv5
-I0108 22:11:41.194367 14998 net.cpp:84] Creating Layer conv5
-I0108 22:11:41.194377 14998 net.cpp:406] conv5 <- binactive4
-I0108 22:11:41.194411 14998 net.cpp:380] conv5 -> conv5
-I0108 22:11:41.272318 14998 cudnn_binary_conv_layer.cpp:194] Reallocating workspace storage: 18874368
-I0108 22:11:41.272682 14998 net.cpp:122] Setting up conv5
-I0108 22:11:41.272732 14998 net.cpp:129] Top shape: 50 256 13 13 (2163200)
-I0108 22:11:41.272735 14998 net.cpp:137] Memory required for data: 502836000
-I0108 22:11:41.272758 14998 layer_factory.hpp:78] Creating layer pool5
-I0108 22:11:41.272791 14998 net.cpp:84] Creating Layer pool5
-I0108 22:11:41.272825 14998 net.cpp:406] pool5 <- conv5
-I0108 22:11:41.272847 14998 net.cpp:380] pool5 -> pool5
-I0108 22:11:41.272934 14998 net.cpp:122] Setting up pool5
-I0108 22:11:41.272948 14998 net.cpp:129] Top shape: 50 256 6 6 (460800)
-I0108 22:11:41.272953 14998 net.cpp:137] Memory required for data: 504679200
-I0108 22:11:41.272958 14998 layer_factory.hpp:78] Creating layer bn6
-I0108 22:11:41.272974 14998 net.cpp:84] Creating Layer bn6
-I0108 22:11:41.272981 14998 net.cpp:406] bn6 <- pool5
-I0108 22:11:41.272995 14998 net.cpp:367] bn6 -> pool5 (in-place)
-I0108 22:11:41.273322 14998 net.cpp:122] Setting up bn6
-I0108 22:11:41.273334 14998 net.cpp:129] Top shape: 50 256 6 6 (460800)
-I0108 22:11:41.273351 14998 net.cpp:137] Memory required for data: 506522400
-I0108 22:11:41.273401 14998 layer_factory.hpp:78] Creating layer scale6
-I0108 22:11:41.273422 14998 net.cpp:84] Creating Layer scale6
-I0108 22:11:41.273430 14998 net.cpp:406] scale6 <- pool5
-I0108 22:11:41.273444 14998 net.cpp:367] scale6 -> pool5 (in-place)
-I0108 22:11:41.273521 14998 layer_factory.hpp:78] Creating layer scale6
-I0108 22:11:41.273694 14998 net.cpp:122] Setting up scale6
-I0108 22:11:41.273705 14998 net.cpp:129] Top shape: 50 256 6 6 (460800)
-I0108 22:11:41.273708 14998 net.cpp:137] Memory required for data: 508365600
-I0108 22:11:41.273733 14998 layer_factory.hpp:78] Creating layer binactive5
-I0108 22:11:41.273746 14998 net.cpp:84] Creating Layer binactive5
-I0108 22:11:41.273753 14998 net.cpp:406] binactive5 <- pool5
-I0108 22:11:41.273767 14998 net.cpp:380] binactive5 -> binactive5
-I0108 22:11:41.273811 14998 net.cpp:122] Setting up binactive5
-I0108 22:11:41.273823 14998 net.cpp:129] Top shape: 50 256 6 6 (460800)
-I0108 22:11:41.273826 14998 net.cpp:137] Memory required for data: 510208800
-I0108 22:11:41.273831 14998 layer_factory.hpp:78] Creating layer fc6
-I0108 22:11:41.273869 14998 net.cpp:84] Creating Layer fc6
-I0108 22:11:41.273876 14998 net.cpp:406] fc6 <- binactive5
-I0108 22:11:41.273892 14998 net.cpp:380] fc6 -> fc6
-I0108 22:11:44.742489 14998 net.cpp:122] Setting up fc6
-I0108 22:11:44.742552 14998 net.cpp:129] Top shape: 50 4096 (204800)
-I0108 22:11:44.742558 14998 net.cpp:137] Memory required for data: 511028000
-I0108 22:11:44.742592 14998 layer_factory.hpp:78] Creating layer bn7
-I0108 22:11:44.742630 14998 net.cpp:84] Creating Layer bn7
-I0108 22:11:44.742645 14998 net.cpp:406] bn7 <- fc6
-I0108 22:11:44.742671 14998 net.cpp:367] bn7 -> fc6 (in-place)
-I0108 22:11:44.742955 14998 net.cpp:122] Setting up bn7
-I0108 22:11:44.742966 14998 net.cpp:129] Top shape: 50 4096 (204800)
-I0108 22:11:44.742990 14998 net.cpp:137] Memory required for data: 511847200
-I0108 22:11:44.743013 14998 layer_factory.hpp:78] Creating layer scale7
-I0108 22:11:44.743049 14998 net.cpp:84] Creating Layer scale7
-I0108 22:11:44.743057 14998 net.cpp:406] scale7 <- fc6
-I0108 22:11:44.743072 14998 net.cpp:367] scale7 -> fc6 (in-place)
-I0108 22:11:44.743170 14998 layer_factory.hpp:78] Creating layer scale7
-I0108 22:11:44.743396 14998 net.cpp:122] Setting up scale7
-I0108 22:11:44.743407 14998 net.cpp:129] Top shape: 50 4096 (204800)
-I0108 22:11:44.743412 14998 net.cpp:137] Memory required for data: 512666400
-I0108 22:11:44.743427 14998 layer_factory.hpp:78] Creating layer binactive6
-I0108 22:11:44.743441 14998 net.cpp:84] Creating Layer binactive6
-I0108 22:11:44.743448 14998 net.cpp:406] binactive6 <- fc6
-I0108 22:11:44.743463 14998 net.cpp:380] binactive6 -> binactive6
-I0108 22:11:44.743511 14998 net.cpp:122] Setting up binactive6
-I0108 22:11:44.743523 14998 net.cpp:129] Top shape: 50 4096 (204800)
-I0108 22:11:44.743526 14998 net.cpp:137] Memory required for data: 513485600
-I0108 22:11:44.743531 14998 layer_factory.hpp:78] Creating layer fc7
-I0108 22:11:44.743564 14998 net.cpp:84] Creating Layer fc7
-I0108 22:11:44.743572 14998 net.cpp:406] fc7 <- binactive6
-I0108 22:11:44.743590 14998 net.cpp:380] fc7 -> fc7
-I0108 22:11:46.283974 14998 net.cpp:122] Setting up fc7
-I0108 22:11:46.284034 14998 net.cpp:129] Top shape: 50 4096 (204800)
-I0108 22:11:46.284039 14998 net.cpp:137] Memory required for data: 514304800
-I0108 22:11:46.284066 14998 layer_factory.hpp:78] Creating layer bn8
-I0108 22:11:46.284116 14998 net.cpp:84] Creating Layer bn8
-I0108 22:11:46.284133 14998 net.cpp:406] bn8 <- fc7
-I0108 22:11:46.284173 14998 net.cpp:367] bn8 -> fc7 (in-place)
-I0108 22:11:46.284492 14998 net.cpp:122] Setting up bn8
-I0108 22:11:46.284502 14998 net.cpp:129] Top shape: 50 4096 (204800)
-I0108 22:11:46.284505 14998 net.cpp:137] Memory required for data: 515124000
-I0108 22:11:46.284525 14998 layer_factory.hpp:78] Creating layer scale8
-I0108 22:11:46.284566 14998 net.cpp:84] Creating Layer scale8
-I0108 22:11:46.284574 14998 net.cpp:406] scale8 <- fc7
-I0108 22:11:46.284588 14998 net.cpp:367] scale8 -> fc7 (in-place)
-I0108 22:11:46.284682 14998 layer_factory.hpp:78] Creating layer scale8
-I0108 22:11:46.284893 14998 net.cpp:122] Setting up scale8
-I0108 22:11:46.284904 14998 net.cpp:129] Top shape: 50 4096 (204800)
-I0108 22:11:46.284909 14998 net.cpp:137] Memory required for data: 515943200
-I0108 22:11:46.284921 14998 layer_factory.hpp:78] Creating layer relu7
-I0108 22:11:46.284955 14998 net.cpp:84] Creating Layer relu7
-I0108 22:11:46.284960 14998 net.cpp:406] relu7 <- fc7
-I0108 22:11:46.284974 14998 net.cpp:367] relu7 -> fc7 (in-place)
-I0108 22:11:46.286557 14998 net.cpp:122] Setting up relu7
-I0108 22:11:46.286573 14998 net.cpp:129] Top shape: 50 4096 (204800)
-I0108 22:11:46.286592 14998 net.cpp:137] Memory required for data: 516762400
-I0108 22:11:46.286599 14998 layer_factory.hpp:78] Creating layer fc8
-I0108 22:11:46.286626 14998 net.cpp:84] Creating Layer fc8
-I0108 22:11:46.286635 14998 net.cpp:406] fc8 <- fc7
-I0108 22:11:46.286656 14998 net.cpp:380] fc8 -> fc8
-I0108 22:11:46.673461 14998 net.cpp:122] Setting up fc8
-I0108 22:11:46.673511 14998 net.cpp:129] Top shape: 50 1000 (50000)
-I0108 22:11:46.673514 14998 net.cpp:137] Memory required for data: 516962400
-I0108 22:11:46.673547 14998 layer_factory.hpp:78] Creating layer fc8_fc8_0_split
-I0108 22:11:46.673591 14998 net.cpp:84] Creating Layer fc8_fc8_0_split
-I0108 22:11:46.673606 14998 net.cpp:406] fc8_fc8_0_split <- fc8
-I0108 22:11:46.673633 14998 net.cpp:380] fc8_fc8_0_split -> fc8_fc8_0_split_0
-I0108 22:11:46.673658 14998 net.cpp:380] fc8_fc8_0_split -> fc8_fc8_0_split_1
-I0108 22:11:46.673671 14998 net.cpp:380] fc8_fc8_0_split -> fc8_fc8_0_split_2
-I0108 22:11:46.673753 14998 net.cpp:122] Setting up fc8_fc8_0_split
-I0108 22:11:46.673765 14998 net.cpp:129] Top shape: 50 1000 (50000)
-I0108 22:11:46.673769 14998 net.cpp:129] Top shape: 50 1000 (50000)
-I0108 22:11:46.673774 14998 net.cpp:129] Top shape: 50 1000 (50000)
-I0108 22:11:46.673799 14998 net.cpp:137] Memory required for data: 517562400
-I0108 22:11:46.673806 14998 layer_factory.hpp:78] Creating layer loss
-I0108 22:11:46.673828 14998 net.cpp:84] Creating Layer loss
-I0108 22:11:46.673836 14998 net.cpp:406] loss <- fc8_fc8_0_split_0
-I0108 22:11:46.673849 14998 net.cpp:406] loss <- label_data_1_split_0
-I0108 22:11:46.673862 14998 net.cpp:380] loss -> loss
-I0108 22:11:46.673883 14998 layer_factory.hpp:78] Creating layer loss
-I0108 22:11:46.674970 14998 net.cpp:122] Setting up loss
-I0108 22:11:46.675002 14998 net.cpp:129] Top shape: (1)
-I0108 22:11:46.675006 14998 net.cpp:132]     with loss weight 1
-I0108 22:11:46.675015 14998 net.cpp:137] Memory required for data: 517562404
-I0108 22:11:46.675022 14998 layer_factory.hpp:78] Creating layer accuracy
-I0108 22:11:46.675040 14998 net.cpp:84] Creating Layer accuracy
-I0108 22:11:46.675047 14998 net.cpp:406] accuracy <- fc8_fc8_0_split_1
-I0108 22:11:46.675062 14998 net.cpp:406] accuracy <- label_data_1_split_1
-I0108 22:11:46.675073 14998 net.cpp:380] accuracy -> accuracy
-I0108 22:11:46.675096 14998 net.cpp:122] Setting up accuracy
-I0108 22:11:46.675103 14998 net.cpp:129] Top shape: (1)
-I0108 22:11:46.675107 14998 net.cpp:137] Memory required for data: 517562408
-I0108 22:11:46.675112 14998 layer_factory.hpp:78] Creating layer accuracy_5
-I0108 22:11:46.675132 14998 net.cpp:84] Creating Layer accuracy_5
-I0108 22:11:46.675138 14998 net.cpp:406] accuracy_5 <- fc8_fc8_0_split_2
-I0108 22:11:46.675148 14998 net.cpp:406] accuracy_5 <- label_data_1_split_2
-I0108 22:11:46.675163 14998 net.cpp:380] accuracy_5 -> accuracy_5
-I0108 22:11:46.675181 14998 net.cpp:122] Setting up accuracy_5
-I0108 22:11:46.675191 14998 net.cpp:129] Top shape: (1)
-I0108 22:11:46.675194 14998 net.cpp:137] Memory required for data: 517562412
-I0108 22:11:46.675201 14998 net.cpp:200] accuracy_5 does not need backward computation.
-I0108 22:11:46.675206 14998 net.cpp:200] accuracy does not need backward computation.
-I0108 22:11:46.675211 14998 net.cpp:198] loss needs backward computation.
-I0108 22:11:46.675216 14998 net.cpp:198] fc8_fc8_0_split needs backward computation.
-I0108 22:11:46.675220 14998 net.cpp:198] fc8 needs backward computation.
-I0108 22:11:46.675225 14998 net.cpp:198] relu7 needs backward computation.
-I0108 22:11:46.675227 14998 net.cpp:198] scale8 needs backward computation.
-I0108 22:11:46.675232 14998 net.cpp:198] bn8 needs backward computation.
-I0108 22:11:46.675235 14998 net.cpp:198] fc7 needs backward computation.
-I0108 22:11:46.675240 14998 net.cpp:198] binactive6 needs backward computation.
-I0108 22:11:46.675243 14998 net.cpp:198] scale7 needs backward computation.
-I0108 22:11:46.675247 14998 net.cpp:198] bn7 needs backward computation.
-I0108 22:11:46.675251 14998 net.cpp:198] fc6 needs backward computation.
-I0108 22:11:46.675256 14998 net.cpp:198] binactive5 needs backward computation.
-I0108 22:11:46.675261 14998 net.cpp:198] scale6 needs backward computation.
-I0108 22:11:46.675264 14998 net.cpp:198] bn6 needs backward computation.
-I0108 22:11:46.675269 14998 net.cpp:198] pool5 needs backward computation.
-I0108 22:11:46.675274 14998 net.cpp:198] conv5 needs backward computation.
-I0108 22:11:46.675278 14998 net.cpp:198] binactive4 needs backward computation.
-I0108 22:11:46.675282 14998 net.cpp:198] scale5 needs backward computation.
-I0108 22:11:46.675287 14998 net.cpp:198] bn5 needs backward computation.
-I0108 22:11:46.675290 14998 net.cpp:198] conv4 needs backward computation.
-I0108 22:11:46.675295 14998 net.cpp:198] binactive3 needs backward computation.
-I0108 22:11:46.675299 14998 net.cpp:198] scale4 needs backward computation.
-I0108 22:11:46.675303 14998 net.cpp:198] bn4 needs backward computation.
-I0108 22:11:46.675308 14998 net.cpp:198] conv3 needs backward computation.
-I0108 22:11:46.675312 14998 net.cpp:198] binactive2 needs backward computation.
-I0108 22:11:46.675318 14998 net.cpp:198] scale3 needs backward computation.
-I0108 22:11:46.675321 14998 net.cpp:198] bn3 needs backward computation.
-I0108 22:11:46.675326 14998 net.cpp:198] pool2 needs backward computation.
-I0108 22:11:46.675352 14998 net.cpp:198] conv2 needs backward computation.
-I0108 22:11:46.675360 14998 net.cpp:198] binactive1 needs backward computation.
-I0108 22:11:46.675365 14998 net.cpp:198] scale2 needs backward computation.
-I0108 22:11:46.675369 14998 net.cpp:198] bn2 needs backward computation.
-I0108 22:11:46.675374 14998 net.cpp:198] pool1 needs backward computation.
-I0108 22:11:46.675379 14998 net.cpp:198] relu1 needs backward computation.
-I0108 22:11:46.675384 14998 net.cpp:198] scale1 needs backward computation.
-I0108 22:11:46.675387 14998 net.cpp:198] bn1 needs backward computation.
-I0108 22:11:46.675391 14998 net.cpp:198] conv1 needs backward computation.
-I0108 22:11:46.675398 14998 net.cpp:200] label_data_1_split does not need backward computation.
-I0108 22:11:46.675405 14998 net.cpp:200] data does not need backward computation.
-I0108 22:11:46.675407 14998 net.cpp:242] This network produces output accuracy
-I0108 22:11:46.675415 14998 net.cpp:242] This network produces output accuracy_5
-I0108 22:11:46.675420 14998 net.cpp:242] This network produces output loss
-I0108 22:11:46.675473 14998 net.cpp:255] Network initialization done.
-I0108 22:11:46.675649 14998 solver.cpp:57] Solver scaffolding done.
-I0108 22:11:46.677971 14998 caffe.cpp:239] Starting Optimization
-I0108 22:11:46.678004 14998 solver.cpp:299] Solving AlexNet-BN
-I0108 22:11:46.678007 14998 solver.cpp:300] Learning Rate Policy: step
-I0108 22:11:46.681670 14998 solver.cpp:384] Iteration 0, Testing net (#0)
-I0108 22:11:46.965929 14998 blocking_queue.cpp:49] Waiting for data
-I0108 22:14:07.189594 15132 data_layer.cpp:73] Restarting data prefetching from start.
-I0108 22:14:07.238409 14998 solver.cpp:452]     Test net output #0: accuracy = 0.00118
-I0108 22:14:07.238458 14998 solver.cpp:452]     Test net output #1: accuracy_5 = 0.00546
-I0108 22:14:07.238487 14998 solver.cpp:452]     Test net output #2: loss = 87.1709 (* 1 = 87.1709 loss)
-I0108 22:14:07.238494 14998 solver.cpp:463] ================================
-I0108 22:14:07.238499 14998 solver.cpp:464]     Test net best accuracy1 is: 0.00118
-I0108 22:14:07.238505 14998 solver.cpp:466]     Test net best accuracy5 is: 0.00546
-I0108 22:14:07.940892 14998 solver.cpp:242] Iteration 0 (2.77435e+20 iter/s, 141.258s/200 iters), loss = 7.4731
-I0108 22:14:07.940951 14998 solver.cpp:261]     Train net output #0: accuracy = 0
-I0108 22:14:07.940964 14998 solver.cpp:261]     Train net output #1: accuracy_5 = 0.0117188
-I0108 22:14:07.940981 14998 solver.cpp:261]     Train net output #2: loss = 7.4731 (* 1 = 7.4731 loss)
-I0108 22:14:07.941031 14998 sgd_solver.cpp:122] Iteration 0, lr = 0.001
-I0108 22:14:29.364353 14998 blocking_queue.cpp:49] Waiting for data
-I0108 22:16:28.019302 14998 solver.cpp:242] Iteration 200 (1.42783 iter/s, 140.073s/200 iters), loss = 7.2829
-I0108 22:16:28.031299 14998 solver.cpp:261]     Train net output #0: accuracy = 0
-I0108 22:16:28.031319 14998 solver.cpp:261]     Train net output #1: accuracy_5 = 0.0117188
-I0108 22:16:28.031359 14998 solver.cpp:261]     Train net output #2: loss = 7.2829 (* 1 = 7.2829 loss)
-I0108 22:16:28.031375 14998 sgd_solver.cpp:122] Iteration 200, lr = 0.001
-I0108 22:18:48.285248 14998 solver.cpp:242] Iteration 400 (1.42604 iter/s, 140.249s/200 iters), loss = 7.23517
-I0108 22:18:48.297032 14998 solver.cpp:261]     Train net output #0: accuracy = 0
-I0108 22:18:48.297052 14998 solver.cpp:261]     Train net output #1: accuracy_5 = 0
-I0108 22:18:48.297070 14998 solver.cpp:261]     Train net output #2: loss = 7.23517 (* 1 = 7.23517 loss)
-I0108 22:18:48.297083 14998 sgd_solver.cpp:122] Iteration 400, lr = 0.001
-I0108 22:21:07.898267 14998 solver.cpp:242] Iteration 600 (1.43271 iter/s, 139.595s/200 iters), loss = 7.34059
-I0108 22:21:07.909133 14998 solver.cpp:261]     Train net output #0: accuracy = 0
-I0108 22:21:07.909155 14998 solver.cpp:261]     Train net output #1: accuracy_5 = 0.00390625
-I0108 22:21:07.909183 14998 solver.cpp:261]     Train net output #2: loss = 7.34059 (* 1 = 7.34059 loss)
-I0108 22:21:07.909195 14998 sgd_solver.cpp:122] Iteration 600, lr = 0.001
-I0108 22:23:35.069239 14998 solver.cpp:242] Iteration 800 (1.35911 iter/s, 147.155s/200 iters), loss = 7.26283
-I0108 22:23:35.069350 14998 solver.cpp:261]     Train net output #0: accuracy = 0
-I0108 22:23:35.069362 14998 solver.cpp:261]     Train net output #1: accuracy_5 = 0
-I0108 22:23:35.069382 14998 solver.cpp:261]     Train net output #2: loss = 7.26283 (* 1 = 7.26283 loss)
-I0108 22:23:35.069396 14998 sgd_solver.cpp:122] Iteration 800, lr = 0.001
-I0108 22:27:38.303205 14998 solver.cpp:384] Iteration 1000, Testing net (#0)
-I0108 22:32:19.677933 14998 blocking_queue.cpp:49] Waiting for data
-I0108 22:33:58.214500 15132 data_layer.cpp:73] Restarting data prefetching from start.
-I0108 22:33:58.263052 14998 solver.cpp:452]     Test net output #0: accuracy = 0.00104
-I0108 22:33:58.263098 14998 solver.cpp:452]     Test net output #1: accuracy_5 = 0.005
-I0108 22:33:58.263120 14998 solver.cpp:452]     Test net output #2: loss = 7.77453 (* 1 = 7.77453 loss)
-I0108 22:33:58.263128 14998 solver.cpp:463] ================================
-I0108 22:33:58.263130 14998 solver.cpp:464]     Test net best accuracy1 is: 0.00118
-I0108 22:33:58.263135 14998 solver.cpp:466]     Test net best accuracy5 is: 0.00546
-I0108 22:33:58.947412 14998 solver.cpp:242] Iteration 1000 (0.320587 iter/s, 623.855s/200 iters), loss = 7.38484
-I0108 22:33:58.949743 14998 solver.cpp:261]     Train net output #0: accuracy = 0.00390625
-I0108 22:33:58.949770 14998 solver.cpp:261]     Train net output #1: accuracy_5 = 0.00390625
-I0108 22:33:58.949795 14998 solver.cpp:261]     Train net output #2: loss = 7.38484 (* 1 = 7.38484 loss)
-I0108 22:33:58.949811 14998 sgd_solver.cpp:122] Iteration 1000, lr = 0.001
-I0108 22:36:22.865823 14998 solver.cpp:242] Iteration 1200 (1.38975 iter/s, 143.911s/200 iters), loss = 7.33059
-I0108 22:36:22.865957 14998 solver.cpp:261]     Train net output #0: accuracy = 0
-I0108 22:36:22.865968 14998 solver.cpp:261]     Train net output #1: accuracy_5 = 0.00390625
-I0108 22:36:22.865988 14998 solver.cpp:261]     Train net output #2: loss = 7.33059 (* 1 = 7.33059 loss)
-I0108 22:36:22.866020 14998 sgd_solver.cpp:122] Iteration 1200, lr = 0.001
-I0108 22:39:04.677949 14998 solver.cpp:242] Iteration 1400 (1.23605 iter/s, 161.806s/200 iters), loss = 7.28974
-I0108 22:39:04.689703 14998 solver.cpp:261]     Train net output #0: accuracy = 0
-I0108 22:39:04.689733 14998 solver.cpp:261]     Train net output #1: accuracy_5 = 0
-I0108 22:39:04.689759 14998 solver.cpp:261]     Train net output #2: loss = 7.28974 (* 1 = 7.28974 loss)
-I0108 22:39:04.689774 14998 sgd_solver.cpp:122] Iteration 1400, lr = 0.001
-I0108 22:44:15.426750 14998 solver.cpp:242] Iteration 1600 (0.643655 iter/s, 310.725s/200 iters), loss = 7.26507
-I0108 22:44:15.426848 14998 solver.cpp:261]     Train net output #0: accuracy = 0
-I0108 22:44:15.426864 14998 solver.cpp:261]     Train net output #1: accuracy_5 = 0.0078125
-I0108 22:44:15.426897 14998 solver.cpp:261]     Train net output #2: loss = 7.26507 (* 1 = 7.26507 loss)
-I0108 22:44:15.426911 14998 sgd_solver.cpp:122] Iteration 1600, lr = 0.001
+I0110 16:22:43.292433  2020 layer_factory.hpp:78] Creating layer data
+I0110 16:22:43.307713  2020 db_lmdb.cpp:35] Opened lmdb /home/zhengzhe/Data/imagenet_shrt256/ilsvrc12_val_lmdb
+I0110 16:22:43.307801  2020 net.cpp:84] Creating Layer data
+I0110 16:22:43.307844  2020 net.cpp:380] data -> data
+I0110 16:22:43.307938  2020 net.cpp:380] data -> label
+I0110 16:22:43.308635  2020 data_layer.cpp:45] output data size: 50,3,224,224
+I0110 16:22:43.407553  2020 base_data_layer.cpp:72] Initializing prefetch
+I0110 16:22:43.407732  2020 base_data_layer.cpp:75] Prefetch initialized.
+I0110 16:22:43.407742  2020 net.cpp:122] Setting up data
+I0110 16:22:43.407768  2020 net.cpp:129] Top shape: 50 3 224 224 (7526400)
+I0110 16:22:43.407775  2020 net.cpp:129] Top shape: 50 (50)
+I0110 16:22:43.407779  2020 net.cpp:137] Memory required for data: 30105800
+I0110 16:22:43.407805  2020 layer_factory.hpp:78] Creating layer label_data_1_split
+I0110 16:22:43.407856  2020 net.cpp:84] Creating Layer label_data_1_split
+I0110 16:22:43.407872  2020 net.cpp:406] label_data_1_split <- label
+I0110 16:22:43.407905  2020 net.cpp:380] label_data_1_split -> label_data_1_split_0
+I0110 16:22:43.407945  2020 net.cpp:380] label_data_1_split -> label_data_1_split_1
+I0110 16:22:43.407961  2020 net.cpp:380] label_data_1_split -> label_data_1_split_2
+I0110 16:22:43.408242  2020 net.cpp:122] Setting up label_data_1_split
+I0110 16:22:43.408257  2020 net.cpp:129] Top shape: 50 (50)
+I0110 16:22:43.408262  2020 net.cpp:129] Top shape: 50 (50)
+I0110 16:22:43.408267  2020 net.cpp:129] Top shape: 50 (50)
+I0110 16:22:43.408270  2020 net.cpp:137] Memory required for data: 30106400
+I0110 16:22:43.408277  2020 layer_factory.hpp:78] Creating layer conv1
+I0110 16:22:43.408324  2020 net.cpp:84] Creating Layer conv1
+I0110 16:22:43.408334  2020 net.cpp:406] conv1 <- data
+I0110 16:22:43.408363  2020 net.cpp:380] conv1 -> conv1
+I0110 16:22:43.419155  2020 cudnn_conv_layer.cpp:194] Reallocating workspace storage: 127416
+I0110 16:22:43.419255  2020 net.cpp:122] Setting up conv1
+I0110 16:22:43.419281  2020 net.cpp:129] Top shape: 50 96 55 55 (14520000)
+I0110 16:22:43.419291  2020 net.cpp:137] Memory required for data: 88186400
+I0110 16:22:43.419381  2020 layer_factory.hpp:78] Creating layer bn1
+I0110 16:22:43.419435  2020 net.cpp:84] Creating Layer bn1
+I0110 16:22:43.419450  2020 net.cpp:406] bn1 <- conv1
+I0110 16:22:43.419481  2020 net.cpp:367] bn1 -> conv1 (in-place)
+I0110 16:22:43.419936  2020 net.cpp:122] Setting up bn1
+I0110 16:22:43.419950  2020 net.cpp:129] Top shape: 50 96 55 55 (14520000)
+I0110 16:22:43.419955  2020 net.cpp:137] Memory required for data: 146266400
+I0110 16:22:43.420011  2020 layer_factory.hpp:78] Creating layer scale1
+I0110 16:22:43.420047  2020 net.cpp:84] Creating Layer scale1
+I0110 16:22:43.420060  2020 net.cpp:406] scale1 <- conv1
+I0110 16:22:43.420089  2020 net.cpp:367] scale1 -> conv1 (in-place)
+I0110 16:22:43.420194  2020 layer_factory.hpp:78] Creating layer scale1
+I0110 16:22:43.420522  2020 net.cpp:122] Setting up scale1
+I0110 16:22:43.420537  2020 net.cpp:129] Top shape: 50 96 55 55 (14520000)
+I0110 16:22:43.420542  2020 net.cpp:137] Memory required for data: 204346400
+I0110 16:22:43.420617  2020 layer_factory.hpp:78] Creating layer relu1
+I0110 16:22:43.420647  2020 net.cpp:84] Creating Layer relu1
+I0110 16:22:43.420660  2020 net.cpp:406] relu1 <- conv1
+I0110 16:22:43.420682  2020 net.cpp:367] relu1 -> conv1 (in-place)
+I0110 16:22:43.421627  2020 net.cpp:122] Setting up relu1
+I0110 16:22:43.421649  2020 net.cpp:129] Top shape: 50 96 55 55 (14520000)
+I0110 16:22:43.421656  2020 net.cpp:137] Memory required for data: 262426400
+I0110 16:22:43.421667  2020 layer_factory.hpp:78] Creating layer pool1
+I0110 16:22:43.421694  2020 net.cpp:84] Creating Layer pool1
+I0110 16:22:43.421710  2020 net.cpp:406] pool1 <- conv1
+I0110 16:22:43.421739  2020 net.cpp:380] pool1 -> pool1
+I0110 16:22:43.421851  2020 net.cpp:122] Setting up pool1
+I0110 16:22:43.421870  2020 net.cpp:129] Top shape: 50 96 27 27 (3499200)
+I0110 16:22:43.421877  2020 net.cpp:137] Memory required for data: 276423200
+I0110 16:22:43.421887  2020 layer_factory.hpp:78] Creating layer bn2
+I0110 16:22:43.421908  2020 net.cpp:84] Creating Layer bn2
+I0110 16:22:43.421917  2020 net.cpp:406] bn2 <- pool1
+I0110 16:22:43.421941  2020 net.cpp:367] bn2 -> pool1 (in-place)
+I0110 16:22:43.422387  2020 net.cpp:122] Setting up bn2
+I0110 16:22:43.422407  2020 net.cpp:129] Top shape: 50 96 27 27 (3499200)
+I0110 16:22:43.422415  2020 net.cpp:137] Memory required for data: 290420000
+I0110 16:22:43.422464  2020 layer_factory.hpp:78] Creating layer scale2
+I0110 16:22:43.422504  2020 net.cpp:84] Creating Layer scale2
+I0110 16:22:43.422518  2020 net.cpp:406] scale2 <- pool1
+I0110 16:22:43.422549  2020 net.cpp:367] scale2 -> pool1 (in-place)
+I0110 16:22:43.422677  2020 layer_factory.hpp:78] Creating layer scale2
+I0110 16:22:43.423022  2020 net.cpp:122] Setting up scale2
+I0110 16:22:43.423043  2020 net.cpp:129] Top shape: 50 96 27 27 (3499200)
+I0110 16:22:43.423048  2020 net.cpp:137] Memory required for data: 304416800
+I0110 16:22:43.423069  2020 layer_factory.hpp:78] Creating layer binactive1
+I0110 16:22:43.423092  2020 net.cpp:84] Creating Layer binactive1
+I0110 16:22:43.423106  2020 net.cpp:406] binactive1 <- pool1
+I0110 16:22:43.423128  2020 net.cpp:380] binactive1 -> binactive1
+I0110 16:22:43.423190  2020 net.cpp:122] Setting up binactive1
+I0110 16:22:43.423207  2020 net.cpp:129] Top shape: 50 96 27 27 (3499200)
+I0110 16:22:43.423210  2020 net.cpp:137] Memory required for data: 318413600
+I0110 16:22:43.423218  2020 layer_factory.hpp:78] Creating layer conv2
+I0110 16:22:43.423265  2020 net.cpp:84] Creating Layer conv2
+I0110 16:22:43.423280  2020 net.cpp:406] conv2 <- binactive1
+I0110 16:22:43.423307  2020 net.cpp:380] conv2 -> conv2
+I0110 16:22:43.497041  2020 cudnn_binary_conv_layer.cpp:194] Reallocating workspace storage: 19668
+I0110 16:22:43.497097  2020 net.cpp:122] Setting up conv2
+I0110 16:22:43.497120  2020 net.cpp:129] Top shape: 50 256 27 27 (9331200)
+I0110 16:22:43.497125  2020 net.cpp:137] Memory required for data: 355738400
+I0110 16:22:43.497159  2020 layer_factory.hpp:78] Creating layer pool2
+I0110 16:22:43.497212  2020 net.cpp:84] Creating Layer pool2
+I0110 16:22:43.497227  2020 net.cpp:406] pool2 <- conv2
+I0110 16:22:43.497261  2020 net.cpp:380] pool2 -> pool2
+I0110 16:22:43.497368  2020 net.cpp:122] Setting up pool2
+I0110 16:22:43.497385  2020 net.cpp:129] Top shape: 50 256 13 13 (2163200)
+I0110 16:22:43.497391  2020 net.cpp:137] Memory required for data: 364391200
+I0110 16:22:43.497397  2020 layer_factory.hpp:78] Creating layer bn3
+I0110 16:22:43.497416  2020 net.cpp:84] Creating Layer bn3
+I0110 16:22:43.497426  2020 net.cpp:406] bn3 <- pool2
+I0110 16:22:43.497442  2020 net.cpp:367] bn3 -> pool2 (in-place)
+I0110 16:22:43.497750  2020 net.cpp:122] Setting up bn3
+I0110 16:22:43.497763  2020 net.cpp:129] Top shape: 50 256 13 13 (2163200)
+I0110 16:22:43.497767  2020 net.cpp:137] Memory required for data: 373044000
+I0110 16:22:43.497792  2020 layer_factory.hpp:78] Creating layer scale3
+I0110 16:22:43.497817  2020 net.cpp:84] Creating Layer scale3
+I0110 16:22:43.497824  2020 net.cpp:406] scale3 <- pool2
+I0110 16:22:43.497869  2020 net.cpp:367] scale3 -> pool2 (in-place)
+I0110 16:22:43.497965  2020 layer_factory.hpp:78] Creating layer scale3
+I0110 16:22:43.498173  2020 net.cpp:122] Setting up scale3
+I0110 16:22:43.498188  2020 net.cpp:129] Top shape: 50 256 13 13 (2163200)
+I0110 16:22:43.498194  2020 net.cpp:137] Memory required for data: 381696800
+I0110 16:22:43.498226  2020 layer_factory.hpp:78] Creating layer binactive2
+I0110 16:22:43.498244  2020 net.cpp:84] Creating Layer binactive2
+I0110 16:22:43.498252  2020 net.cpp:406] binactive2 <- pool2
+I0110 16:22:43.498268  2020 net.cpp:380] binactive2 -> binactive2
+I0110 16:22:43.498324  2020 net.cpp:122] Setting up binactive2
+I0110 16:22:43.498338  2020 net.cpp:129] Top shape: 50 256 13 13 (2163200)
+I0110 16:22:43.498350  2020 net.cpp:137] Memory required for data: 390349600
+I0110 16:22:43.498358  2020 layer_factory.hpp:78] Creating layer conv3
+I0110 16:22:43.498400  2020 net.cpp:84] Creating Layer conv3
+I0110 16:22:43.498411  2020 net.cpp:406] conv3 <- binactive2
+I0110 16:22:43.498436  2020 net.cpp:380] conv3 -> conv3
+I0110 16:22:43.585561  2020 cudnn_binary_conv_layer.cpp:194] Reallocating workspace storage: 18874368
+I0110 16:22:43.585940  2020 net.cpp:122] Setting up conv3
+I0110 16:22:43.585969  2020 net.cpp:129] Top shape: 50 384 13 13 (3244800)
+I0110 16:22:43.585975  2020 net.cpp:137] Memory required for data: 403328800
+I0110 16:22:43.586015  2020 layer_factory.hpp:78] Creating layer bn4
+I0110 16:22:43.586066  2020 net.cpp:84] Creating Layer bn4
+I0110 16:22:43.586081  2020 net.cpp:406] bn4 <- conv3
+I0110 16:22:43.586112  2020 net.cpp:367] bn4 -> conv3 (in-place)
+I0110 16:22:43.586398  2020 net.cpp:122] Setting up bn4
+I0110 16:22:43.586410  2020 net.cpp:129] Top shape: 50 384 13 13 (3244800)
+I0110 16:22:43.586428  2020 net.cpp:137] Memory required for data: 416308000
+I0110 16:22:43.586468  2020 layer_factory.hpp:78] Creating layer scale4
+I0110 16:22:43.586493  2020 net.cpp:84] Creating Layer scale4
+I0110 16:22:43.586499  2020 net.cpp:406] scale4 <- conv3
+I0110 16:22:43.586514  2020 net.cpp:367] scale4 -> conv3 (in-place)
+I0110 16:22:43.586603  2020 layer_factory.hpp:78] Creating layer scale4
+I0110 16:22:43.586788  2020 net.cpp:122] Setting up scale4
+I0110 16:22:43.586802  2020 net.cpp:129] Top shape: 50 384 13 13 (3244800)
+I0110 16:22:43.586805  2020 net.cpp:137] Memory required for data: 429287200
+I0110 16:22:43.586820  2020 layer_factory.hpp:78] Creating layer binactive3
+I0110 16:22:43.586839  2020 net.cpp:84] Creating Layer binactive3
+I0110 16:22:43.586848  2020 net.cpp:406] binactive3 <- conv3
+I0110 16:22:43.586863  2020 net.cpp:380] binactive3 -> binactive3
+I0110 16:22:43.586910  2020 net.cpp:122] Setting up binactive3
+I0110 16:22:43.586923  2020 net.cpp:129] Top shape: 50 384 13 13 (3244800)
+I0110 16:22:43.586928  2020 net.cpp:137] Memory required for data: 442266400
+I0110 16:22:43.586933  2020 layer_factory.hpp:78] Creating layer conv4
+I0110 16:22:43.586966  2020 net.cpp:84] Creating Layer conv4
+I0110 16:22:43.586977  2020 net.cpp:406] conv4 <- binactive3
+I0110 16:22:43.586997  2020 net.cpp:380] conv4 -> conv4
+I0110 16:22:43.713003  2020 cudnn_binary_conv_layer.cpp:194] Reallocating workspace storage: 9840
+I0110 16:22:43.713062  2020 net.cpp:122] Setting up conv4
+I0110 16:22:43.713099  2020 net.cpp:129] Top shape: 50 384 13 13 (3244800)
+I0110 16:22:43.713104  2020 net.cpp:137] Memory required for data: 455245600
+I0110 16:22:43.713138  2020 layer_factory.hpp:78] Creating layer bn5
+I0110 16:22:43.713183  2020 net.cpp:84] Creating Layer bn5
+I0110 16:22:43.713201  2020 net.cpp:406] bn5 <- conv4
+I0110 16:22:43.713229  2020 net.cpp:367] bn5 -> conv4 (in-place)
+I0110 16:22:43.713527  2020 net.cpp:122] Setting up bn5
+I0110 16:22:43.713541  2020 net.cpp:129] Top shape: 50 384 13 13 (3244800)
+I0110 16:22:43.713543  2020 net.cpp:137] Memory required for data: 468224800
+I0110 16:22:43.713568  2020 layer_factory.hpp:78] Creating layer scale5
+I0110 16:22:43.713593  2020 net.cpp:84] Creating Layer scale5
+I0110 16:22:43.713601  2020 net.cpp:406] scale5 <- conv4
+I0110 16:22:43.713642  2020 net.cpp:367] scale5 -> conv4 (in-place)
+I0110 16:22:43.713729  2020 layer_factory.hpp:78] Creating layer scale5
+I0110 16:22:43.713923  2020 net.cpp:122] Setting up scale5
+I0110 16:22:43.713937  2020 net.cpp:129] Top shape: 50 384 13 13 (3244800)
+I0110 16:22:43.713940  2020 net.cpp:137] Memory required for data: 481204000
+I0110 16:22:43.713956  2020 layer_factory.hpp:78] Creating layer binactive4
+I0110 16:22:43.713973  2020 net.cpp:84] Creating Layer binactive4
+I0110 16:22:43.713980  2020 net.cpp:406] binactive4 <- conv4
+I0110 16:22:43.714002  2020 net.cpp:380] binactive4 -> binactive4
+I0110 16:22:43.714059  2020 net.cpp:122] Setting up binactive4
+I0110 16:22:43.714071  2020 net.cpp:129] Top shape: 50 384 13 13 (3244800)
+I0110 16:22:43.714076  2020 net.cpp:137] Memory required for data: 494183200
+I0110 16:22:43.714081  2020 layer_factory.hpp:78] Creating layer conv5
+I0110 16:22:43.714112  2020 net.cpp:84] Creating Layer conv5
+I0110 16:22:43.714120  2020 net.cpp:406] conv5 <- binactive4
+I0110 16:22:43.714141  2020 net.cpp:380] conv5 -> conv5
+I0110 16:22:43.797394  2020 cudnn_binary_conv_layer.cpp:194] Reallocating workspace storage: 18874368
+I0110 16:22:43.797832  2020 net.cpp:122] Setting up conv5
+I0110 16:22:43.797874  2020 net.cpp:129] Top shape: 50 256 13 13 (2163200)
+I0110 16:22:43.797879  2020 net.cpp:137] Memory required for data: 502836000
+I0110 16:22:43.797917  2020 layer_factory.hpp:78] Creating layer pool5
+I0110 16:22:43.797986  2020 net.cpp:84] Creating Layer pool5
+I0110 16:22:43.798002  2020 net.cpp:406] pool5 <- conv5
+I0110 16:22:43.798033  2020 net.cpp:380] pool5 -> pool5
+I0110 16:22:43.798133  2020 net.cpp:122] Setting up pool5
+I0110 16:22:43.798161  2020 net.cpp:129] Top shape: 50 256 6 6 (460800)
+I0110 16:22:43.798166  2020 net.cpp:137] Memory required for data: 504679200
+I0110 16:22:43.798172  2020 layer_factory.hpp:78] Creating layer bn6
+I0110 16:22:43.798187  2020 net.cpp:84] Creating Layer bn6
+I0110 16:22:43.798197  2020 net.cpp:406] bn6 <- pool5
+I0110 16:22:43.798210  2020 net.cpp:367] bn6 -> pool5 (in-place)
+I0110 16:22:43.798496  2020 net.cpp:122] Setting up bn6
+I0110 16:22:43.798511  2020 net.cpp:129] Top shape: 50 256 6 6 (460800)
+I0110 16:22:43.798514  2020 net.cpp:137] Memory required for data: 506522400
+I0110 16:22:43.798554  2020 layer_factory.hpp:78] Creating layer scale6
+I0110 16:22:43.798578  2020 net.cpp:84] Creating Layer scale6
+I0110 16:22:43.798588  2020 net.cpp:406] scale6 <- pool5
+I0110 16:22:43.798604  2020 net.cpp:367] scale6 -> pool5 (in-place)
+I0110 16:22:43.798698  2020 layer_factory.hpp:78] Creating layer scale6
+I0110 16:22:43.798898  2020 net.cpp:122] Setting up scale6
+I0110 16:22:43.798912  2020 net.cpp:129] Top shape: 50 256 6 6 (460800)
+I0110 16:22:43.798915  2020 net.cpp:137] Memory required for data: 508365600
+I0110 16:22:43.798929  2020 layer_factory.hpp:78] Creating layer binactive5
+I0110 16:22:43.798945  2020 net.cpp:84] Creating Layer binactive5
+I0110 16:22:43.798954  2020 net.cpp:406] binactive5 <- pool5
+I0110 16:22:43.798969  2020 net.cpp:380] binactive5 -> binactive5
+I0110 16:22:43.799027  2020 net.cpp:122] Setting up binactive5
+I0110 16:22:43.799039  2020 net.cpp:129] Top shape: 50 256 6 6 (460800)
+I0110 16:22:43.799042  2020 net.cpp:137] Memory required for data: 510208800
+I0110 16:22:43.799048  2020 layer_factory.hpp:78] Creating layer fc6
+I0110 16:22:43.799072  2020 net.cpp:84] Creating Layer fc6
+I0110 16:22:43.799080  2020 net.cpp:406] fc6 <- binactive5
+I0110 16:22:43.799098  2020 net.cpp:380] fc6 -> fc6
+I0110 16:22:47.929775  2020 net.cpp:122] Setting up fc6
+I0110 16:22:47.929886  2020 net.cpp:129] Top shape: 50 4096 (204800)
+I0110 16:22:47.929894  2020 net.cpp:137] Memory required for data: 511028000
+I0110 16:22:47.929942  2020 layer_factory.hpp:78] Creating layer bn7
+I0110 16:22:47.930009  2020 net.cpp:84] Creating Layer bn7
+I0110 16:22:47.930048  2020 net.cpp:406] bn7 <- fc6
+I0110 16:22:47.930090  2020 net.cpp:367] bn7 -> fc6 (in-place)
+I0110 16:22:47.930523  2020 net.cpp:122] Setting up bn7
+I0110 16:22:47.930536  2020 net.cpp:129] Top shape: 50 4096 (204800)
+I0110 16:22:47.930577  2020 net.cpp:137] Memory required for data: 511847200
+I0110 16:22:47.930608  2020 layer_factory.hpp:78] Creating layer scale7
+I0110 16:22:47.930656  2020 net.cpp:84] Creating Layer scale7
+I0110 16:22:47.930665  2020 net.cpp:406] scale7 <- fc6
+I0110 16:22:47.930691  2020 net.cpp:367] scale7 -> fc6 (in-place)
+I0110 16:22:47.930855  2020 layer_factory.hpp:78] Creating layer scale7
+I0110 16:22:47.931185  2020 net.cpp:122] Setting up scale7
+I0110 16:22:47.931197  2020 net.cpp:129] Top shape: 50 4096 (204800)
+I0110 16:22:47.931216  2020 net.cpp:137] Memory required for data: 512666400
+I0110 16:22:47.931236  2020 layer_factory.hpp:78] Creating layer binactive6
+I0110 16:22:47.931257  2020 net.cpp:84] Creating Layer binactive6
+I0110 16:22:47.931268  2020 net.cpp:406] binactive6 <- fc6
+I0110 16:22:47.931308  2020 net.cpp:380] binactive6 -> binactive6
+I0110 16:22:47.931383  2020 net.cpp:122] Setting up binactive6
+I0110 16:22:47.931396  2020 net.cpp:129] Top shape: 50 4096 (204800)
+I0110 16:22:47.931399  2020 net.cpp:137] Memory required for data: 513485600
+I0110 16:22:47.931406  2020 layer_factory.hpp:78] Creating layer fc7
+I0110 16:22:47.931460  2020 net.cpp:84] Creating Layer fc7
+I0110 16:22:47.931479  2020 net.cpp:406] fc7 <- binactive6
+I0110 16:22:47.931502  2020 net.cpp:380] fc7 -> fc7
+I0110 16:22:50.019642  2020 net.cpp:122] Setting up fc7
+I0110 16:22:50.019695  2020 net.cpp:129] Top shape: 50 4096 (204800)
+I0110 16:22:50.019704  2020 net.cpp:137] Memory required for data: 514304800
+I0110 16:22:50.019754  2020 layer_factory.hpp:78] Creating layer bn8
+I0110 16:22:50.019846  2020 net.cpp:84] Creating Layer bn8
+I0110 16:22:50.019881  2020 net.cpp:406] bn8 <- fc7
+I0110 16:22:50.019925  2020 net.cpp:367] bn8 -> fc7 (in-place)
+I0110 16:22:50.020412  2020 net.cpp:122] Setting up bn8
+I0110 16:22:50.020429  2020 net.cpp:129] Top shape: 50 4096 (204800)
+I0110 16:22:50.020438  2020 net.cpp:137] Memory required for data: 515124000
+I0110 16:22:50.020474  2020 layer_factory.hpp:78] Creating layer scale8
+I0110 16:22:50.020521  2020 net.cpp:84] Creating Layer scale8
+I0110 16:22:50.020534  2020 net.cpp:406] scale8 <- fc7
+I0110 16:22:50.020568  2020 net.cpp:367] scale8 -> fc7 (in-place)
+I0110 16:22:50.020732  2020 layer_factory.hpp:78] Creating layer scale8
+I0110 16:22:50.021178  2020 net.cpp:122] Setting up scale8
+I0110 16:22:50.021203  2020 net.cpp:129] Top shape: 50 4096 (204800)
+I0110 16:22:50.021209  2020 net.cpp:137] Memory required for data: 515943200
+I0110 16:22:50.021234  2020 layer_factory.hpp:78] Creating layer relu7
+I0110 16:22:50.021270  2020 net.cpp:84] Creating Layer relu7
+I0110 16:22:50.021281  2020 net.cpp:406] relu7 <- fc7
+I0110 16:22:50.021309  2020 net.cpp:367] relu7 -> fc7 (in-place)
+I0110 16:22:50.024761  2020 net.cpp:122] Setting up relu7
+I0110 16:22:50.024794  2020 net.cpp:129] Top shape: 50 4096 (204800)
+I0110 16:22:50.024798  2020 net.cpp:137] Memory required for data: 516762400
+I0110 16:22:50.024806  2020 layer_factory.hpp:78] Creating layer fc8
+I0110 16:22:50.024866  2020 net.cpp:84] Creating Layer fc8
+I0110 16:22:50.024878  2020 net.cpp:406] fc8 <- fc7
+I0110 16:22:50.024914  2020 net.cpp:380] fc8 -> fc8
+I0110 16:22:50.650579  2020 net.cpp:122] Setting up fc8
+I0110 16:22:50.650676  2020 net.cpp:129] Top shape: 50 1000 (50000)
+I0110 16:22:50.650682  2020 net.cpp:137] Memory required for data: 516962400
+I0110 16:22:50.650727  2020 layer_factory.hpp:78] Creating layer fc8_fc8_0_split
+I0110 16:22:50.650799  2020 net.cpp:84] Creating Layer fc8_fc8_0_split
+I0110 16:22:50.650828  2020 net.cpp:406] fc8_fc8_0_split <- fc8
+I0110 16:22:50.650866  2020 net.cpp:380] fc8_fc8_0_split -> fc8_fc8_0_split_0
+I0110 16:22:50.650902  2020 net.cpp:380] fc8_fc8_0_split -> fc8_fc8_0_split_1
+I0110 16:22:50.650930  2020 net.cpp:380] fc8_fc8_0_split -> fc8_fc8_0_split_2
+I0110 16:22:50.651063  2020 net.cpp:122] Setting up fc8_fc8_0_split
+I0110 16:22:50.651077  2020 net.cpp:129] Top shape: 50 1000 (50000)
+I0110 16:22:50.651083  2020 net.cpp:129] Top shape: 50 1000 (50000)
+I0110 16:22:50.651089  2020 net.cpp:129] Top shape: 50 1000 (50000)
+I0110 16:22:50.651121  2020 net.cpp:137] Memory required for data: 517562400
+I0110 16:22:50.651135  2020 layer_factory.hpp:78] Creating layer loss
+I0110 16:22:50.651178  2020 net.cpp:84] Creating Layer loss
+I0110 16:22:50.651194  2020 net.cpp:406] loss <- fc8_fc8_0_split_0
+I0110 16:22:50.651221  2020 net.cpp:406] loss <- label_data_1_split_0
+I0110 16:22:50.651245  2020 net.cpp:380] loss -> loss
+I0110 16:22:50.651270  2020 layer_factory.hpp:78] Creating layer loss
+I0110 16:22:50.653038  2020 net.cpp:122] Setting up loss
+I0110 16:22:50.653069  2020 net.cpp:129] Top shape: (1)
+I0110 16:22:50.653076  2020 net.cpp:132]     with loss weight 1
+I0110 16:22:50.653090  2020 net.cpp:137] Memory required for data: 517562404
+I0110 16:22:50.653098  2020 layer_factory.hpp:78] Creating layer accuracy
+I0110 16:22:50.653120  2020 net.cpp:84] Creating Layer accuracy
+I0110 16:22:50.653132  2020 net.cpp:406] accuracy <- fc8_fc8_0_split_1
+I0110 16:22:50.653149  2020 net.cpp:406] accuracy <- label_data_1_split_1
+I0110 16:22:50.653164  2020 net.cpp:380] accuracy -> accuracy
+I0110 16:22:50.653195  2020 net.cpp:122] Setting up accuracy
+I0110 16:22:50.653208  2020 net.cpp:129] Top shape: (1)
+I0110 16:22:50.653211  2020 net.cpp:137] Memory required for data: 517562408
+I0110 16:22:50.653218  2020 layer_factory.hpp:78] Creating layer accuracy_5
+I0110 16:22:50.653237  2020 net.cpp:84] Creating Layer accuracy_5
+I0110 16:22:50.653247  2020 net.cpp:406] accuracy_5 <- fc8_fc8_0_split_2
+I0110 16:22:50.653260  2020 net.cpp:406] accuracy_5 <- label_data_1_split_2
+I0110 16:22:50.653275  2020 net.cpp:380] accuracy_5 -> accuracy_5
+I0110 16:22:50.653317  2020 net.cpp:122] Setting up accuracy_5
+I0110 16:22:50.653334  2020 net.cpp:129] Top shape: (1)
+I0110 16:22:50.653349  2020 net.cpp:137] Memory required for data: 517562412
+I0110 16:22:50.653367  2020 net.cpp:200] accuracy_5 does not need backward computation.
+I0110 16:22:50.653379  2020 net.cpp:200] accuracy does not need backward computation.
+I0110 16:22:50.653386  2020 net.cpp:198] loss needs backward computation.
+I0110 16:22:50.653394  2020 net.cpp:198] fc8_fc8_0_split needs backward computation.
+I0110 16:22:50.653399  2020 net.cpp:198] fc8 needs backward computation.
+I0110 16:22:50.653404  2020 net.cpp:198] relu7 needs backward computation.
+I0110 16:22:50.653422  2020 net.cpp:198] scale8 needs backward computation.
+I0110 16:22:50.653427  2020 net.cpp:198] bn8 needs backward computation.
+I0110 16:22:50.653431  2020 net.cpp:198] fc7 needs backward computation.
+I0110 16:22:50.653436  2020 net.cpp:198] binactive6 needs backward computation.
+I0110 16:22:50.653442  2020 net.cpp:198] scale7 needs backward computation.
+I0110 16:22:50.653447  2020 net.cpp:198] bn7 needs backward computation.
+I0110 16:22:50.653452  2020 net.cpp:198] fc6 needs backward computation.
+I0110 16:22:50.653457  2020 net.cpp:198] binactive5 needs backward computation.
+I0110 16:22:50.653465  2020 net.cpp:198] scale6 needs backward computation.
+I0110 16:22:50.653470  2020 net.cpp:198] bn6 needs backward computation.
+I0110 16:22:50.653475  2020 net.cpp:198] pool5 needs backward computation.
+I0110 16:22:50.653479  2020 net.cpp:198] conv5 needs backward computation.
+I0110 16:22:50.653484  2020 net.cpp:198] binactive4 needs backward computation.
+I0110 16:22:50.653491  2020 net.cpp:198] scale5 needs backward computation.
+I0110 16:22:50.653496  2020 net.cpp:198] bn5 needs backward computation.
+I0110 16:22:50.653504  2020 net.cpp:198] conv4 needs backward computation.
+I0110 16:22:50.653509  2020 net.cpp:198] binactive3 needs backward computation.
+I0110 16:22:50.653515  2020 net.cpp:198] scale4 needs backward computation.
+I0110 16:22:50.653520  2020 net.cpp:198] bn4 needs backward computation.
+I0110 16:22:50.653527  2020 net.cpp:198] conv3 needs backward computation.
+I0110 16:22:50.653532  2020 net.cpp:198] binactive2 needs backward computation.
+I0110 16:22:50.653539  2020 net.cpp:198] scale3 needs backward computation.
+I0110 16:22:50.653544  2020 net.cpp:198] bn3 needs backward computation.
+I0110 16:22:50.653550  2020 net.cpp:198] pool2 needs backward computation.
+I0110 16:22:50.653584  2020 net.cpp:198] conv2 needs backward computation.
+I0110 16:22:50.653597  2020 net.cpp:198] binactive1 needs backward computation.
+I0110 16:22:50.653609  2020 net.cpp:198] scale2 needs backward computation.
+I0110 16:22:50.653620  2020 net.cpp:198] bn2 needs backward computation.
+I0110 16:22:50.653630  2020 net.cpp:198] pool1 needs backward computation.
+I0110 16:22:50.653641  2020 net.cpp:198] relu1 needs backward computation.
+I0110 16:22:50.653650  2020 net.cpp:198] scale1 needs backward computation.
+I0110 16:22:50.653659  2020 net.cpp:198] bn1 needs backward computation.
+I0110 16:22:50.653666  2020 net.cpp:198] conv1 needs backward computation.
+I0110 16:22:50.653677  2020 net.cpp:200] label_data_1_split does not need backward computation.
+I0110 16:22:50.653686  2020 net.cpp:200] data does not need backward computation.
+I0110 16:22:50.653690  2020 net.cpp:242] This network produces output accuracy
+I0110 16:22:50.653699  2020 net.cpp:242] This network produces output accuracy_5
+I0110 16:22:50.653707  2020 net.cpp:242] This network produces output loss
+I0110 16:22:50.653784  2020 net.cpp:255] Network initialization done.
+I0110 16:22:50.654047  2020 solver.cpp:57] Solver scaffolding done.
+I0110 16:22:50.657361  2020 caffe.cpp:239] Starting Optimization
+I0110 16:22:50.657393  2020 solver.cpp:299] Solving AlexNet-BN
+I0110 16:22:50.657400  2020 solver.cpp:300] Learning Rate Policy: step
+I0110 16:22:50.662575  2020 solver.cpp:384] Iteration 0, Testing net (#0)
+I0110 16:22:51.010080  2020 blocking_queue.cpp:49] Waiting for data
+I0110 16:25:06.461783  2206 data_layer.cpp:73] Restarting data prefetching from start.
+I0110 16:25:06.512312  2020 solver.cpp:452]     Test net output #0: accuracy = 0.00128
+I0110 16:25:06.512414  2020 solver.cpp:452]     Test net output #1: accuracy_5 = 0.00558
+I0110 16:25:06.512460  2020 solver.cpp:452]     Test net output #2: loss = 87.1614 (* 1 = 87.1614 loss)
+I0110 16:25:06.512495  2020 solver.cpp:463] ================================
+I0110 16:25:06.512502  2020 solver.cpp:464]     Test net best accuracy1 is: 0.00128
+I0110 16:25:06.512513  2020 solver.cpp:466]     Test net best accuracy5 is: 0.00558
+I0110 16:25:07.209111  2020 solver.cpp:242] Iteration 0 (-0.000258639 iter/s, 136.546s/200 iters), loss = 7.28394
+I0110 16:25:07.209195  2020 solver.cpp:261]     Train net output #0: accuracy = 0.00390625
+I0110 16:25:07.209218  2020 solver.cpp:261]     Train net output #1: accuracy_5 = 0.0078125
+I0110 16:25:07.209246  2020 solver.cpp:261]     Train net output #2: loss = 7.28394 (* 1 = 7.28394 loss)
+I0110 16:25:07.209313  2020 sgd_solver.cpp:122] Iteration 0, lr = 0.001
+I0110 16:25:17.327805  2020 blocking_queue.cpp:49] Waiting for data
+I0110 16:27:55.510643  2020 solver.cpp:242] Iteration 200 (1.18839 iter/s, 168.295s/200 iters), loss = 6.44619
+I0110 16:27:55.510773  2020 solver.cpp:261]     Train net output #0: accuracy = 0.0195312
+I0110 16:27:55.510789  2020 solver.cpp:261]     Train net output #1: accuracy_5 = 0.0390625
+I0110 16:27:55.510808  2020 solver.cpp:261]     Train net output #2: loss = 6.44619 (* 1 = 6.44619 loss)
+I0110 16:27:55.510838  2020 sgd_solver.cpp:122] Iteration 200, lr = 0.001
+I0110 16:30:56.794023  2020 solver.cpp:242] Iteration 400 (1.10329 iter/s, 181.276s/200 iters), loss = 6.34049
+I0110 16:30:56.806202  2020 solver.cpp:261]     Train net output #0: accuracy = 0.0117188
+I0110 16:30:56.806238  2020 solver.cpp:261]     Train net output #1: accuracy_5 = 0.0703125
+I0110 16:30:56.806279  2020 solver.cpp:261]     Train net output #2: loss = 6.34049 (* 1 = 6.34049 loss)
+I0110 16:30:56.806291  2020 sgd_solver.cpp:122] Iteration 400, lr = 0.001

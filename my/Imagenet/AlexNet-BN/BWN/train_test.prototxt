@@ -288,7 +288,7 @@ layer {
   top: "conv5"
 }
 layer {
-  name: "pool5"
+  name: "pool3"
   type: "Pooling"
   bottom: "conv5"
   top: "pool5"
@@ -296,6 +296,15 @@ layer {
     pool: MAX
     kernel_size: 3
     stride: 2
+  }
+}
+layer {
+  name: "drop6"
+  type: "Dropout"
+  bottom: "pool5"
+  top: "pool5"
+  dropout_param {
+    dropout_ratio: 0.1
   }
 }
 layer {
@@ -342,10 +351,10 @@ layer {
   top: "fc6"
 }
 layer {
-  name: "drop6"
+  name: "drop7"
   type: "Dropout"
   bottom: "fc6"
-  top: "fc6"
+  top: "fc7"
   dropout_param {
     dropout_ratio: 0.1
   }
@@ -353,7 +362,7 @@ layer {
 layer {
   name: "fc7"
   type: "BinaryInnerProduct"
-  bottom: "fc6"
+  bottom: "fc7"
   top: "fc7"
   param {
     lr_mult: 1
@@ -393,15 +402,7 @@ layer {
   bottom: "fc7"
   top: "fc7"
 }
-layer {
-  name: "drop7"
-  type: "Dropout"
-  bottom: "fc7"
-  top: "fc7"
-  dropout_param {
-    dropout_ratio: 0.1
-  }
-}
+
 layer {
   name: "fc8"
   type: "InnerProduct"

@@ -1,15 +1,26 @@
 net: "train_test.prototxt" 
 test_iter: 1000 
 test_interval: 1000 
-base_lr: 0.001
+#base_lr: 0.001
 momentum: 0.9
 momentum2: 0.999
-# since Adam dynamically changes the learning rate, we set the base learning
-# rate to a fixed value
-lr_policy: "fixed"
-# Display every 100 iterations
+lr_policy: "modified_lr"
+modified_lr{
+  stepvalue: 120000
+  stepvalue: 260000
+  stepvalue: 370000
+  stepvalue: 500000
+  mlr: 0.001
+  mlr: 0.0001
+  mlr: 0.00001
+  mlr: 0.000001 
+  weight_decay:0
+  weight_decay:0
+  weight_decay:0
+  weight_decay:0
+}   
 display: 200 
-max_iter: 480000 
+max_iter: 500000  
 snapshot: 10000
 snapshot_prefix: "snapshot" 
 type: "Adam"

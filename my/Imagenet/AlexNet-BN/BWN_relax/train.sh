@@ -8,5 +8,5 @@ if [ ! -f "$WORK_SPACE/log.log" ]; then
 fi
 LOG=$WORK_SPACE/log.log
 $TOOLS/caffe train \
-    --solver=$WORK_SPACE/solver.prototxt --snapshot=snapshot/solver_iter_140000.solverstate -gpu 5 2>&1 | tee $LOG
+    --solver=$WORK_SPACE/solver.prototxt --snapshot=snapshot/solver_iter_140000.solverstate -gpu 4 2>&1 | tee $LOG
 
