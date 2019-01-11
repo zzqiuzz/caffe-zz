@@ -808,7 +808,7 @@ template <typename Dtype>
 void Net<Dtype>::CopyTrainedLayersFrom(const NetParameter& param) {
   int num_source_layers = param.layer_size();
   bool is_quantization = false;//only quantize weights not bias.
-  LOG(INFO) << "net quantization's state : " << param.is_quantization();
+  //LOG(INFO) << "net quantization's state : " << param.is_quantization();//why always 0? Because the model you copy from doesn't have is_quantization flag!
   for (int i = 0; i < num_source_layers; ++i) {
     const LayerParameter& source_layer = param.layer(i);
     const string& source_layer_name = source_layer.name();
@@ -827,7 +827,7 @@ void Net<Dtype>::CopyTrainedLayersFrom(const NetParameter& param) {
     CHECK_EQ(target_blobs.size(), source_layer.blobs_size())
         << "Incompatible number of blobs for layer " << source_layer_name;
     for (int j = 0; j < target_blobs.size(); ++j) {
-	  if(source_layer.type() == "BatchNorm" || source_layer.type() == "Scale"){//avoid to quantize bn layers
+	  /*if(source_layer.type() == "BatchNorm" || source_layer.type() == "Scale"){//avoid to quantize bn layers
 	  	is_quantization = false;
 	  }
 	  else{
@@ -835,7 +835,7 @@ void Net<Dtype>::CopyTrainedLayersFrom(const NetParameter& param) {
 	  		is_quantization = true;
 	  	else if(j == 1)//bias
 	  		is_quantization = false; 
-	  } 
+	  } */
       if (!target_blobs[j]->ShapeEquals(source_layer.blobs(j))) {
         Blob<Dtype> source_blob;
         const bool kReshape = true;

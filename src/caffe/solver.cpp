@@ -109,7 +109,7 @@ void Solver<Dtype>::InitTrainNet() {
   // Set the correct NetState.  We start with the solver defaults (lowest
   // precedence); then, merge in any NetState specified by the net_param itself;
   // finally, merge in any NetState specified by the train_state (highest
-  // precedence).
+  // precedence). 
   NetState net_state;
   net_state.set_phase(TRAIN);
   net_state.MergeFrom(net_param.state());
