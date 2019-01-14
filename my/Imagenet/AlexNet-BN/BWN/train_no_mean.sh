@@ -11,5 +11,5 @@ if [ ! -d "snapshot_no_mean" ]; then
 fi
 LOG=$WORK_SPACE/log_no_mean.log
 $TOOLS/caffe train \
-    --solver=$WORK_SPACE/solver_no_mean.prototxt  -gpu 2 2>&1 | tee $LOG
+    --solver=$WORK_SPACE/solver_no_mean.prototxt  --snapshot=snapshot_no_mean/solver_no_mean_iter_60000.solverstate -gpu 2 2>&1 | tee $LOG
 

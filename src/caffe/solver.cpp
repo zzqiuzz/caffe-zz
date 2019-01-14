@@ -438,7 +438,7 @@ void Solver<Dtype>::Test(const int test_net_id) {
     LOG(INFO) << "Test loss: " << loss;
   }
   bool flag=false;
-  for (int i = 0; i < test_score.size(); ++i) {
+  for (int i = 0; i < test_score.size(); ++i) {//size == 3
     const int output_blob_index =
         test_net->output_blob_indices()[test_score_output_id[i]];
     const string& output_name = test_net->blob_names()[output_blob_index];
@@ -458,8 +458,11 @@ void Solver<Dtype>::Test(const int test_net_id) {
 	}
 	if(flag && i == 1 && test_score.size() == 3)
 		best_accuracy_5 = mean_score;
-		//snapshot model that has best accuracy.
-    string model_filename = "best_accuracy_" + std::to_string(best_accuracy_1) + "_" + std::to_string(best_accuracy_5) + ".caffemodel";
+  }
+  if(flag)
+  {
+    //snapshot model that has best accuracy.
+    string model_filename = param_.snapshot_prefix() + "_best_accuracy_" + std::to_string(best_accuracy_1) + "_" + std::to_string(best_accuracy_5) + ".caffemodel";
     LOG(INFO) << "snapshoting best accuracy model ...";
     NetParameter net_param;
     net_->ToProto(&net_param, param_.snapshot_diff());
