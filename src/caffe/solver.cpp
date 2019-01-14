@@ -462,7 +462,7 @@ void Solver<Dtype>::Test(const int test_net_id) {
   if(flag)
   {
     //snapshot model that has best accuracy.
-    string model_filename = param_.snapshot_prefix() + "_best_accuracy_" + std::to_string(best_accuracy_1) + "_" + std::to_string(best_accuracy_5) + ".caffemodel";
+    string model_filename = param_.snapshot_prefix() + "_best_accuracy"  + ".caffemodel";
     LOG(INFO) << "snapshoting best accuracy model ...";
     NetParameter net_param;
     net_->ToProto(&net_param, param_.snapshot_diff());
