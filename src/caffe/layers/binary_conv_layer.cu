@@ -10,11 +10,7 @@ __global__ void BinaryGpu_binarize(const int num, const int weight_col, const Dt
 	CUDA_KERNEL_LOOP(index, num){
 		int n = index / weight_col; 
 		const Dtype binarycode = in[index] >= 0 ? 1 : -1; 
-		out[index] = binarycode*alpha[n];
-
-		/*for (int coor = 0; coor < weight_col; coor++){
-			out[index*weight_col + coor] = sign(in[index*weight_col + coor]) * alpha[index];
-		}*/
+		out[index] = binarycode*alpha[n]; 
 	}
 }
 template <typename Dtype>
@@ -53,18 +49,19 @@ void BinaryConvolutionLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bott
 	Dtype* binaryweight = this->W_b.mutable_gpu_data();
 	//caffe_copy<Dtype>(N, weight, binaryweight);
 	caffe_gpu_abs(N,weight,binaryweight);
-	if(this->layer_param_.debug_param().xnorno_grad() && phase == TRAIN){//only in train phase!
+	if(this->layer_param_.debug_param().xnorno_grad() && phase == TRAIN){//only in train phase!   
 		//calculate mean_.
 		caffe_gpu_gemv<Dtype>(CblasNoTrans, num, div, 1. / div, weight, weight_sum_multiplier.gpu_data(), 0.,
 			mean_.mutable_gpu_data()); 
 
 		//extract mean.
 		const Dtype* mean_data=mean_.gpu_data();
-		Mean_sub<Dtype><< <CAFFE_GET_BLOCKS(N),CAFFE_CUDA_NUM_THREADS>> >(N,div,mean_data,this->blobs_[0]->mutable_gpu_data());
+		Mean_sub<Dtype><< <CAFFE_GET_BLOCKS(N),CAFFE_CUDA_NUM_THREADS>> >(N,div,mean_data,this->blobs_[0]->mutable_gpu_data());//weight_new = weight - mean;
 		//TODO：to gpu
 		/*for(int i=0;i<num;++i){
 			caffe_gpu_add_scalar<Dtype>(div, -*(mean_data + i), this->blobs_[0]->mutable_gpu_data() + i*div);
 		}*/
+		caffe_gpu_abs(N,weight,binaryweight);//weight_new --> binaryweight
 		//clamp weights
 		this->blobs_[0]->clip_data(); 
 	}

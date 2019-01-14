@@ -1,0 +1,37 @@
+net: "train_test_no_mean.prototxt"
+test_iter: 1000
+test_interval: 1000
+base_lr: 0.01
+display:200
+lr_policy: "modified_lr"
+modified_lr{
+  stepvalue: 90000
+  stepvalue: 140000
+  stepvalue: 210000
+  stepvalue: 230000
+  stepvalue: 260000
+  stepvalue: 280000
+  stepvalue: 290000
+  stepvalue: 300000
+  mlr: 0.01
+  mlr: 0.005
+  mlr: 0.001
+  mlr: 0.0005 
+  mlr: 0.0001
+  mlr: 0.00005
+  mlr: 0.00001
+  mlr: 0.000001
+  weight_decay:0.0005
+  weight_decay:0.0005
+  weight_decay:0
+  weight_decay:0
+  weight_decay:0
+  weight_decay:0
+  weight_decay:0
+  weight_decay:0
+}  
+max_iter: 300000
+momentum: 0.9 
+snapshot: 10000
+snapshot_prefix: "snapshot_no_mean/"
+solver_mode: GPU

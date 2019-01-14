@@ -11,5 +11,5 @@ if [ ! -f "$WORK_SPACE/log_adam.log" ]; then
 fi
 LOG=$WORK_SPACE/log_adam.log
 $TOOLS/caffe train \
-    --solver=$WORK_SPACE/solver_adam.prototxt  -gpu 3 2>&1 | tee $LOG
+    --solver=$WORK_SPACE/solver_adam.prototxt --snapshot=snapshot/solver_adam_iter_140000.solverstate -gpu 3 2>&1 | tee $LOG
 

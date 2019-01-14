@@ -324,9 +324,9 @@ void Solver<Dtype>::Solve(const char* resume_file) {
 	net_->QuantizeLayer(net_param,quantize_ratio);
 	//
 	iter_ = 0;
-    current_step_ = 0; 
-    best_accuracy_1 = 0;
-    best_accuracy_5 = 0;
+  current_step_ = 0; 
+  best_accuracy_1 = 0;
+  best_accuracy_5 = 0;
 	this->quantize_step_++;	
 	if(quantize_ratio == 0)//ratio == 0
 		break;
@@ -453,12 +453,18 @@ void Solver<Dtype>::Test(const int test_net_id) {
               << mean_score << loss_msg_stream.str();
 	
 	if(mean_score >= best_accuracy_1 && i == 0){
-	    flag = true;
+	  flag = true;
 		best_accuracy_1 = mean_score; 
 	}
 	if(flag && i == 1 && test_score.size() == 3)
 		best_accuracy_5 = mean_score;
-		
+		//snapshot model that has best accuracy.
+    string model_filename = "best_accuracy_" + std::to_string(best_accuracy_1) + "_" + std::to_string(best_accuracy_5) + ".caffemodel";
+    LOG(INFO) << "snapshoting best accuracy model ...";
+    NetParameter net_param;
+    net_->ToProto(&net_param, param_.snapshot_diff());
+    WriteProtoToBinaryFile(net_param, model_filename);
+    LOG(INFO) << "snapshoting best accuracy model done.";
   }
   LOG(INFO) << "================================";
   LOG(INFO) << "    Test net best accuracy1 is: " << best_accuracy_1;

@@ -1,14 +1,27 @@
-net: "train_test.prototxt"
-test_iter: 1000
-test_interval: 1000
-base_lr: 0.001
-lr_policy: "step"
-gamma: 0.1
-stepsize: 100000
-display: 200
-max_iter: 500000
+net: "train_test.prototxt" 
+test_iter: 1000 
+test_interval: 1000 
+#base_lr: 0.001
 momentum: 0.9
-weight_decay: 0.0005
+momentum2: 0.999
+lr_policy: "modified_lr"
+modified_lr{
+  stepvalue: 125000
+  stepvalue: 250000
+  stepvalue: 375000
+  stepvalue: 500000
+  mlr: 0.001
+  mlr: 0.0001
+  mlr: 0.00001
+  mlr: 0.000001 
+  weight_decay:0.00001
+  weight_decay:0.00001
+  weight_decay:0.00001
+  weight_decay:0.00001
+}   
+display: 200 
+max_iter: 500000  
 snapshot: 10000
-snapshot_prefix: "snapshot"
+snapshot_prefix: "snapshot/" 
+type: "Adam"
 solver_mode: GPU

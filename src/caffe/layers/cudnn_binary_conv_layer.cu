@@ -56,11 +56,10 @@ void CuDNNBinaryConvolutionLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>&
 	Dtype* binaryweight = this->W_b.mutable_gpu_data();
 	//caffe_copy<Dtype>(N, weight, binaryweight);
 	caffe_gpu_abs(N,weight,binaryweight);
-	if(this->layer_param_.debug_param().xnorno_grad() && phase == TRAIN){//only in train phase!
+	if(this->layer_param_.debug_param().xnorno_grad() && phase == TRAIN){//only in train phase! 
 		//calculate mean_.
 		caffe_gpu_gemv<Dtype>(CblasNoTrans, num, div, 1. / div, weight, this->weight_sum_multiplier.gpu_data(), 0.,
 			this->mean_.mutable_gpu_data()); 
-
 		//extract mean.
 		const Dtype* mean_data=this->mean_.gpu_data();
 		Mean_sub<Dtype><< <CAFFE_GET_BLOCKS(N),CAFFE_CUDA_NUM_THREADS>> >(N,div,mean_data,this->blobs_[0]->mutable_gpu_data());
@@ -68,6 +67,7 @@ void CuDNNBinaryConvolutionLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>&
 		/*for(int i=0;i<num;++i){
 			caffe_gpu_add_scalar<Dtype>(div, -*(mean_data + i), this->blobs_[0]->mutable_gpu_data() + i*div);
 		}*/
+		caffe_gpu_abs(N,weight,binaryweight);
 		//clamp weights
 		this->blobs_[0]->clip_data(); 
 	}
