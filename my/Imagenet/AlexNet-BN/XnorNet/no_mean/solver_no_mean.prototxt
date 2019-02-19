@@ -1,0 +1,27 @@
+net: "train_test_no_mean.prototxt" 
+test_iter: 1000 
+test_interval: 1000 
+#base_lr: 0.001 
+momentum: 0.9
+momentum2: 0.999
+lr_policy: "modified_lr"
+modified_lr{
+  stepvalue: 125000
+  stepvalue: 160000
+  stepvalue: 270000
+  stepvalue: 300000
+  mlr: 0.001
+  mlr: 0.0001
+  mlr: 0.00001
+  mlr: 0.000001 
+  weight_decay:0.00001
+  weight_decay:0.00001
+  weight_decay:0.00001
+  weight_decay:0.00001
+}   
+display: 200 
+max_iter: 300000  
+snapshot: 10000
+snapshot_prefix: "snapshot/" 
+type: "Adam"
+solver_mode: GPU

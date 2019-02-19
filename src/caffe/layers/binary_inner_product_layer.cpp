@@ -54,6 +54,8 @@ void BinaryInnerProductLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bott
   this->param_propagate_down_.resize(this->blobs_.size(), true);
 
   /*variable init*/
+  lamda = Dtype(1);
+	rou = 1.045;
   const int weight_dim = this->blobs_[0]->count() / this->blobs_[0]->num();
   weight_sum_multiplier.Reshape(weight_dim, 1, 1, 1);//must be reshaped as 4 dim. no know reasons yet.
   mean_.Reshape(num_output, 1, 1, 1);

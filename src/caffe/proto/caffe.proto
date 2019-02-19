@@ -431,12 +431,20 @@ message LayerParameter {
   optional TileParameter tile_param = 138;
   optional WindowDataParameter window_data_param = 129;
   optional AllPassParameter all_pass_param = 148;
-  optional DebugParameter debug_param = 149;
+  optional DebugParameter debug_param = 149; 
 }
 message DebugParameter{
   optional bool xnorno_grad  = 1 [default = false];
   optional bool binary_relax = 2 [default = false];
+  optional string forward_func = 3 [default = "sign"];
+  optional float clip_thr = 4 [default = 0];
+  optional float negative_slope = 5 [default = 0];
+  repeated float thrs = 6;
+  repeated float centers = 7;
+  optional int32 update_lamda = 8;
+  optional int32 phase1_iter = 9;
 }
+ 
 message AllPassParameter{
   optional float key = 1 [default = 0];
 }

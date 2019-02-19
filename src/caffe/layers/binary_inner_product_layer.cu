@@ -89,16 +89,12 @@ void BinaryInnerProductLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bot
 	  binaryweight, N, div); 
   if(this->layer_param_.debug_param().binary_relax())  
   {
-  	if(phase == TRAIN){
+  	if(this->_iter <= this->layer_param_.debug_param().phase1_iter()){
 		//case 1: vectorize all filters in one layer
-		Dtype beta=0.001;//0.001->0.01->0.05->0.1
-		caffe_gpu_axpby(N,beta,weight,1-beta,binaryweight);
-		
-		//case 2: vectorize one filter in one layer
-		/*Dtype beta = 0.001;
-		for(int i = 0; i < num; i++){
-		 	caffe_gpu_axpby(div,beta,weight + i * div,1-beta,binaryweight + i * div);
-		}*/
+    caffe_gpu_axpby(N,Dtype(1) / (this->lamda + 1),weight,this->lamda / (1 + this->lamda),binaryweight);//binaryweigh = beta * weight + (1 - beta) * binaryweight
+		const int n = this->_iter / this->layer_param_.debug_param().update_lamda();
+		caffe_powx<Dtype>(1, &(this->rou), n,&(this->lamda)) ;//lamda = rou ^ n
+		  
 	}
   }
   if (M_ == 1) {

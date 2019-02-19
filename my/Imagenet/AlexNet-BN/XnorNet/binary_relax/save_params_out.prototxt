@@ -1,0 +1,458 @@
+name: "AlexNet-BN"
+layer {
+  name: "data"
+  type: "Data"
+  top: "data"
+  top: "label"
+  include {
+    phase: TRAIN
+  }
+  transform_param {
+    mirror: true
+    crop_size: 224
+    mean_value: 104
+    mean_value: 117
+    mean_value: 123
+  }
+  data_param {
+    source: "/home/zhengzhe/Data/imagenet_shrt256/ilsvrc12_train_lmdb"
+    batch_size: 256
+    backend: LMDB
+  }
+}
+layer {
+  name: "data"
+  type: "Data"
+  top: "data"
+  top: "label"
+  include {
+    phase: TEST
+  }
+  transform_param {
+    mirror: false
+    crop_size: 224
+    mean_value: 104
+    mean_value: 117
+    mean_value: 123
+  }
+  data_param {
+    source: "/home/zhengzhe/Data/imagenet_shrt256/ilsvrc12_val_lmdb"
+    batch_size: 50
+    backend: LMDB
+  }
+}
+layer {
+  name: "conv1"
+  type: "Convolution"
+  bottom: "data"
+  top: "conv1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    num_output: 96
+    kernel_size: 11
+    stride: 4
+    pad: 2
+    weight_filler {
+      type: "msra"
+    }
+    bias_term: false
+  }
+}
+layer {
+  name: "bn1"
+  type: "BatchNorm"
+  bottom: "conv1"
+  top: "bn1"
+  
+}
+layer {
+  name: "scale1"
+  type: "Scale"
+  bottom: "bn1"
+  top: "scale1"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "relu1"
+  type: "ReLU"
+  bottom: "scale1"
+  top: "relu1"
+}
+layer {
+  name: "pool1"
+  type: "Pooling"
+  bottom: "relu1"
+  top: "pool1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "bn2"
+  type: "BatchNorm"
+  bottom: "pool1"
+  top: "bn2"
+  
+}
+layer {
+  name: "scale2"
+  type: "Scale"
+  bottom: "bn2"
+  top: "scale2"
+  scale_param {
+    bias_term: true
+  }
+}
+layer{
+	name:"binactive1"
+	type:"BinActive"
+	bottom:"scale2"
+	top:"binactive1"
+}
+layer {
+  name: "conv2"
+  type: "BinaryConvolution"
+  bottom: "binactive1"
+  top: "conv2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+
+  convolution_param {
+    num_output: 256
+    pad: 2
+    kernel_size: 5
+    #group: 2
+    weight_filler {
+      type: "msra"
+    }
+    bias_term: false
+  }
+  debug_param{
+    xnorno_grad:false
+  }
+}
+layer {
+  name: "pool2"
+  type: "Pooling"
+  bottom: "conv2"
+  top: "pool2"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "bn3"
+  type: "BatchNorm"
+  bottom: "pool2"
+  top: "bn3"
+  
+}
+layer {
+  name: "scale3"
+  type: "Scale"
+  bottom: "bn3"
+  top: "scale3"
+  scale_param {
+    bias_term: true
+  }
+}
+layer{
+	name:"binactive2"
+	type:"BinActive"
+	bottom:"scale3"
+	top:"binactive2"
+}
+layer {
+  name: "conv3"
+  type: "BinaryConvolution"
+  bottom: "binactive2"
+  top: "conv3"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+
+  convolution_param {
+    num_output: 384
+    pad: 1
+    kernel_size: 3
+    weight_filler {
+      type: "msra"
+    }
+    bias_term: false
+  }
+  debug_param{
+    xnorno_grad:false
+  }
+}
+layer {
+  name: "bn4"
+  type: "BatchNorm"
+  bottom: "conv3"
+  top: "bn4"
+  
+}
+layer {
+  name: "scale4"
+  type: "Scale"
+  bottom: "bn4"
+  top: "scale4"
+  scale_param {
+    bias_term: true
+  }
+}
+layer{
+	name:"binactive3"
+	type:"BinActive"
+	bottom:"scale4"
+	top:"binactive3"
+}
+layer {
+  name: "conv4"
+  type: "BinaryConvolution"
+  bottom: "binactive3"
+  top: "conv4"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+
+  convolution_param {
+    num_output: 384
+    pad: 1
+    kernel_size: 3
+    #group: 2
+    weight_filler {
+      type: "msra"
+    }
+    bias_term: false
+  }
+  debug_param{
+    xnorno_grad:false
+  }
+}
+layer {
+  name: "bn5"
+  type: "BatchNorm"
+  bottom: "conv4"
+  top: "bn5"
+  
+}
+layer {
+  name: "scale5"
+  type: "Scale"
+  bottom: "bn5"
+  top: "scale5"
+  scale_param {
+    bias_term: true
+  }
+}
+layer{
+	name:"binactive4"
+	type:"BinActive"
+	bottom:"scale5"
+	top:"binactive4"
+}
+layer {
+  name: "conv5"
+  type: "BinaryConvolution"
+  bottom: "binactive4"
+  top: "conv5"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    #group: 2
+    weight_filler {
+      type: "msra"
+    }
+    bias_term: false
+  }
+  debug_param{
+    xnorno_grad:false
+  }
+}
+layer {
+  name: "pool5"
+  type: "Pooling"
+  bottom: "conv5"
+  top: "pool5"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "bn6"
+  type: "BatchNorm"
+  bottom: "pool5"
+  top: "bn6"
+  
+}
+layer {
+  name: "scale6"
+  type: "Scale"
+  bottom: "bn6"
+  top: "scale6"
+  scale_param {
+    bias_term: true
+  }
+}
+layer{
+	name:"binactive5"
+	type:"BinActive"
+	bottom:"scale6"
+	top:"binactive5"
+}
+layer {
+  name: "fc6"
+  type: "BinaryInnerProduct"
+  bottom: "binactive5"
+  top: "fc6"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+
+  inner_product_param {
+    num_output: 4096
+    weight_filler {
+      type: "msra"
+    }
+    bias_term: false
+  }
+  debug_param{
+    xnorno_grad:false
+  }
+}
+layer {
+  name: "bn7"
+  type: "BatchNorm"
+  bottom: "fc6"
+  top: "bn7"
+}
+layer {
+  name: "scale7"
+  type: "Scale"
+  bottom: "bn7"
+  top: "scale7"
+  scale_param {
+    bias_term: true
+  }
+}
+layer{
+	name:"binactive6"
+	type:"BinActive"
+	bottom:"scale7"
+	top:"binactive6"
+}
+layer {
+  name: "fc7"
+  type: "BinaryInnerProduct"
+  bottom: "binactive6"
+  top: "fc7"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+
+  inner_product_param {
+    num_output: 4096
+    weight_filler {
+      type: "msra"
+    }
+    bias_term: false
+  }
+  debug_param{
+    xnorno_grad:false
+  }
+}
+layer {
+  name: "bn8"
+  type: "BatchNorm"
+  bottom: "fc7"
+  top: "bn8"
+  
+}
+layer {
+  name: "scale8"
+  type: "Scale"
+  bottom: "bn8"
+  top: "scale8"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "relu7"
+  type: "ReLU"
+  bottom: "scale8"
+  top: "relu7"
+}
+layer {
+  name: "fc8"
+  type: "InnerProduct"
+  bottom: "relu7"
+  top: "fc8"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+
+  inner_product_param {
+    num_output: 1000
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "loss"
+  type: "SoftmaxWithLoss"
+  bottom: "fc8"
+  bottom: "label"
+  top: "loss"
+}
+layer {
+  name: "accuracy"
+  type: "Accuracy"
+  bottom: "fc8"
+  bottom: "label"
+  top: "accuracy"
+}
+layer { 
+  name: "accuracy_5"
+  type: "Accuracy"
+  bottom: "fc8"
+  bottom: "label"
+  top: "accuracy_5"
+  accuracy_param
+  { 
+    top_k:5
+  }
+}
+

@@ -50,6 +50,8 @@ class BinaryInnerProductLayer : public Layer<Dtype> {
   Blob<Dtype> mean_;
   Blob<Dtype> alphas_;
   Blob<Dtype> weight_sum_multiplier;//used for vector sum
+  Dtype lamda;
+  Dtype rou;
 };
 
 }  // namespace caffe

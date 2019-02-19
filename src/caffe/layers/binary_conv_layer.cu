@@ -44,7 +44,7 @@ void BinaryConvolutionLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bott
 	const int N = this->blobs_[0]->count();
 	const int num = this->num_output_;
 	const int div = N / num;
-	
+	LOG(INFO) << "now iter is: " << this->_iter;
 	const Dtype* weight = this->blobs_[0]->gpu_data();
 	Dtype* binaryweight = this->W_b.mutable_gpu_data();
 	//caffe_copy<Dtype>(N, weight, binaryweight);

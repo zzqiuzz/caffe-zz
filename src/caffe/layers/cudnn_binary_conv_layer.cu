@@ -51,7 +51,7 @@ void CuDNNBinaryConvolutionLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>&
 	const int N = this->blobs_[0]->count();
 	const int num = this->num_output_;
 	const int div = N / num;
-	
+ 		
 	const Dtype* weight = this->blobs_[0]->gpu_data();
 	Dtype* binaryweight = this->W_b.mutable_gpu_data();
 	//caffe_copy<Dtype>(N, weight, binaryweight);
@@ -83,20 +83,20 @@ void CuDNNBinaryConvolutionLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>&
 	//binarize weights.
 	CudnnBinaryGpu_binarize<Dtype> << <CAFFE_GET_BLOCKS(N), CAFFE_CUDA_NUM_THREADS >> > (
 		N, div, this->alphas_.gpu_data(), weight, binaryweight);
-	if(this->layer_param_.debug_param().binary_relax()){
-		if(phase == TRAIN){
+	if(this->layer_param_.debug_param().binary_relax()){//both train and test phase
+		if(this->_iter <= this->layer_param_.debug_param().phase1_iter()){ 
+		//LOG(INFO) << "now iter: " << this->_iter << "last_lamda: " << this->last_lamda << "rou: " << this->rou << "now_lamda: " << this->now_lamda;
+		//LOG(INFO) << this->layer_param_.debug_param().phase1_iter();
 		//case 1: vectorize all filters in one layer
-		Dtype beta=0.001;//0.001->0.01->0.05->0.1
-		caffe_gpu_axpby(N,beta,weight,1-beta,binaryweight);
+		caffe_gpu_axpby(N,Dtype(1) / (this->last_lamda + 1),weight,this->last_lamda / (1 + this->last_lamda),binaryweight);//binaryweigh = beta * weight + (1 - beta) * binaryweight
+		const int n = this->_iter / this->layer_param_.debug_param().update_lamda();
+		caffe_powx<Dtype>(1, &(this->rou), n,&(this->now_lamda)) ;//lamda = rou ^ n
 		
-		//case 2: vectorize one filter in one layer
-		/*Dtype beta = 0.001;
-		for(int i = 0; i < num; i++){
-		 	caffe_gpu_axpby(div,beta,weight + i * div,1-beta,binaryweight + i * div);
-		}*/
+		if(this->last_lamda != this->now_lamda)
+			//LOG(INFO) << "now lamda is:" << this->now_lamda;
+		this->last_lamda = this->now_lamda;
 		
 	}
-	
 	}
 	//normal conv operations,directly copied from conv_layer.cpp
 	//const Dtype* weight = this->blobs_[0]->gpu_data();

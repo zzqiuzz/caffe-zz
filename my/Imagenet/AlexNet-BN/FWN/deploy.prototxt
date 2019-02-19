@@ -1,45 +1,9 @@
 name: "AlexNet-BN"
 layer {
   name: "data"
-  type: "Data"
+  type: "Input"
   top: "data"
-  top: "label"
-  include {
-    phase: TRAIN
-  }
-  transform_param {
-    mirror: true
-    crop_size: 224
-    mean_value: 103.939
-    mean_value: 116.779
-    mean_value: 123.68
-  }
-  data_param {
-    source: "/home/zhengzhe/Data/imagenet_shrt256/ilsvrc12_train_lmdb"
-    batch_size: 256
-    backend: LMDB
-  }
-}
-layer {
-  name: "data"
-  type: "Data"
-  top: "data"
-  top: "label"
-  include {
-    phase: TEST
-  }
-  transform_param {
-    mirror: false
-    crop_size: 224
-    mean_value: 103.939
-    mean_value: 116.779
-    mean_value: 123.68
-  }
-  data_param {
-    source: "/home/zhengzhe/Data/imagenet_shrt256/ilsvrc12_val_lmdb"
-    batch_size: 50
-    backend: LMDB
-  }
+  input_param { shape: { dim: 1 dim: 3 dim: 224 dim: 224 } }
 }
 layer {
   name: "conv1"
@@ -468,48 +432,8 @@ layer {
   }
 }
 layer {
-  name: "accuracy"
-  type: "Accuracy"
+  name: "prob"
+  type: "Softmax"
   bottom: "fc8"
-  bottom: "label"
-  top: "accuracy"
-  include {
-    phase: TEST
-  }
+  top: "prob"
 }
-layer { 
-  name: "accuracy_5"
-  type: "Accuracy"
-  bottom: "fc8"
-  bottom: "label"
-  top: "accuracy_5"
-  accuracy_param
-  { 
-    top_k:5
-  }
-  include {
-    phase: TEST
-  }
-}
-layer { 
-  name: "accuracy_5_TRAIN"
-  type: "Accuracy"
-  bottom: "fc8"
-  bottom: "label"
-  top: "accuracy_5_TRAIN"
-  accuracy_param
-  { 
-    top_k:5
-  }
-  include {
-    phase: TRAIN
-  }
-}
-layer {
-  name: "loss"
-  type: "SoftmaxWithLoss"
-  bottom: "fc8"
-  bottom: "label"
-  top: "loss"
-}
-

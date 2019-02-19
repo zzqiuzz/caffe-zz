@@ -252,7 +252,9 @@ class Net {
   void add_after_backward(Callback* value) {
     after_backward_.push_back(value);
   }
-
+  void set_iter(int iter){
+    net_iter_ = iter;
+  }
  protected:
   // Helpers for Init.
   /// @brief Append a new top blob to the net.
@@ -274,6 +276,7 @@ class Net {
   /// @brief Helper for displaying debug info in Update.
   void UpdateDebugInfo(const int param_id);
 
+  int net_iter_;
   /// @brief The network name
   string name_;
   /// @brief The phase: TRAIN or TEST

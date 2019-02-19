@@ -10,10 +10,10 @@ layer {
   transform_param {
     mirror: true
     crop_size: 32
-    mean_file: "examples/cifar10/mean.binaryproto"
+    mean_file: "/home/zhengzhe/Data/cifar10/mean.binaryproto"
   }
   data_param {
-    source: "examples/cifar10/cifar10_train_lmdb"
+    source: "/home/zhengzhe/Data/cifar10/cifar10_train_lmdb"
     batch_size: 100
     backend: LMDB
   }
@@ -29,10 +29,10 @@ layer {
   transform_param {
     mirror: false
     crop_size: 32
-    mean_file: "examples/cifar10/mean.binaryproto"
+    mean_file: "/home/zhengzhe/Data/cifar10/mean.binaryproto"
   }
   data_param {
-    source: "examples/cifar10/cifar10_test_lmdb"
+    source: "/home/zhengzhe/Data/cifar10/cifar10_test_lmdb"
     batch_size: 100
     backend: LMDB
   }
@@ -59,7 +59,8 @@ layer {
     bias_term: false
   }
   debug_param{
-    xnorno_grad:false
+    binary_relax:true
+	update_lamda:10
   }
 }
 ##batch normalization1
@@ -106,7 +107,9 @@ layer {
     bias_term: false
   }
   debug_param{
-    xnorno_grad:false
+    binary_relax:true
+	update_lamda:10
+	phase1_iter:50000
   }
 }
 ##batch normalization1
@@ -175,7 +178,8 @@ layer {
     bias_term: false
   }
   debug_param{
-    xnorno_grad:false
+    binary_relax:true
+	update_lamda:10
   }
 }
 ##batch normalization1
@@ -223,7 +227,8 @@ layer {
     bias_term: false
   }
   debug_param{
-    xnorno_grad:false
+    binary_relax:true
+	update_lamda:10
   }
 }
 ##batch normalization1
@@ -292,7 +297,8 @@ layer {
     bias_term: false
   }
   debug_param{
-    xnorno_grad:false
+    binary_relax:true
+	update_lamda:10
   }
 }
 ##batch normalization1
@@ -340,7 +346,8 @@ layer {
     bias_term: false
   }
   debug_param{
-    xnorno_grad:false
+    binary_relax:true
+	update_lamda:10
   }
 }
 ##batch normalization1
@@ -405,7 +412,8 @@ layer {
     bias_term: false
   }
   debug_param{
-    xnorno_grad:false
+    binary_relax:true
+	update_lamda:10
   }
 }
 ##batch normalization1
@@ -458,7 +466,8 @@ layer {
     bias_term: false
   }
   debug_param{
-    xnorno_grad:false
+    binary_relax:true
+	update_lamda:10
   }
 }
 ###batch normalization1
@@ -519,7 +528,8 @@ layer {
      }
   }
   debug_param{
-    xnorno_grad:false
+    binary_relax:true
+	update_lamda:10
   }
 }
 

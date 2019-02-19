@@ -291,8 +291,12 @@ class Layer {
     param_propagate_down_[param_id] = value;
   }
 
+  void set_iter(int iter){
+    _iter = iter;
+  }
 
  protected:
+  int _iter;
   /** The protobuf that stores the layer parameters */
   LayerParameter layer_param_;
   /** The phase: TRAIN or TEST */

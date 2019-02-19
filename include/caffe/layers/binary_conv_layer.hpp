@@ -35,12 +35,10 @@ protected:
 	Blob<Dtype> alphas_;
 	Blob<Dtype> mean_;
 	Blob<Dtype> weight_sum_multiplier;
-	inline Dtype clampWeights(Dtype w){
-		return w = (w) < -1 ? -1 : (w) >1 ? 1 : (w);
-	}
-	inline Dtype signWeights(Dtype w){
-		return w = (w) >= 0 ? 1 : -1;
-	}
+	Dtype now_lamda;
+	Dtype last_lamda;
+	Dtype lamda_0;
+	Dtype rou;
 
 
 

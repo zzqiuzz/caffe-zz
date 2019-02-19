@@ -7,7 +7,10 @@ void BinaryConvolutionLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& botto
 	const vector<Blob<Dtype>*>& top){
 	BaseConvolutionLayer<Dtype>::LayerSetUp(bottom, top);
 	const int weight_dim = this->blobs_[0]->count() / this->blobs_[0]->num();
-	
+	lamda_0 = Dtype(1);
+	last_lamda = lamda_0;
+	now_lamda = 0;
+	rou = 1.045;
 	alphas_.Reshape(this->num_output_,1,1,1);
 	mean_.Reshape(this->num_output_, 1, 1, 1);
 	W_b.Reshape(this->blobs_[0]->shape());

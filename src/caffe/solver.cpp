@@ -230,7 +230,8 @@ void Solver<Dtype>::Step(int iters) {
     net_->set_debug_info(display && param_.debug_info());
     // accumulate the loss and gradient
     Dtype loss = 0;
-    for (int i = 0; i < param_.iter_size(); ++i) {
+    net_->set_iter(iter_);
+     for (int i = 0; i < param_.iter_size(); ++i) {
       loss += net_->ForwardBackward();
     }
     loss /= param_.iter_size();
@@ -406,6 +407,7 @@ void Solver<Dtype>::Test(const int test_net_id) {
     }
 
     Dtype iter_loss;
+    test_net->set_iter(iter_);
     const vector<Blob<Dtype>*>& result =
         test_net->Forward(&iter_loss);
     if (param_.test_compute_loss()) {

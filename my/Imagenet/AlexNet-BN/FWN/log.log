@@ -1,0 +1,15 @@
+I0128 21:59:32.692335 48717 upgrade_proto.cpp:1113] snapshot_prefix was a directory and is replaced to snapshot/solver
+I0128 21:59:32.693388 48717 caffe.cpp:204] Using GPUs 1
+I0128 21:59:32.804067 48717 caffe.cpp:209] GPU 1: 
+F0128 21:59:32.804153 48717 common.cpp:158] Check failed: error == cudaSuccess (10 vs. 0)  invalid device ordinal
+*** Check failure stack trace: ***
+    @     0x7f1443c4f074  google::LogMessage::Fail()
+    @     0x7f1443c4efd0  google::LogMessage::SendToLog()
+    @     0x7f1443c4e94e  google::LogMessage::Flush()
+    @     0x7f1443c51e6f  google::LogMessageFatal::~LogMessageFatal()
+    @     0x7f144b7f4345  caffe::Caffe::SetDevice()
+    @           0x420821  train()
+    @           0x422c47  main
+    @     0x7f142986e445  __libc_start_main
+    @           0x41f7d9  (unknown)
+    @              (nil)  (unknown)
